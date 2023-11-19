@@ -7,18 +7,10 @@ namespace FishStick.Render
 {
   class ConsoleController
   {
-    private static readonly Dictionary<string, ConsoleColor> _keywords = new()
-    {
-      { "east", ConsoleColor.Red },
-      { "key", ConsoleColor.Blue }
-    };
-
-
     public static void WriteText(string text)
     {
       ConsoleWriter.Write(text)
         .Slowly()
-        .WithHighlighting(_keywords)
         .WithColor(ConsoleColor.DarkGray)
         .ToConsole();
       Console.WriteLine();
@@ -27,7 +19,6 @@ namespace FishStick.Render
     {
       ConsoleWriter.Write(scene.Description)
         .Slowly()
-        .WithHighlighting(_keywords)
         .WithColor(ConsoleColor.DarkGray)
         .ToConsole();
 
@@ -35,7 +26,7 @@ namespace FishStick.Render
       {
         ConsoleWriter.Write(transition.Description)
           .Slowly()
-          .WithHighlighting(_keywords)
+          .WithHighlighting(new() { { transition.Name, ConsoleColor.Red } })
           .WithColor(ConsoleColor.Yellow)
           .ToConsole();
       }
@@ -43,7 +34,7 @@ namespace FishStick.Render
       {
         ConsoleWriter.Write(item.SceneDescription)
           .Slowly()
-          .WithHighlighting(_keywords)
+          .WithHighlighting(new() { { item.Name, ConsoleColor.Blue } })
           .WithColor(ConsoleColor.DarkGray)
           .ToConsole();
       }
@@ -70,7 +61,7 @@ namespace FishStick.Render
     private ConsoleColor _foregroundColor = Console.ForegroundColor;
     private ConsoleColor _backgroundColor = Console.BackgroundColor;
     private bool _writeSlowly = false;
-    private Dictionary<string, ConsoleColor> _highlightedWords = new Dictionary<string, ConsoleColor>();
+    private Dictionary<string, ConsoleColor> _highlightedPhrases = new Dictionary<string, ConsoleColor>();
 
     private ConsoleWriter() { }
 
@@ -94,37 +85,63 @@ namespace FishStick.Render
 
     public ConsoleWriter WithHighlighting(Dictionary<string, ConsoleColor> highlightedWords)
     {
-      _highlightedWords = highlightedWords;
+      _highlightedPhrases = highlightedWords;
       return this;
     }
 
     public void ToConsole()
     {
+      Console.ForegroundColor = _foregroundColor;
+      Console.BackgroundColor = _backgroundColor;
+
+      int currentPos = 0;
+
+      while (currentPos < _message.Length)
+      {
+        int nextWordPos = _message.Length;
+        ConsoleColor nextWordColor = _foregroundColor;
+        string? nextPhrase = null;
+
+        // Find the closest highlighted word
+        foreach (var pair in _highlightedPhrases)
+        {
+          int pos = _message.IndexOf(value: pair.Key, startIndex: currentPos);
+          if (pos >= 0 && pos < nextWordPos)
+          {
+            nextWordPos = pos;
+            nextWordColor = pair.Value;
+            nextPhrase = pair.Key;
+          }
+        }
+
+        // Print text before the highlighted word
+        WriteWord(_message.Substring(currentPos, nextWordPos - currentPos));
+
+        // If a highlighted word is found, print it in its color
+        if (nextPhrase != null)
+        {
+          Console.ForegroundColor = nextWordColor;
+          WriteWord("[" + nextPhrase + "]");
+          Console.ForegroundColor = _foregroundColor;
+
+          currentPos = nextWordPos + nextPhrase.Length;
+        }
+        else
+        {
+          currentPos = _message.Length; // No more words to highlight
+        }
+      }
+
+      Console.ResetColor();
+      Console.Write(" "); // Trailing space.
+    }
+
+    private void WriteWord(string word)
+    {
       // TODO: It would be nice to let the user press a button like space to
       // skip the slow typing effect. For that, this typing effect should
       // probably be in a separate thread.
       // Could use something like this https://stackoverflow.com/questions/62610803/c-sharp-manually-stopping-an-asynchronous-for-statement-typewriter-effect
-      Console.ForegroundColor = _foregroundColor;
-      Console.BackgroundColor = _backgroundColor;
-
-      string[] words = _message.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-      foreach (var word in words)
-      {
-        var keyword = word.Trim(new[] { ',', '.' });
-        bool isHighlighted = _highlightedWords.TryGetValue(keyword, out var highlightColor);
-        Console.ForegroundColor = isHighlighted ? highlightColor : _foregroundColor;
-
-        WriteWord(word, isHighlighted);
-
-        Console.Write(" ");
-      }
-
-      Console.ResetColor();
-    }
-
-    private void WriteWord(string word, bool isHighlighted)
-    {
       foreach (char c in word)
       {
         Console.Write(c);
