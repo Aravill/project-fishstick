@@ -1,3 +1,4 @@
+using FishStick.Item;
 using FishStick.Scene;
 
 namespace FishStick.Render
@@ -16,6 +17,10 @@ namespace FishStick.Render
       foreach (ITransition transition in scene.Transitions)
       {
         WriteSlowly(transition.Description + " ");
+      }
+      foreach (IItem item in scene.Items)
+      {
+        WriteSlowly(item.SceneDescription + " ");
       }
       Console.WriteLine();
     }
@@ -39,6 +44,7 @@ namespace FishStick.Render
       Console.ForegroundColor = ConsoleColor.DarkGray;
       foreach (char c in message)
       {
+
         // TODO: It would be nice to let the user press a button like space to
         // skip the slow typing effect. For that, this typing effect should
         // probably be in a separate thread.
