@@ -8,5 +8,6 @@ namespace FishStick.Item
     string IItem.Type { get; } = Type;
     string IItem.Id { get; } = Id;
     string[] IItem.Tags { get; } = Tags;
+    public bool Highlight => true;
   }
 }
