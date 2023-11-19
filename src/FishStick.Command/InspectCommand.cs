@@ -16,7 +16,7 @@ namespace FishStick.Commands
       targetItemName = String.Join(" ", args);
       if (targetItemName.Length < 1)
       {
-        ConsoleController.WriteText("Inspect  what?");
+        ConsoleController.WriteText("Inspect what?");
         return;
       }
       string? itemDescription = _player.GetInventoryItem(targetItemName)?.Description;
