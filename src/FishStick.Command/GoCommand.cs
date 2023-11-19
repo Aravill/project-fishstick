@@ -22,6 +22,7 @@ namespace FishStick.Commands
         return;
       }
       _player.SetCurrentSceneId(transition.NextSceneId);
+      ConsoleController.DescribeScene(_world.GetScene(_player.GetCurrentSceneId()));
     }
   }
 }
