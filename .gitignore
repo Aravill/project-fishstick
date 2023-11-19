@@ -5,6 +5,7 @@
 
 bin/
 obj/
+.vscode/
 
 # dotenv files
 .env
