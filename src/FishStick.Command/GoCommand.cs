@@ -14,7 +14,7 @@ namespace FishStick.Commands
     {
       string targetSceneName = args[0];
       IScene currentScene = _world.GetScene(_player.GetCurrentSceneId());
-      ITransition? transition = currentScene.Transitions.Find(transition => transition.Name == targetSceneName) ?? throw new TransitionNotFoundException($"Transition to '{targetSceneName}' not found."); ;
+      ITransition? transition = currentScene.Transitions.Find(transition => transition.Name == targetSceneName) ?? throw new TransitionNotFoundException($"Transition to '{targetSceneName}' not found.");
       _player.SetCurrentSceneId(transition.NextSceneId);
     }
   }

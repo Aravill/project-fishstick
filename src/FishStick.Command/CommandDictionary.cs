@@ -11,5 +11,6 @@ class CommandDictionary : Dictionary<string, ICommand>
     Add(QuitCommand.Name, new QuitCommand(player, world));
     Add(TakeCommand.Name, new TakeCommand(player, world));
     Add(InventoryCommand.Name, new InventoryCommand(player, world));
+    Add(InspectCommand.Name, new InspectCommand(player, world));
   }
 }

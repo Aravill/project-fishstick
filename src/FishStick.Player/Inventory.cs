@@ -6,6 +6,11 @@ namespace FishStick.Player
   {
 
     private List<IItem> _items = new();
+
+    public IItem? GetItem(string name)
+    {
+      return _items.Find(item => item.Name == name);
+    }
     public void AddItem(IItem item)
     {
       _items.Add(item);

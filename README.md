@@ -14,3 +14,4 @@ Project Fish Stick is a simple, text based adventure game inspired by fighting f
 - Keyword highlighting in the console (so a player would know which words are important)
 - Command whisperer, giving a player suggestions on commands and parameters they can enter
 - Ability to use items on objects in scenes (using a key to open a door)
+- Command aliases, some commands can be aliased as multiple words (for example "take" could also be "loot" or "yoink")
