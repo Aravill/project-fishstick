@@ -36,6 +36,11 @@ namespace FishStick.Player
     {
       _inventory.RemoveItem(item);
     }
+
+    public List<IItem> GetInventory()
+    {
+      return _inventory.GetItems();
+    }
     public int GetHp()
     {
       return _hp;
