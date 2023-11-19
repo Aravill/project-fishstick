@@ -1,6 +1,7 @@
 using FishStick.Item;
 using FishStick.Scene;
 using System.Collections.Generic;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace FishStick.Render
 {
@@ -15,7 +16,11 @@ namespace FishStick.Render
 
     public static void WriteText(string text)
     {
-      WriteSlowly(text)();
+      ConsoleWriter.Write(text)
+        .Slowly()
+        .WithHighlighting(_keywords)
+        .WithColor(ConsoleColor.DarkGray)
+        .ToConsole();
       Console.WriteLine();
     }
     public static void DescribeScene(IScene scene)
@@ -29,18 +34,18 @@ namespace FishStick.Render
       foreach (ITransition transition in scene.Transitions)
       {
         ConsoleWriter.Write(transition.Description)
-        .Slowly()
-        .WithHighlighting(_keywords)
-        .WithColor(ConsoleColor.Yellow)
-        .ToConsole();
+          .Slowly()
+          .WithHighlighting(_keywords)
+          .WithColor(ConsoleColor.Yellow)
+          .ToConsole();
       }
       foreach (IItem item in scene.Items)
       {
         ConsoleWriter.Write(item.SceneDescription)
-        .Slowly()
-        .WithHighlighting(_keywords)
-        .WithColor(ConsoleColor.DarkGray)
-        .ToConsole();
+          .Slowly()
+          .WithHighlighting(_keywords)
+          .WithColor(ConsoleColor.DarkGray)
+          .ToConsole();
       }
       Console.WriteLine();
     }
@@ -58,20 +63,6 @@ namespace FishStick.Render
       }
       return commandText;
     }
-
-    private static Action WriteSlowly(string message) => () =>
-    {
-      foreach (char c in message)
-      {
-
-        // TODO: It would be nice to let the user press a button like space to
-        // skip the slow typing effect. For that, this typing effect should
-        // probably be in a separate thread.
-        // Could use something like this https://stackoverflow.com/questions/62610803/c-sharp-manually-stopping-an-asynchronous-for-statement-typewriter-effect
-        Console.Write(c);
-        Thread.Sleep(20);
-      }
-    };
   }
   public class ConsoleWriter
   {
@@ -109,6 +100,10 @@ namespace FishStick.Render
 
     public void ToConsole()
     {
+      // TODO: It would be nice to let the user press a button like space to
+      // skip the slow typing effect. For that, this typing effect should
+      // probably be in a separate thread.
+      // Could use something like this https://stackoverflow.com/questions/62610803/c-sharp-manually-stopping-an-asynchronous-for-statement-typewriter-effect
       Console.ForegroundColor = _foregroundColor;
       Console.BackgroundColor = _backgroundColor;
 
