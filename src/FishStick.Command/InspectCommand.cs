@@ -23,10 +23,11 @@ namespace FishStick.Commands
       if (itemDescription is null)
       {
         ConsoleController.WriteText($"You don't have a {targetItemName}.");
+        return;
       }
       else
       {
-        ConsoleController.WriteText(itemDescription);
+        ConsoleController.WriteText($"You inspect the {targetItemName}, it is: {itemDescription}");
       }
     }
   }

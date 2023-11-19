@@ -1,5 +1,6 @@
 using FishStick.Exception;
 using FishStick.Player;
+using FishStick.Render;
 using FishStick.Scene;
 using FishStick.World;
 
@@ -14,7 +15,12 @@ namespace FishStick.Commands
     {
       string targetSceneName = args[0];
       IScene currentScene = _world.GetScene(_player.GetCurrentSceneId());
-      ITransition? transition = currentScene.Transitions.Find(transition => transition.Name == targetSceneName) ?? throw new TransitionNotFoundException($"Transition to '{targetSceneName}' not found.");
+      ITransition? transition = currentScene.Transitions.Find(transition => transition.Name == targetSceneName);
+      if (transition is null)
+      {
+        ConsoleController.WriteText($"I don't know where '{targetSceneName}' is.");
+        return;
+      }
       _player.SetCurrentSceneId(transition.NextSceneId);
     }
   }

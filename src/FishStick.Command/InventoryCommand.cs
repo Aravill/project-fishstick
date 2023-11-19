@@ -15,12 +15,10 @@ namespace FishStick.Commands
       if (items.Length < 1)
       {
         ConsoleController.WriteText("You look into your bag. It is empty.");
+        return;
       }
-      else
-      {
-        ConsoleController.WriteText($"You look into your bag and see: {items}.");
-      }
-
+      ConsoleController.WriteText($"You look into your bag and see: {items}.");
+      return;
     }
   }
 }
