@@ -26,15 +26,15 @@ namespace FishStick.Render
       {
         ConsoleWriter.Write(transition.Description)
           .Slowly()
-          .WithHighlighting(new() { { transition.Name, ConsoleColor.Red } })
-          .WithColor(ConsoleColor.Yellow)
+          .WithHighlighting(transition.Highlight ? new() { { transition.Name, ConsoleColor.Yellow } } : null)
+          .WithColor(ConsoleColor.DarkGray)
           .ToConsole();
       }
       foreach (IItem item in scene.Items)
       {
         ConsoleWriter.Write(item.SceneDescription)
           .Slowly()
-          .WithHighlighting(new() { { item.Name, ConsoleColor.Blue } })
+          .WithHighlighting(item.Highlight ? new() { { item.Name, ConsoleColor.Yellow } } : null)
           .WithColor(ConsoleColor.DarkGray)
           .ToConsole();
       }
@@ -83,9 +83,9 @@ namespace FishStick.Render
       return this;
     }
 
-    public ConsoleWriter WithHighlighting(Dictionary<string, ConsoleColor> highlightedWords)
+    public ConsoleWriter WithHighlighting(Dictionary<string, ConsoleColor>? highlightedWords)
     {
-      _highlightedPhrases = highlightedWords;
+      _highlightedPhrases = highlightedWords ?? _highlightedPhrases;
       return this;
     }
 

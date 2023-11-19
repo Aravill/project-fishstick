@@ -18,5 +18,6 @@ namespace FishStick.Item
     // Returns the item's id
     string Id { get; }
     string[] Tags { get; }
+    bool Highlight { get; }
   }
 }

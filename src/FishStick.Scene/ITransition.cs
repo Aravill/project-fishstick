@@ -8,6 +8,7 @@ namespace FishStick.Scene
 
     string Description { get; }
     string Name { get; }
+    bool Highlight { get; } // TODO: Add to csv
   }
 }
 
