@@ -67,27 +67,18 @@ namespace FishStick.Assets
       List<IElement> elements = new();
       foreach (ElementData eData in elementData)
       {
-        switch (eData)
-        {
-          case InteractableElementData:
-            {
-              InteractableElement e = new InteractableElement(((InteractableElementData)eData).Id, ((InteractableElementData)eData).Name, ((InteractableElementData)eData).OnInteract, ((InteractableElementData)eData).Args, ((InteractableElementData)eData).SceneDescription, ((InteractableElementData)eData).Hidden);
-              elements.Add(e);
-              break;
-            }
-          case ElementData:
-            {
-              StaticElement e = new StaticElement(eData.Id, eData.SceneDescription, eData.Hidden);
-              elements.Add(e);
-              break;
-            }
-          default:
-            throw new System.Exception("Unknown element type");
-        }
-
+        elements.Add(eData.InstantiateElement());
       }
       return elements;
     }
+
+    public static IElement InstantiateElement(this ElementData eData) => eData switch
+    {
+      InteractableElementData ied => new InteractableElement(ied.Id, ied.Name, ied.OnInteract, ied.Args, ied.SceneDescription, ied.Hidden),
+      ElementData staticElemet => new StaticElement(eData.Id, eData.SceneDescription, eData.Hidden),
+      _ => throw new System.Exception("Unknown element type"),
+    };
+
     public static Assets ReadAssetsFromFiles()
     {
       List<SceneData> sceneData = new();
