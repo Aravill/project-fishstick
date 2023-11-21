@@ -2,6 +2,7 @@ using FishStick.AssetData;
 using FishStick.Item;
 using FishStick.Scene;
 using Scene;
+using System.Linq;
 
 namespace FishStick.Assets
 {
@@ -62,20 +63,12 @@ namespace FishStick.Assets
     /// </summary>
     /// <param name="itemData"></param>
     /// <returns></returns>
-    public static List<IElement> ElementDataToIElement(List<ElementData> elementData)
-    {
-      List<IElement> elements = new();
-      foreach (ElementData eData in elementData)
-      {
-        elements.Add(eData.InstantiateElement());
-      }
-      return elements;
-    }
+    public static List<IElement> ElementDataToIElement(List<ElementData> elementData) => elementData.Select(eData => eData.AsElement()).ToList();
 
-    public static IElement InstantiateElement(this ElementData eData) => eData switch
+    public static IElement AsElement(this ElementData eData) => eData switch
     {
       InteractableElementData ied => new InteractableElement(ied.Id, ied.Name, ied.OnInteract, ied.Args, ied.SceneDescription, ied.Hidden),
-      ElementData staticElemet => new StaticElement(eData.Id, eData.SceneDescription, eData.Hidden),
+      ElementData => new StaticElement(eData.Id, eData.SceneDescription, eData.Hidden),
       _ => throw new System.Exception("Unknown element type"),
     };
 
