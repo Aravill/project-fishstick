@@ -26,7 +26,7 @@ namespace FishStick.Assets
       {
         List<IItem> relatedItems = LootableDataToILootable(assets.ItemData.Where(itemData => itemData.InScene == scene.Id).ToList());
         List<ITransition> relatedExits = ExitDataToITransition(assets.ExitData.Where(exitData => exitData.From == scene.Id).ToList());
-        List<IElement> relatedElements = LootableDataToILootable(assets.ItemData.Where(itemData => itemData.InScene == scene.Id).ToList());
+        List<IElement> relatedElements = ElementDataToIElement(assets.ElementData.Where(elementData => elementData.InScene == scene.Id).ToList());
         scenes.Add(new BaseScene(scene.Id, scene.Description, relatedExits, relatedItems, relatedElements));
       }
       return scenes;
@@ -65,14 +65,22 @@ namespace FishStick.Assets
     public static List<IElement> ElementDataToIElement(List<ElementData> elementData)
     {
       List<IElement> elements = new();
-      foreach (ElementData element in elementData)
+      foreach (ElementData eData in elementData)
       {
-        switch (element.GetType())
+        switch (eData)
         {
           case InteractableElementData:
-            InteractableElement element = new InteractableElement(element.Id, element.SceneDescription, element.Hidden, element.Type, element.InScene, element.Name, element.OnInteract, element.Args));
-            elements.Add(element);
-            break;
+            {
+              InteractableElement e = new InteractableElement(((InteractableElementData)eData).Id, ((InteractableElementData)eData).Name, ((InteractableElementData)eData).OnInteract, ((InteractableElementData)eData).Args, ((InteractableElementData)eData).SceneDescription, ((InteractableElementData)eData).Hidden);
+              elements.Add(e);
+              break;
+            }
+          case ElementData:
+            {
+              StaticElement e = new StaticElement(eData.Id, eData.SceneDescription, eData.Hidden);
+              elements.Add(e);
+              break;
+            }
           default:
             throw new System.Exception("Unknown element type");
         }
