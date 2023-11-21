@@ -1,15 +1,18 @@
 using FishStick.AssetData;
 using FishStick.Item;
 using FishStick.Scene;
+using Scene;
 
 namespace FishStick.Assets
 {
 
-  public class Assets(List<SceneData> sceneData, List<ExitData> exitData, List<ItemData> itemData)
+  public class Assets(List<SceneData> sceneData, List<ExitData> exitData, List<ItemData> itemData, List<ElementData> elementData)
   {
     public List<SceneData> SceneData { get; set; } = sceneData;
     public List<ExitData> ExitData { get; set; } = exitData;
     public List<ItemData> ItemData { get; set; } = itemData;
+
+    public List<ElementData> ElementData { get; set; } = elementData;
 
   }
   public static class AssetLoader
@@ -23,7 +26,8 @@ namespace FishStick.Assets
       {
         List<IItem> relatedItems = LootableDataToILootable(assets.ItemData.Where(itemData => itemData.InScene == scene.Id).ToList());
         List<ITransition> relatedExits = ExitDataToITransition(assets.ExitData.Where(exitData => exitData.From == scene.Id).ToList());
-        scenes.Add(new BaseScene(scene.Id, scene.Description, relatedExits, relatedItems));
+        List<IElement> relatedElements = LootableDataToILootable(assets.ItemData.Where(itemData => itemData.InScene == scene.Id).ToList());
+        scenes.Add(new BaseScene(scene.Id, scene.Description, relatedExits, relatedItems, relatedElements));
       }
       return scenes;
     }
@@ -38,6 +42,11 @@ namespace FishStick.Assets
       return transitions;
     }
 
+    /// <summary>
+    /// Converts a list of ItemData to a list of IItem
+    /// </summary>
+    /// <param name="itemData"></param>
+    /// <returns></returns>
     public static List<IItem> LootableDataToILootable(List<ItemData> itemData)
     {
       List<IItem> lootables = new();
@@ -47,11 +56,36 @@ namespace FishStick.Assets
       }
       return lootables;
     }
+
+    /// <summary>
+    /// Converts a list of ItemData to a list of IElement
+    /// </summary>
+    /// <param name="itemData"></param>
+    /// <returns></returns>
+    public static List<IElement> ElementDataToIElement(List<ElementData> elementData)
+    {
+      List<IElement> elements = new();
+      foreach (ElementData element in elementData)
+      {
+        switch (element.GetType())
+        {
+          case InteractableElementData:
+            InteractableElement element = new InteractableElement(element.Id, element.SceneDescription, element.Hidden, element.Type, element.InScene, element.Name, element.OnInteract, element.Args));
+            elements.Add(element);
+            break;
+          default:
+            throw new System.Exception("Unknown element type");
+        }
+
+      }
+      return elements;
+    }
     public static Assets ReadAssetsFromFiles()
     {
       List<SceneData> sceneData = new();
       List<ExitData> exitData = new();
       List<ItemData> itemData = new();
+      List<ElementData> elementData = new();
       using var sceneReader = new StreamReader(Directory.GetCurrentDirectory() + "/assets/scenes.csv");
       {
         // Skip the first line
@@ -111,7 +145,48 @@ namespace FishStick.Assets
           }
         }
       }
-      return new Assets(sceneData, exitData, itemData);
+      using var elementsReader = new StreamReader(Directory.GetCurrentDirectory() + "/assets/elements.csv");
+      {
+        // Skip the first line
+        elementsReader.ReadLine();
+        while (!elementsReader.EndOfStream)
+        {
+          string? line = elementsReader.ReadLine();
+          if (line != null)
+          {
+            string[] values = line.Split(',');
+            // for element data: id,	in scene,	scene description,	hidden,	type,	name,	on interaction,	...arg 1	arg 2	arg 3	arg 4
+            string id = values[0];
+            string inScene = values[1];
+            string sceneDescription = values[2];
+            bool hidden;
+            if (values[3] == "TRUE")
+            {
+              hidden = true;
+            }
+            else
+            {
+              hidden = false;
+            }
+            string type = values[4];
+            switch (type)
+            {
+              case "interactable":
+                string name = values[5];
+                string onInteract = values[6];
+                string[] args = values[7..];
+                elementData.Add(new InteractableElementData(id, sceneDescription, hidden, type, inScene, name, onInteract, args));
+                break;
+              case "static":
+                elementData.Add(new ElementData(id, sceneDescription, hidden, type, inScene));
+                break;
+              default:
+                throw new System.Exception("Unknown element type");
+            }
+          }
+        }
+      }
+      return new Assets(sceneData, exitData, itemData, elementData);
     }
   }
 }
