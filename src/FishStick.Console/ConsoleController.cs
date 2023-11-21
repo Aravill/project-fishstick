@@ -1,7 +1,6 @@
 using FishStick.Item;
 using FishStick.Scene;
-using System.Collections.Generic;
-using static System.Formats.Asn1.AsnWriter;
+using Scene;
 
 namespace FishStick.Render
 {
@@ -35,6 +34,13 @@ namespace FishStick.Render
         ConsoleWriter.Write(item.SceneDescription)
           .Slowly()
           .WithHighlighting(item.Highlight ? new() { { item.Name, ConsoleColor.Yellow } } : null)
+          .WithColor(ConsoleColor.DarkGray)
+          .ToConsole();
+      }
+      foreach (IElement element in scene.Elements)
+      {
+        ConsoleWriter.Write(element.SceneDescription)
+          .Slowly()
           .WithColor(ConsoleColor.DarkGray)
           .ToConsole();
       }
