@@ -2,6 +2,8 @@ using FishStick.AssetData;
 using FishStick.Item;
 using FishStick.Scene;
 using Scene;
+using System.Linq;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace FishStick.Assets
 {
@@ -24,58 +26,38 @@ namespace FishStick.Assets
       Assets assets = ReadAssetsFromFiles();
       foreach (SceneData scene in assets.SceneData)
       {
-        List<IItem> relatedItems = LootableDataToILootable(assets.ItemData.Where(itemData => itemData.InScene == scene.Id).ToList());
-        List<ITransition> relatedExits = ExitDataToITransition(assets.ExitData.Where(exitData => exitData.From == scene.Id).ToList());
-        List<IElement> relatedElements = ElementDataToIElement(assets.ElementData.Where(elementData => elementData.InScene == scene.Id).ToList());
+        List<IItem> relatedItems = assets.ItemData.Where(itemData => itemData.InScene == scene.Id).AsItems().ToList();
+        List<ITransition> relatedExits = assets.ExitData.Where(exitData => exitData.From == scene.Id).AsTransitions().ToList();
+        List<IElement> relatedElements = assets.ElementData.Where(elementData => elementData.InScene == scene.Id).AsElements().ToList();
         scenes.Add(new BaseScene(scene.Id, scene.Description, relatedExits, relatedItems, relatedElements));
       }
       return scenes;
     }
 
-    public static List<ITransition> ExitDataToITransition(List<ExitData> exitData)
-    {
-      List<ITransition> transitions = new();
-      foreach (ExitData exit in exitData)
-      {
-        transitions.Add(new BaseTransition(exit.Name, exit.Description, exit.To));
-      }
-      return transitions;
-    }
+
+    public static IEnumerable<ITransition> AsTransitions(this IEnumerable<ExitData> exitData) => exitData.Select(AsTransition);
+
+    public static ITransition AsTransition(this ExitData exit) => new BaseTransition(exit.Name, exit.Description, exit.To);
 
     /// <summary>
     /// Converts a list of ItemData to a list of IItem
     /// </summary>
     /// <param name="itemData"></param>
     /// <returns></returns>
-    public static List<IItem> LootableDataToILootable(List<ItemData> itemData)
-    {
-      List<IItem> lootables = new();
-      foreach (ItemData item in itemData)
-      {
-        lootables.Add(new BaseItem(item.Id, item.Name, item.Description, item.SceneDescription, item.Type, item.Tags));
-      }
-      return lootables;
-    }
+    public static IEnumerable<IItem> AsItems(this IEnumerable<ItemData> itemData) => itemData.Select(AsItem);
+    public static IItem AsItem(this ItemData item) => new BaseItem(item.Id, item.Name, item.Description, item.SceneDescription, item.Type, item.Tags);
 
     /// <summary>
     /// Converts a list of ItemData to a list of IElement
     /// </summary>
     /// <param name="itemData"></param>
     /// <returns></returns>
-    public static List<IElement> ElementDataToIElement(List<ElementData> elementData)
-    {
-      List<IElement> elements = new();
-      foreach (ElementData eData in elementData)
-      {
-        elements.Add(eData.InstantiateElement());
-      }
-      return elements;
-    }
+    public static IEnumerable<IElement> AsElements(this IEnumerable<ElementData> elementData) => elementData.Select(AsElement);
 
-    public static IElement InstantiateElement(this ElementData eData) => eData switch
+    public static IElement AsElement(this ElementData eData) => eData switch
     {
       InteractableElementData ied => new InteractableElement(ied.Id, ied.Name, ied.OnInteract, ied.Args, ied.SceneDescription, ied.Hidden),
-      ElementData staticElemet => new StaticElement(eData.Id, eData.SceneDescription, eData.Hidden),
+      ElementData => new StaticElement(eData.Id, eData.SceneDescription, eData.Hidden),
       _ => throw new System.Exception("Unknown element type"),
     };
 
