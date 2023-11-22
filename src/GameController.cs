@@ -1,6 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using FishStick.Commands;
-using FishStick.Exception;
 using FishStick.Player;
 using FishStick.Render;
 using FishStick.World;

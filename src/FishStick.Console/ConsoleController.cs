@@ -16,34 +16,25 @@ namespace FishStick.Render
     }
     public static void DescribeScene(IScene scene)
     {
-      ConsoleWriter.Write(scene.Description)
-        .Slowly()
-        .WithColor(ConsoleColor.DarkGray)
-        .ToConsole();
+      string allText = scene.Description;
 
       foreach (ITransition transition in scene.Transitions)
       {
-        ConsoleWriter.Write(transition.Description)
-          .Slowly()
-          .WithHighlighting(transition.Highlight ? new() { { transition.Name, ConsoleColor.Yellow } } : null)
-          .WithColor(ConsoleColor.DarkGray)
-          .ToConsole();
+        allText += " " + transition.Description;
       }
       foreach (IItem item in scene.Items)
       {
-        ConsoleWriter.Write(item.SceneDescription)
-          .Slowly()
-          .WithHighlighting(item.Highlight ? new() { { item.Name, ConsoleColor.Yellow } } : null)
-          .WithColor(ConsoleColor.DarkGray)
-          .ToConsole();
+        allText += " " + item.SceneDescription;
       }
       foreach (IElement element in scene.Elements)
       {
-        ConsoleWriter.Write(element.SceneDescription)
-          .Slowly()
-          .WithColor(ConsoleColor.DarkGray)
-          .ToConsole();
+        if (element.Hidden) continue;
+        allText += " " + element.SceneDescription;
       }
+      ConsoleWriter.Write(allText)
+        .Slowly()
+        .WithColor(ConsoleColor.DarkGray)
+        .ToConsole();
       Console.WriteLine();
     }
 
@@ -75,6 +66,8 @@ namespace FishStick.Render
     {
       return new ConsoleWriter { _message = message };
     }
+
+    public void SetSlowly(bool slowly) => _writeSlowly = slowly;
 
     public ConsoleWriter Slowly()
     {
@@ -148,14 +141,38 @@ namespace FishStick.Render
       // skip the slow typing effect. For that, this typing effect should
       // probably be in a separate thread.
       // Could use something like this https://stackoverflow.com/questions/62610803/c-sharp-manually-stopping-an-asynchronous-for-statement-typewriter-effect
-      foreach (char c in word)
+      var ts = new CancellationTokenSource();
+      CancellationToken ct = ts.Token;
+      Task interruptSlow = Task.Run(() =>
       {
-        Console.Write(c);
+        while (true)
+        {
+          if (Console.KeyAvailable)
+          {
+            Console.ReadKey(true);
+            _writeSlowly = false;
+            break;
+          }
+          if (ct.IsCancellationRequested)
+          {
+            break;
+          }
+        }
+      });
+      for (int i = 0; i < word.Length; i++)
+      {
         if (_writeSlowly)
         {
+          Console.Write(word[i]);
           Thread.Sleep(20);
         }
+        else
+        {
+          Console.Write(word[i..]);
+          break;
+        }
       }
+      ts.Cancel();
     }
   }
 

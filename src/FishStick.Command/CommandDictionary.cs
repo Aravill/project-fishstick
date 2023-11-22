@@ -13,5 +13,6 @@ class CommandDictionary : Dictionary<string, ICommand>
     Add(InventoryCommand.Name, new InventoryCommand(player, world));
     Add(InspectCommand.Name, new InspectCommand(player, world));
     Add(LookAroundCommand.Name, new LookAroundCommand(player, world));
+    Add(InteractCommand.Name, new InteractCommand(player, world));
   }
 }

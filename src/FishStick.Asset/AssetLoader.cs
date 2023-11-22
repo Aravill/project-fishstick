@@ -56,7 +56,7 @@ namespace FishStick.Assets
 
     public static IElement AsElement(this ElementData eData) => eData switch
     {
-      InteractableElementData ied => new InteractableElement(ied.Id, ied.Name, ied.OnInteract, ied.Args, ied.SceneDescription, ied.Hidden),
+      InteractableElementData ied => new InteractableElement(ied.Id, ied.Name, ied.Target, ied.OnInteract, ied.Args, ied.SceneDescription, ied.Hidden),
       ElementData => new StaticElement(eData.Id, eData.SceneDescription, eData.Hidden),
       _ => throw new System.Exception("Unknown element type"),
     };
@@ -154,9 +154,10 @@ namespace FishStick.Assets
             {
               case "interactable":
                 string name = values[5];
-                string onInteract = values[6];
-                string[] args = values[7..];
-                elementData.Add(new InteractableElementData(id, sceneDescription, hidden, type, inScene, name, onInteract, args));
+                string target = values[6];
+                string onInteract = values[7];
+                string[] args = values[8..];
+                elementData.Add(new InteractableElementData(id, sceneDescription, hidden, type, inScene, name, target, onInteract, args));
                 break;
               case "static":
                 elementData.Add(new ElementData(id, sceneDescription, hidden, type, inScene));

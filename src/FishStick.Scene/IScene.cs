@@ -16,7 +16,7 @@ namespace FishStick.Scene
     IItem? GetItem(string itemId);
     IElement? GetElement(string elementId);
 
-    IInteractable? GetElementByCommandName(string commandName);
+    IInteractable? GetElementByTarget(string target);
     ITransition? GetTransition(string exitName);
   }
 }
