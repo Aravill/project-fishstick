@@ -2,6 +2,8 @@ using FishStick.AssetData;
 using FishStick.Item;
 using FishStick.Scene;
 using Scene;
+using System.Linq;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace FishStick.Assets
 {
