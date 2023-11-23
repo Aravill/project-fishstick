@@ -1,3 +1,3 @@
 id,in scene,scene description,hidden,type,command,on interaction,arg 1,arg 2,arg 3,arg 4
-0,0,There's a {small grey stone} to your right.,FALSE,interactable,move,RevealScript,0,1,,
+0,0,There's a {small grey stone} to your right.,FALSE,interactable,move,RevealScript,0,1,item,
 1,0,A compact {metal strongbox} is hidden in a small hole under the rock.,TRUE,static,,,,,,,

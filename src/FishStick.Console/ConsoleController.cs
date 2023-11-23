@@ -27,6 +27,7 @@ namespace FishStick.Render
       }
       foreach (IItem item in scene.Items)
       {
+        if (item.Hidden) continue;
         allText += " " + item.SceneDescription;
       }
       foreach (IElement element in scene.Elements)

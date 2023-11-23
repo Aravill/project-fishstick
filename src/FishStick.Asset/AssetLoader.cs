@@ -46,7 +46,7 @@ namespace FishStick.Assets
     /// <param name="itemData"></param>
     /// <returns></returns>
     public static IEnumerable<IItem> AsItems(this IEnumerable<ItemData> itemData) => itemData.Select(AsItem);
-    public static IItem AsItem(this ItemData item) => new BaseItem(item.Id, item.Name, item.Description, item.SceneDescription, item.Type, item.Tags);
+    public static IItem AsItem(this ItemData item) => new BaseItem(item.Id, item.Name, item.Description, item.SceneDescription, item.Type, item.Tags, item.Hidden);
 
     /// <summary>
     /// Converts a list of ItemData to a list of IElement
@@ -99,8 +99,8 @@ namespace FishStick.Assets
             // For exits data: from, to, name, description
             string from = values[0];
             string to = values[1];
-            string name = values[2];
-            string description = values[3];
+            string description = values[2];
+            string name = Regex.Match(description, @"\{([\w ]+)\}", RegexOptions.IgnoreCase).Groups[1].Value;
             exitData.Add(new ExitData(name, from, to, description));
           }
         }
@@ -117,13 +117,14 @@ namespace FishStick.Assets
             string[] values = line.Split(',');
             // For scene data: id, name, description
             string id = values[0];
-            string name = values[1];
-            string sceneDescription = values[2];
-            string description = values[3];
-            string[] tags = values[4].Split(' ');
-            string type = values[5];
-            string inScene = values[6];
-            itemData.Add(new ItemData(id, name, description, sceneDescription, type, tags, inScene));
+            string sceneDescription = values[1];
+            string name = Regex.Match(sceneDescription, @"\{([\w ]+)\}", RegexOptions.IgnoreCase).Groups[1].Value;
+            string description = values[2];
+            string[] tags = values[3].Split(' ');
+            string type = values[4];
+            string inScene = values[5];
+            bool hidden = values[6] == "TRUE";
+            itemData.Add(new ItemData(id, name, description, sceneDescription, type, tags, inScene, hidden));
           }
         }
       }
@@ -158,8 +159,6 @@ namespace FishStick.Assets
                 string name = Regex.Match(sceneDescription, @"\{([\w ]+)\}", RegexOptions.IgnoreCase).Groups[1].Value;
                 string onInteract = values[6];
                 string[] args = values[7..];
-                Console.WriteLine(command);
-                Console.WriteLine(name);
                 elementData.Add(new InteractableElementData(id, sceneDescription, hidden, type, inScene, command, name, onInteract, args));
                 break;
               case "static":

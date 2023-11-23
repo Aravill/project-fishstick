@@ -14,10 +14,10 @@ namespace FishStick.Commands
       string items = String.Join(", ", _player.GetInventory().Select(item => item.Name).ToArray());
       if (items.Length < 1)
       {
-        ConsoleController.WriteText("I look into my bag. It is empty.");
+        ConsoleController.WriteText("You look into your bag. It is empty.");
         return;
       }
-      ConsoleController.WriteText($"I look into my bag and see: {items}.");
+      ConsoleController.WriteText($"You look into your bag and see: {items}.");
       return;
     }
   }

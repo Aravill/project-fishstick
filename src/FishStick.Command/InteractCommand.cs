@@ -1,7 +1,6 @@
 
 using FishStick.Player;
 using FishStick.Render;
-using FishStick.Scene;
 using FishStick.Scripts;
 using FishStick.World;
 using Scene;
