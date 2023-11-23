@@ -14,8 +14,11 @@ namespace FishStick.Scripts
       string elementId = args[1];
       IScene? scene = world.GetScene(sceneId);
       IElement? element = scene.GetElement(elementId);
-      element.Hidden = false;
-      ConsoleController.WriteText(element.SceneDescription);
+      if (element != null)
+      {
+        element.Hidden = false;
+        ConsoleController.WriteText(element.SceneDescription);
+      }
     }
   }
 }

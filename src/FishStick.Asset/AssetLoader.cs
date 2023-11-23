@@ -3,6 +3,7 @@ using FishStick.Item;
 using FishStick.Scene;
 using Scene;
 using System.Linq;
+using System.Text.RegularExpressions;
 using static System.Formats.Asn1.AsnWriter;
 
 namespace FishStick.Assets
@@ -56,7 +57,7 @@ namespace FishStick.Assets
 
     public static IElement AsElement(this ElementData eData) => eData switch
     {
-      InteractableElementData ied => new InteractableElement(ied.Id, ied.Name, ied.Target, ied.OnInteract, ied.Args, ied.SceneDescription, ied.Hidden),
+      InteractableElementData ied => new InteractableElement(ied.Id, ied.Command, ied.Name, ied.OnInteract, ied.Args, ied.SceneDescription, ied.Hidden),
       ElementData => new StaticElement(eData.Id, eData.SceneDescription, eData.Hidden),
       _ => throw new System.Exception("Unknown element type"),
     };
@@ -153,11 +154,13 @@ namespace FishStick.Assets
             switch (type)
             {
               case "interactable":
-                string name = values[5];
-                string target = values[6];
-                string onInteract = values[7];
-                string[] args = values[8..];
-                elementData.Add(new InteractableElementData(id, sceneDescription, hidden, type, inScene, name, target, onInteract, args));
+                string command = values[5];
+                string name = Regex.Match(sceneDescription, @"\{([\w ]+)\}", RegexOptions.IgnoreCase).Groups[1].Value;
+                string onInteract = values[6];
+                string[] args = values[7..];
+                Console.WriteLine(command);
+                Console.WriteLine(name);
+                elementData.Add(new InteractableElementData(id, sceneDescription, hidden, type, inScene, command, name, onInteract, args));
                 break;
               case "static":
                 elementData.Add(new ElementData(id, sceneDescription, hidden, type, inScene));

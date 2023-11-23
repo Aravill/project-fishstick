@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using FishStick.Item;
 using FishStick.Scene;
 using Scene;
@@ -8,16 +9,18 @@ namespace FishStick.Render
   {
     public static void WriteText(string text)
     {
-      ConsoleWriter.Write(text)
+      string withoutTags = text.Replace("{", "").Replace("}", "");
+      List<string> tagged = FindTaggedWords(text);
+      ConsoleWriter.Write(withoutTags)
         .Slowly()
         .WithColor(ConsoleColor.DarkGray)
+        .WithHighlighting(tagged.ToDictionary(tag => tag, tag => ConsoleColor.DarkYellow))
         .ToConsole();
       Console.WriteLine();
     }
     public static void DescribeScene(IScene scene)
     {
       string allText = scene.Description;
-
       foreach (ITransition transition in scene.Transitions)
       {
         allText += " " + transition.Description;
@@ -31,11 +34,26 @@ namespace FishStick.Render
         if (element.Hidden) continue;
         allText += " " + element.SceneDescription;
       }
+      // Get rid of tags
+      List<string> tagged = FindTaggedWords(allText);
+      allText = allText.Replace("{", "").Replace("}", "");
       ConsoleWriter.Write(allText)
         .Slowly()
         .WithColor(ConsoleColor.DarkGray)
+        .WithHighlighting(tagged.ToDictionary(tag => tag, tag => ConsoleColor.DarkYellow))
         .ToConsole();
       Console.WriteLine();
+    }
+
+    private static List<string> FindTaggedWords(string text)
+    {
+      MatchCollection matches = Regex.Matches(text, @"\{([\w ]+)\}", RegexOptions.IgnoreCase);
+      List<string> found = new();
+      foreach (Match m in matches)
+      {
+        found.Add(m.Groups[1].Value);
+      }
+      return found;
     }
 
     public static string ReadCommand()

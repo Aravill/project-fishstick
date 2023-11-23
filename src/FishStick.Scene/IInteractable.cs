@@ -4,7 +4,7 @@ namespace Scene
   {
     string Name { get; }
 
-    string Target { get; }
+    string Command { get; }
     string OnInteract { get; }
 
     string[] Args { get; }

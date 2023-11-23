@@ -18,10 +18,10 @@ namespace FishStick.Scene
       return Elements.Find(element => element.Id == elementId);
     }
 
-    IInteractable? IScene.GetElementByTarget(string target)
+    IInteractable? IScene.GetElementByName(string name)
     {
       var interactableType = typeof(IInteractable);
-      IElement? element = Elements.Find(element => element is IInteractable && ((IInteractable)element).Target == target);
+      IElement? element = Elements.Find(element => element is IInteractable && ((IInteractable)element).Name == name);
       if (element == null) return null;
       return (IInteractable)element;
     }

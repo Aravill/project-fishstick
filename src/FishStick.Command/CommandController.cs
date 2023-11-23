@@ -1,8 +1,5 @@
 using FishStick.Player;
-using FishStick.Render;
-using FishStick.Scripts;
 using FishStick.World;
-using Scene;
 
 namespace FishStick.Commands
 {

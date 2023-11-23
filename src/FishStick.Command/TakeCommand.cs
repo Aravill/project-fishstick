@@ -29,7 +29,7 @@ namespace FishStick.Commands
         return;
       }
       _player.TakeItem(item);
-      ConsoleController.WriteText($"You take the {targetItemName}.");
+      ConsoleController.WriteText($"I take the {targetItemName}.");
       // TODO: Handle removing the item from the scene
     }
   }
