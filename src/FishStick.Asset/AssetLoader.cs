@@ -2,20 +2,18 @@ using FishStick.AssetData;
 using FishStick.Item;
 using FishStick.Scene;
 using Scene;
-using System.Linq;
 using System.Text.RegularExpressions;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace FishStick.Assets
 {
 
-  public class Assets(List<SceneData> sceneData, List<ExitData> exitData, List<ItemData> itemData, List<ElementData> elementData)
+  public class Assets(List<SceneData> sceneData, List<ExitData> exitData, List<ItemData> itemData, List<ElementData> elementData, Dictionary<string, List<string>> containerContents)
   {
     public List<SceneData> SceneData { get; set; } = sceneData;
     public List<ExitData> ExitData { get; set; } = exitData;
     public List<ItemData> ItemData { get; set; } = itemData;
-
     public List<ElementData> ElementData { get; set; } = elementData;
+    public Dictionary<string, List<string>> ContainerContents { get; set; } = containerContents;
 
   }
   public static class AssetLoader
@@ -30,6 +28,22 @@ namespace FishStick.Assets
         List<IItem> relatedItems = assets.ItemData.Where(itemData => itemData.InScene == scene.Id).AsItems().ToList();
         List<ITransition> relatedExits = assets.ExitData.Where(exitData => exitData.From == scene.Id).AsTransitions().ToList();
         List<IElement> relatedElements = assets.ElementData.Where(elementData => elementData.InScene == scene.Id).AsElements().ToList();
+        List<IItem> toRemove = new();
+        relatedItems.ForEach(item =>
+        {
+          if (item is IContainer container)
+          {
+            assets.ContainerContents.TryGetValue(container.Id, out List<string>? contents);
+            if (contents != null)
+            {
+              // We need to find the items that are in the container and add them to the container's contents
+              container.Contents = relatedItems.FindAll(item => contents.Contains(item.Id));
+              // We also need to remove them from the list of items in the scene
+              toRemove.AddRange(container.Contents);
+            }
+          }
+        });
+        relatedItems.RemoveAll(toRemove.Contains);
         scenes.Add(new BaseScene(scene.Id, scene.Description, relatedExits, relatedItems, relatedElements));
       }
       return scenes;
@@ -46,8 +60,15 @@ namespace FishStick.Assets
     /// <param name="itemData"></param>
     /// <returns></returns>
     public static IEnumerable<IItem> AsItems(this IEnumerable<ItemData> itemData) => itemData.Select(AsItem);
-    public static IItem AsItem(this ItemData item) => new BaseItem(item.Id, item.Name, item.Description, item.SceneDescription, item.Type, item.Tags, item.Hidden);
+    // public static IItem AsItem(this ItemData item) => new BaseItem(item.Id, item.Name, item.Description, item.SceneDescription, item.Type, item.Hidden);
 
+    public static IItem AsItem(this ItemData item) => item switch
+    {
+      ContainerItemData cid => new ContainerItem(cid.Id, cid.Name, cid.Description, cid.SceneDescription, cid.Type, cid.Hidden, cid.Locked, new List<IItem>()),
+      KeyItemData kid => new KeyItem(kid.Id, kid.Name, kid.Description, kid.SceneDescription, kid.Type, kid.Hidden, kid.UnlocksContainer),
+      ItemData id => new BaseItem(id.Id, id.Name, id.Description, id.SceneDescription, id.Type, id.Hidden),
+      _ => throw new System.Exception("Unknown item type"),
+    };
     /// <summary>
     /// Converts a list of ItemData to a list of IElement
     /// </summary>
@@ -68,6 +89,7 @@ namespace FishStick.Assets
       List<ExitData> exitData = new();
       List<ItemData> itemData = new();
       List<ElementData> elementData = new();
+      Dictionary<string, List<string>> containerContents = new();
       using var sceneReader = new StreamReader(Directory.GetCurrentDirectory() + "/assets/scenes.csv");
       {
         // Skip the first line
@@ -112,19 +134,46 @@ namespace FishStick.Assets
         while (!itemsReader.EndOfStream)
         {
           string? line = itemsReader.ReadLine();
+
           if (line != null)
           {
             string[] values = line.Split(',');
             // For scene data: id, name, description
             string id = values[0];
-            string sceneDescription = values[1];
+            string containerId = values[1];
+            string sceneDescription = values[2];
             string name = Regex.Match(sceneDescription, @"\{([\w ]+)\}", RegexOptions.IgnoreCase).Groups[1].Value;
-            string description = values[2];
-            string[] tags = values[3].Split(' ');
+            string description = values[3];
             string type = values[4];
             string inScene = values[5];
             bool hidden = values[6] == "TRUE";
-            itemData.Add(new ItemData(id, name, description, sceneDescription, type, tags, inScene, hidden));
+            switch (type)
+            {
+              case "container":
+                bool locked = values[7] == "TRUE";
+                List<IItem> contents = new();
+                itemData.Add(new ContainerItemData(id, name, description, sceneDescription, type, inScene, hidden, locked));
+                break;
+              case "key":
+                string unlocksContainer = values[7];
+                itemData.Add(new KeyItemData(id, name, description, sceneDescription, type, inScene, hidden, unlocksContainer));
+                break;
+              default:
+                itemData.Add(new ItemData(id, name, description, sceneDescription, type, inScene, hidden));
+                break;
+            }
+            // Adding references of items under containers
+            if (containerId != "" && containerId != null)
+            {
+              if (containerContents.ContainsKey(containerId))
+              {
+                containerContents[containerId].Add(id);
+              }
+              else
+              {
+                containerContents.Add(containerId, new List<string>() { id });
+              }
+            }
           }
         }
       }
@@ -170,7 +219,7 @@ namespace FishStick.Assets
           }
         }
       }
-      return new Assets(sceneData, exitData, itemData, elementData);
+      return new Assets(sceneData, exitData, itemData, elementData, containerContents);
     }
   }
 }
