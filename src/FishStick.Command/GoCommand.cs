@@ -1,4 +1,4 @@
-using FishStick.Exception;
+
 using FishStick.Player;
 using FishStick.Render;
 using FishStick.Scene;
@@ -18,7 +18,7 @@ namespace FishStick.Commands
       ITransition? transition = currentScene.Transitions.Find(transition => transition.Name == targetSceneName);
       if (transition is null)
       {
-        ConsoleController.WriteText($"I don't know where '{targetSceneName}' is.");
+        ConsoleController.WriteText($"You cannot go '{targetSceneName}' from here.");
         return;
       }
       _player.SetCurrentSceneId(transition.NextSceneId);

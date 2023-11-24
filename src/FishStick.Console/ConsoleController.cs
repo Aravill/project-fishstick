@@ -1,7 +1,7 @@
+using System.Text.RegularExpressions;
 using FishStick.Item;
 using FishStick.Scene;
-using System.Collections.Generic;
-using static System.Formats.Asn1.AsnWriter;
+using Scene;
 
 namespace FishStick.Render
 {
@@ -9,36 +9,52 @@ namespace FishStick.Render
   {
     public static void WriteText(string text)
     {
-      ConsoleWriter.Write(text)
+      string withoutTags = text.Replace("{", "").Replace("}", "");
+      List<string> tagged = FindTaggedWords(text);
+      ConsoleWriter.Write(withoutTags)
         .Slowly()
         .WithColor(ConsoleColor.DarkGray)
+        .WithHighlighting(tagged.ToDictionary(tag => tag, tag => ConsoleColor.DarkYellow))
         .ToConsole();
       Console.WriteLine();
     }
     public static void DescribeScene(IScene scene)
     {
-      ConsoleWriter.Write(scene.Description)
-        .Slowly()
-        .WithColor(ConsoleColor.DarkGray)
-        .ToConsole();
-
+      string allText = scene.Description;
       foreach (ITransition transition in scene.Transitions)
       {
-        ConsoleWriter.Write(transition.Description)
-          .Slowly()
-          .WithHighlighting(transition.Highlight ? new() { { transition.Name, ConsoleColor.Yellow } } : null)
-          .WithColor(ConsoleColor.DarkGray)
-          .ToConsole();
+        allText += " " + transition.Description;
       }
       foreach (IItem item in scene.Items)
       {
-        ConsoleWriter.Write(item.SceneDescription)
-          .Slowly()
-          .WithHighlighting(item.Highlight ? new() { { item.Name, ConsoleColor.Yellow } } : null)
-          .WithColor(ConsoleColor.DarkGray)
-          .ToConsole();
+        if (item.Hidden) continue;
+        allText += " " + item.SceneDescription;
       }
+      foreach (IElement element in scene.Elements)
+      {
+        if (element.Hidden) continue;
+        allText += " " + element.SceneDescription;
+      }
+      // Get rid of tags
+      List<string> tagged = FindTaggedWords(allText);
+      allText = allText.Replace("{", "").Replace("}", "");
+      ConsoleWriter.Write(allText)
+        .Slowly()
+        .WithColor(ConsoleColor.DarkGray)
+        .WithHighlighting(tagged.ToDictionary(tag => tag, tag => ConsoleColor.DarkYellow))
+        .ToConsole();
       Console.WriteLine();
+    }
+
+    private static List<string> FindTaggedWords(string text)
+    {
+      MatchCollection matches = Regex.Matches(text, @"\{([\w ]+)\}", RegexOptions.IgnoreCase);
+      List<string> found = new();
+      foreach (Match m in matches)
+      {
+        found.Add(m.Groups[1].Value);
+      }
+      return found;
     }
 
     public static string ReadCommand()
@@ -69,6 +85,8 @@ namespace FishStick.Render
     {
       return new ConsoleWriter { _message = message };
     }
+
+    public void SetSlowly(bool slowly) => _writeSlowly = slowly;
 
     public ConsoleWriter Slowly()
     {
@@ -142,14 +160,38 @@ namespace FishStick.Render
       // skip the slow typing effect. For that, this typing effect should
       // probably be in a separate thread.
       // Could use something like this https://stackoverflow.com/questions/62610803/c-sharp-manually-stopping-an-asynchronous-for-statement-typewriter-effect
-      foreach (char c in word)
+      var ts = new CancellationTokenSource();
+      CancellationToken ct = ts.Token;
+      Task interruptSlow = Task.Run(() =>
       {
-        Console.Write(c);
+        while (true)
+        {
+          if (Console.KeyAvailable)
+          {
+            Console.ReadKey(true);
+            _writeSlowly = false;
+            break;
+          }
+          if (ct.IsCancellationRequested)
+          {
+            break;
+          }
+        }
+      });
+      for (int i = 0; i < word.Length; i++)
+      {
         if (_writeSlowly)
         {
+          Console.Write(word[i]);
           Thread.Sleep(20);
         }
+        else
+        {
+          Console.Write(word[i..]);
+          break;
+        }
       }
+      ts.Cancel();
     }
   }
 

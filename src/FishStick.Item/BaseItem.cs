@@ -1,6 +1,6 @@
 namespace FishStick.Item
 {
-  class BaseItem(string Id, string Name, string description, string SceneDescription, string Type, string[] Tags) : IItem
+  class BaseItem(string Id, string Name, string description, string SceneDescription, string Type, string[] Tags, bool Hidden) : IItem
   {
     string IItem.Name { get; } = Name;
     string IItem.Description { get; } = description;
@@ -8,6 +8,6 @@ namespace FishStick.Item
     string IItem.Type { get; } = Type;
     string IItem.Id { get; } = Id;
     string[] IItem.Tags { get; } = Tags;
-    public bool Highlight => true;
+    public bool Hidden { get; set; } = Hidden;
   }
 }

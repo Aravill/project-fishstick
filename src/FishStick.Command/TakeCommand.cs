@@ -25,12 +25,12 @@ namespace FishStick.Commands
       IItem? item = currentScene.Items.Find(item => item.Name == targetItemName);
       if (item == null)
       {
-        ConsoleController.WriteText($"There is no '{targetItemName}' here.");
+        ConsoleController.WriteText($"You do not see a '{targetItemName}' here.");
         return;
       }
       _player.TakeItem(item);
       ConsoleController.WriteText($"You take the {targetItemName}.");
-      // TODO: Handle removing the item from the scene
+      currentScene.Items.Remove(item);
     }
   }
 }

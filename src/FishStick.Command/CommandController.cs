@@ -1,6 +1,4 @@
-using FishStick.Exception;
 using FishStick.Player;
-using FishStick.Render;
 using FishStick.World;
 
 namespace FishStick.Commands
@@ -16,7 +14,8 @@ namespace FishStick.Commands
       args = args[1..].Select(arg => arg.Trim()).ToArray();
       if (!_commands.ContainsKey(commandName))
       {
-        ConsoleController.WriteText($"I don't know how to '{commandName}'.");
+        // Try an interaction
+        _commands[InteractCommand.Name].Execute([commandName, .. args]);
         return;
       }
       _commands[commandName].Execute(args);

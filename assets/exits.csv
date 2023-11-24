@@ -1,2 +1,3 @@
-from,to,name,description
-0,1,east,A muddy road leads east. You see a clearing in the distance.
+from,to,description
+0,1,A muddy road leads {east}. You see a clearing in the distance.
+1,0,A muddy road back {west}. The way you came.
