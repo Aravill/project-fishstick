@@ -11,22 +11,17 @@ namespace FishStick.Session
       _historyIndex = _history.Count;
     }
 
-    public void ResetPosition()
-    {
-      _historyIndex = _history.Count;
-    }
-
     public string GetPrevious()
     {
-      if (_historyIndex == 0) return "";
       _historyIndex--;
+      if (_historyIndex < 0) { _historyIndex = -1; return ""; };
       return _history[_historyIndex];
     }
 
     public string GetNext()
     {
-      if (_historyIndex == _history.Count) return "";
       _historyIndex++;
+      if (_historyIndex >= _history.Count) { _historyIndex = _history.Count; return ""; };
       return _history[_historyIndex];
     }
   }

@@ -60,44 +60,62 @@ namespace FishStick.Render
 
     public static string ReadCommand(SessionHistory history)
     {
-      string? commandText = null;
-      var ts = new CancellationTokenSource();
-      CancellationToken ct = ts.Token;
-      Task readUpDownArrows = Task.Run(() =>
+      string? finalInput = null;
+
+      string writtenInput = "";
+      int cursorIndex = 0;
+      do
       {
-        // Detect if the user is searching through history by pressing the up arrow
-        while (Console.KeyAvailable)
+        ConsoleKeyInfo readKeyResult = Console.ReadKey(true);
+        switch (readKeyResult.Key)
         {
-          if (Console.ReadKey(true).Key == ConsoleKey.UpArrow)
-          {
-            Console.WriteLine("previous was " + history.GetPrevious());
-          }
-          else if (Console.ReadKey(true).Key == ConsoleKey.DownArrow)
-          {
-            Console.WriteLine("next was " + history.GetNext());
-          }
-          if (ct.IsCancellationRequested)
-          {
+          case ConsoleKey.UpArrow:
+            ClearCurrentConsoleLine();
+            writtenInput = history.GetPrevious();
+            Console.Write(writtenInput);
+            cursorIndex = writtenInput.Length;
             break;
-          }
+          case ConsoleKey.DownArrow:
+            ClearCurrentConsoleLine();
+            writtenInput = history.GetNext();
+            Console.Write(writtenInput);
+            cursorIndex = writtenInput.Length;
+            break;
+          case ConsoleKey.Backspace:
+            if (cursorIndex > 0)
+            {
+              ClearCurrentConsoleLine();
+              writtenInput = writtenInput.Remove(writtenInput.Length - 1);
+              Console.Write(writtenInput);
+              cursorIndex = writtenInput.Length;
+            }
+            break;
+          case ConsoleKey.Enter:
+            finalInput = writtenInput;
+            break;
+          default:
+            string added = readKeyResult.KeyChar.ToString();
+            writtenInput += added;
+            Console.Write(readKeyResult.KeyChar);
+            cursorIndex += added.Length;
+            break;
         }
-      });
-      Task read = Task.Run(() =>
-      {
-        while (commandText == null)
-        {
-          commandText = Console.ReadLine();
-          if (commandText == null)
-          {
-            continue;
-          }
-        }
-      });
-      read.Wait();
-      ts.Cancel();
-      return commandText;
+      }
+      while (finalInput == null || finalInput.Length < 1);
+      Console.WriteLine();
+      history.Add(finalInput);
+      return finalInput;
+    }
+    public static void ClearCurrentConsoleLine()
+    {
+      int currentLineCursor = Console.CursorTop;
+      Console.SetCursorPosition(0, Console.CursorTop);
+      Console.Write(new string(' ', Console.WindowWidth));
+      Console.SetCursorPosition(0, currentLineCursor);
     }
   }
+
+
   public class ConsoleWriter
   {
     private string _message = string.Empty;
@@ -183,10 +201,6 @@ namespace FishStick.Render
 
     private void WriteWord(string word)
     {
-      // TODO: It would be nice to let the user press a button like space to
-      // skip the slow typing effect. For that, this typing effect should
-      // probably be in a separate thread.
-      // Could use something like this https://stackoverflow.com/questions/62610803/c-sharp-manually-stopping-an-asynchronous-for-statement-typewriter-effect
       var ts = new CancellationTokenSource();
       CancellationToken ct = ts.Token;
       Task interruptSlow = Task.Run(() =>

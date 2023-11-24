@@ -17,7 +17,6 @@ ConsoleController.DescribeScene(world.GetScene(player.GetCurrentSceneId()));
 while (true)
 {
   string input = ConsoleController.ReadCommand(sessionHistory);
-  sessionHistory.Add(input);
   if (input.Length < 1)
   {
     continue;
