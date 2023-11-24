@@ -6,7 +6,6 @@ using System.Text.RegularExpressions;
 
 namespace FishStick.Assets
 {
-
   public class Assets(List<SceneData> sceneData, List<ExitData> exitData, List<ItemData> itemData, List<ElementData> elementData, Dictionary<string, List<string>> containerContents)
   {
     public List<SceneData> SceneData { get; set; } = sceneData;
@@ -14,6 +13,8 @@ namespace FishStick.Assets
     public List<ItemData> ItemData { get; set; } = itemData;
     public List<ElementData> ElementData { get; set; } = elementData;
     public Dictionary<string, List<string>> ContainerContents { get; set; } = containerContents;
+
+    public List<ElementData> ElementData { get; set; } = elementData;
 
   }
   public static class AssetLoader
@@ -75,7 +76,7 @@ namespace FishStick.Assets
     /// <param name="itemData"></param>
     /// <returns></returns>
     public static IEnumerable<IElement> AsElements(this IEnumerable<ElementData> elementData) => elementData.Select(AsElement);
-
+    
     public static IElement AsElement(this ElementData eData) => eData switch
     {
       InteractableElementData ied => new InteractableElement(ied.Id, ied.Command, ied.Name, ied.OnInteract, ied.Args, ied.SceneDescription, ied.Hidden),
