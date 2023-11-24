@@ -30,17 +30,17 @@ namespace FishStick.Assets
         List<IItem> toRemove = new();
         relatedItems.ForEach(item =>
         {
-          if (item is IContainer container)
-          {
-            assets.ContainerContents.TryGetValue(container.Id, out List<string>? contents);
-            if (contents != null)
-            {
-              // We need to find the items that are in the container and add them to the container's contents
-              container.Contents = relatedItems.FindAll(item => contents.Contains(item.Id));
-              // We also need to remove them from the list of items in the scene
-              toRemove.AddRange(container.Contents);
-            }
-          }
+          if (item is not IContainer container)
+            return;
+
+          assets.ContainerContents.TryGetValue(container.Id, out List<string>? contents);
+          if (contents == null)
+            return;
+
+          // We need to find the items that are in the container and add them to the container's contents
+          container.Contents = relatedItems.FindAll(item => contents.Contains(item.Id));
+          // We also need to remove them from the list of items in the scene
+          toRemove.AddRange(container.Contents);
         });
         relatedItems.RemoveAll(toRemove.Contains);
         scenes.Add(new BaseScene(scene.Id, scene.Description, relatedExits, relatedItems, relatedElements));
@@ -95,16 +95,14 @@ namespace FishStick.Assets
         sceneReader.ReadLine();
         while (!sceneReader.EndOfStream)
         {
-          string? line = sceneReader.ReadLine();
-          if (line != null)
-          {
-            string[] values = line.Split(',');
-            // For scene data: id, name, description
-            string id = values[0];
-            string name = values[1];
-            string description = values[2];
-            sceneData.Add(new SceneData(id, description, name));
-          }
+          if (sceneReader.ReadCSV() is not { Length: 3 } values)
+            continue;
+
+          // For scene data: id, name, description
+          string id = values[0];
+          string name = values[1];
+          string description = values[2];
+          sceneData.Add(new SceneData(id, description, name));
         }
       }
       using var exitsReader = new StreamReader(Directory.GetCurrentDirectory() + "/assets/exits.csv");
@@ -113,17 +111,15 @@ namespace FishStick.Assets
         exitsReader.ReadLine();
         while (!exitsReader.EndOfStream)
         {
-          string? line = exitsReader.ReadLine();
-          if (line != null)
-          {
-            string[] values = line.Split(',');
-            // For exits data: from, to, name, description
-            string from = values[0];
-            string to = values[1];
-            string description = values[2];
-            string name = description.GetName();
-            exitData.Add(new ExitData(name, from, to, description));
-          }
+          if (exitsReader.ReadCSV() is not { Length: 3 } values)
+            continue;
+
+          // For exits data: from, to, name, description
+          string from = values[0];
+          string to = values[1];
+          string description = values[2];
+          string name = description.GetName();
+          exitData.Add(new ExitData(name, from, to, description));
         }
       }
       using var itemsReader = new StreamReader(Directory.GetCurrentDirectory() + "/assets/items.csv");
@@ -132,48 +128,36 @@ namespace FishStick.Assets
         itemsReader.ReadLine();
         while (!itemsReader.EndOfStream)
         {
-          string? line = itemsReader.ReadLine();
+          if (itemsReader.ReadCSV() is not { Length: 8 } values) 
+            continue;
 
-          if (line != null)
+          // For scene data: id, name, description
+          string id = values[0];
+          string containerId = values[1];
+          string sceneDescription = values[2];
+          string name = sceneDescription.GetName();
+          string description = values[3];
+          string type = values[4];
+          string inScene = values[5];
+          _ = bool.TryParse(values[6], out var hidden); // when parsing fails hidden = false
+          _ = bool.TryParse(values[7], out var locked); // when parsing fails hidden = false
+          string unlocksContainer = values[7];
+
+          itemData.Add(type switch
           {
-            string[] values = line.Split(',');
-            // For scene data: id, name, description
-            string id = values[0];
-            string containerId = values[1];
-            string sceneDescription = values[2];
-            string name = sceneDescription.GetName();
-            string description = values[3];
-            string type = values[4];
-            string inScene = values[5];
-            bool hidden = values[6] == "TRUE";
-            switch (type)
-            {
-              case "container":
-                bool locked = values[7] == "TRUE";
-                List<IItem> contents = new();
-                itemData.Add(new ContainerItemData(id, name, description, sceneDescription, type, inScene, hidden, locked));
-                break;
-              case "key":
-                string unlocksContainer = values[7];
-                itemData.Add(new KeyItemData(id, name, description, sceneDescription, type, inScene, hidden, unlocksContainer));
-                break;
-              default:
-                itemData.Add(new ItemData(id, name, description, sceneDescription, type, inScene, hidden));
-                break;
-            }
-            // Adding references of items under containers
-            if (containerId != "" && containerId != null)
-            {
-              if (containerContents.ContainsKey(containerId))
-              {
-                containerContents[containerId].Add(id);
-              }
-              else
-              {
-                containerContents.Add(containerId, new List<string>() { id });
-              }
-            }
-          }
+            "container" => new ContainerItemData(id, name, description, sceneDescription, type, inScene, hidden, locked),
+            "key" => new KeyItemData(id, name, description, sceneDescription, type, inScene, hidden, unlocksContainer),
+            _ => new ItemData(id, name, description, sceneDescription, type, inScene, hidden)
+          });
+
+          // Adding references of items under containers
+          if (containerId == "" || containerId == null)
+            continue;
+
+          if (!containerContents.ContainsKey(containerId))
+            containerContents.Add(containerId, []);
+
+          containerContents[containerId].Add(id);
         }
       }
       using var elementsReader = new StreamReader(Directory.GetCurrentDirectory() + "/assets/elements.csv");
@@ -182,45 +166,31 @@ namespace FishStick.Assets
         elementsReader.ReadLine();
         while (!elementsReader.EndOfStream)
         {
-          string? line = elementsReader.ReadLine();
-          if (line != null)
+          if (elementsReader.ReadCSV() is not { Length: >=8 } values)
+            continue;
+
+          // for element data: id,	in scene,	scene description,	hidden,	type,	name,	on interaction,	...arg 1	arg 2	arg 3	arg 4
+          string id = values[0];
+          string inScene = values[1];
+          string sceneDescription = values[2];
+          _ = bool.TryParse(values[3], out var hidden); // when parsing fails hidden = false
+          string type = values[4];
+          string command = values[5];
+          string name = sceneDescription.GetName();
+          string onInteract = values[6];
+          string[] args = values[7..];
+
+          elementData.Add(type switch
           {
-            string[] values = line.Split(',');
-            // for element data: id,	in scene,	scene description,	hidden,	type,	name,	on interaction,	...arg 1	arg 2	arg 3	arg 4
-            string id = values[0];
-            string inScene = values[1];
-            string sceneDescription = values[2];
-            bool hidden;
-            if (values[3] == "TRUE")
-            {
-              hidden = true;
-            }
-            else
-            {
-              hidden = false;
-            }
-            string type = values[4];
-            switch (type)
-            {
-              case "interactable":
-                string command = values[5];
-                string name = sceneDescription.GetName();
-                string onInteract = values[6];
-                string[] args = values[7..];
-                elementData.Add(new InteractableElementData(id, sceneDescription, hidden, type, inScene, command, name, onInteract, args));
-                break;
-              case "static":
-                elementData.Add(new ElementData(id, sceneDescription, hidden, type, inScene));
-                break;
-              default:
-                throw new System.Exception("Unknown element type");
-            }
-          }
+            "interactable" => new InteractableElementData(id, sceneDescription, hidden, type, inScene, command, name, onInteract, args),
+            "static" => new ElementData(id, sceneDescription, hidden, type, inScene),
+            _ => throw new ArgumentException($"Unknown element type '{type}'")
+          });
         }
       }
       return new Assets(sceneData, exitData, itemData, elementData, containerContents);
     }
-
+    private static string[]? ReadCSV(this StreamReader reader, char separator = ',') => reader.ReadLine()?.Split(separator);
     private static Match FindTagged(this string description) => Regex.Match(description, @"\{([\w ]+)\}", RegexOptions.IgnoreCase);
     private static string GetMatch(this Match match, int group = 1) => match.Groups[group].Value;
     private static string GetName(this string description) => description.FindTagged().GetMatch();
