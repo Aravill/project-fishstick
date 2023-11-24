@@ -25,10 +25,5 @@ namespace FishStick.Player
     {
       return _items;
     }
-
-    public List<IItem> GetItemsByTag(string tag)
-    {
-      return _items.Where(item => item.Tags.Contains(tag)).ToList();
-    }
   }
 }
