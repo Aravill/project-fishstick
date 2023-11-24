@@ -1,4 +1,4 @@
 id, container id, scene description,description,type,in scene,hidden,locked/unlocks container
 0,,A {fork shaped key} lies on the floor.,An intricate key made of metal shaped like a fork.,key,1,FALSE,metal strongbox
 1,,A compact {metal strongbox} is hidden in a small hole under the rock.,An intricate metal strongbox. It must be hiding some kind of a secret,container,0,TRUE,TRUE
-2,1,A {red gem} is comfotably nestled on a velvet pillow inside the {metal strongbox}.,A beautiful red gemstone.,treasure,0,FALSE
+2,1,A {red gem} is comfotably nestled on a velvet pillow inside the metal strongbox.,A beautiful red gemstone.,treasure,0,FALSE

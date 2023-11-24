@@ -4,7 +4,7 @@ namespace FishStick.Item
   {
     bool Locked { get; }
     List<IItem> Contents { get; set; }
-    void FindItem(string itemName);
+    IItem? FindItem(string itemName);
     void RemoveItem(IItem item);
     void Unlock();
     void Lock();

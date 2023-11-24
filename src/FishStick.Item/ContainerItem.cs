@@ -8,9 +8,9 @@ namespace FishStick.Item
     private bool _locked;
     private List<IItem> _contents;
 
-    void IContainer.FindItem(string itemName)
+    IItem? IContainer.FindItem(string itemName)
     {
-      _contents.Find(Item => Item.Name == itemName);
+      return _contents.Find(Item => Item.Name == itemName);
     }
     void IContainer.RemoveItem(IItem item)
     {
