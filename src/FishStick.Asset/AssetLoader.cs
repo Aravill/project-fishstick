@@ -121,7 +121,7 @@ namespace FishStick.Assets
             string from = values[0];
             string to = values[1];
             string description = values[2];
-            string name = Regex.Match(description, @"\{([\w ]+)\}", RegexOptions.IgnoreCase).Groups[1].Value;
+            string name = description.GetName();
             exitData.Add(new ExitData(name, from, to, description));
           }
         }
@@ -141,7 +141,7 @@ namespace FishStick.Assets
             string id = values[0];
             string containerId = values[1];
             string sceneDescription = values[2];
-            string name = Regex.Match(sceneDescription, @"\{([\w ]+)\}", RegexOptions.IgnoreCase).Groups[1].Value;
+            string name = sceneDescription.GetName();
             string description = values[3];
             string type = values[4];
             string inScene = values[5];
@@ -204,7 +204,7 @@ namespace FishStick.Assets
             {
               case "interactable":
                 string command = values[5];
-                string name = Regex.Match(sceneDescription, @"\{([\w ]+)\}", RegexOptions.IgnoreCase).Groups[1].Value;
+                string name = sceneDescription.GetName();
                 string onInteract = values[6];
                 string[] args = values[7..];
                 elementData.Add(new InteractableElementData(id, sceneDescription, hidden, type, inScene, command, name, onInteract, args));
@@ -220,5 +220,9 @@ namespace FishStick.Assets
       }
       return new Assets(sceneData, exitData, itemData, elementData, containerContents);
     }
+
+    private static Match FindTagged(this string description) => Regex.Match(description, @"\{([\w ]+)\}", RegexOptions.IgnoreCase);
+    private static string GetMatch(this Match match, int group = 1) => match.Groups[group].Value;
+    private static string GetName(this string description) => description.FindTagged().GetMatch();
   }
 }

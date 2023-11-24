@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using System.Xml;
 using FishStick.Item;
 using FishStick.Scene;
 using Scene;
@@ -9,67 +10,68 @@ namespace FishStick.Render
   {
     public static void WriteText(string text)
     {
-      string withoutTags = text.Replace("{", "").Replace("}", "");
-      List<string> tagged = FindTaggedWords(text);
+      string withoutTags = text.FindTags(out var tags)
+                               .RemoveTagMarkers();
+
       ConsoleWriter.Write(withoutTags)
         .Slowly()
         .WithColor(ConsoleColor.DarkGray)
-        .WithHighlighting(tagged.ToDictionary(tag => tag, tag => ConsoleColor.DarkYellow))
+        .WithHighlighting(tags.ToDictionary(tag => tag, tag => ConsoleColor.DarkYellow))
         .ToConsole();
+
       Console.WriteLine();
     }
     public static void DescribeScene(IScene scene)
     {
-      string allText = scene.Description;
-      foreach (ITransition transition in scene.Transitions)
-      {
-        allText += " " + transition.Description;
-      }
-      foreach (IItem item in scene.Items)
-      {
-        if (item.Hidden) continue;
-        allText += " " + item.SceneDescription;
-      }
-      foreach (IElement element in scene.Elements)
-      {
-        if (element.Hidden) continue;
-        allText += " " + element.SceneDescription;
-      }
-      // Get rid of tags
-      List<string> tagged = FindTaggedWords(allText);
-      allText = allText.Replace("{", "").Replace("}", "");
+      var description = scene.Description;
+      var transitions = scene.Transitions.Select(t => t.Description);
+      var items       = scene.Items.Where(i => !i.Hidden).Select(i => i.SceneDescription);
+      var elements    = scene.Elements.Where(e => !e.Hidden).Select(e => e.SceneDescription);
+
+      var textList = description.Concat(transitions)
+                                .Concat(items)
+                                .Concat(elements);
+
+      var allText = string.Join(' ', textList)
+                          .FindTags(out var tags)
+                          .RemoveTagMarkers();
+
       ConsoleWriter.Write(allText)
         .Slowly()
         .WithColor(ConsoleColor.DarkGray)
-        .WithHighlighting(tagged.ToDictionary(tag => tag, tag => ConsoleColor.DarkYellow))
+        .WithHighlighting(tags.ToDictionary(tag => tag, tag => ConsoleColor.DarkYellow))
         .ToConsole();
+
       Console.WriteLine();
     }
-
-    private static List<string> FindTaggedWords(string text)
-    {
-      MatchCollection matches = Regex.Matches(text, @"\{([\w ]+)\}", RegexOptions.IgnoreCase);
-      List<string> found = new();
-      foreach (Match m in matches)
-      {
-        found.Add(m.Groups[1].Value);
-      }
-      return found;
-    }
-
     public static string ReadCommand()
     {
-      string? commandText = null;
-      while (commandText == null)
-      {
-        commandText = Console.ReadLine();
-        if (commandText == null)
-        {
-          continue;
-        }
-      }
-      return commandText;
+      string? commandText;
+      while (string.IsNullOrWhiteSpace(commandText = Console.ReadLine())) ;
+
+      return commandText!;
     }
+  }
+  public static class StringExtensions
+  {
+    public static string RemoveTagMarkers(this string text) => text.Replace("{", "").Replace("}", "");
+    public static string FindTags(this string text, out List<string> tags)
+    {
+      tags = Regex.Matches(text, @"\{([\w ]+)\}", RegexOptions.IgnoreCase).Select(match => match.Groups[1].Value).ToList();
+      return text;
+    }
+
+    public static IEnumerable<string> Concat(this string text, IEnumerable<string> next) 
+    { 
+      return toEnumerable(text).Concat(next);
+
+      // hax
+      IEnumerable<string> toEnumerable(string toEnum)
+      {
+        yield return toEnum;
+      }
+    }
+
   }
   public class ConsoleWriter
   {
