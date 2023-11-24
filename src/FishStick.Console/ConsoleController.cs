@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 using FishStick.Item;
 using FishStick.Scene;
+using FishStick.Session;
 using Scene;
 
 namespace FishStick.Render
@@ -57,17 +58,43 @@ namespace FishStick.Render
       return found;
     }
 
-    public static string ReadCommand()
+    public static string ReadCommand(SessionHistory history)
     {
       string? commandText = null;
-      while (commandText == null)
+      var ts = new CancellationTokenSource();
+      CancellationToken ct = ts.Token;
+      Task readUpDownArrows = Task.Run(() =>
       {
-        commandText = Console.ReadLine();
-        if (commandText == null)
+        // Detect if the user is searching through history by pressing the up arrow
+        while (Console.KeyAvailable)
         {
-          continue;
+          if (Console.ReadKey(true).Key == ConsoleKey.UpArrow)
+          {
+            Console.WriteLine("previous was " + history.GetPrevious());
+          }
+          else if (Console.ReadKey(true).Key == ConsoleKey.DownArrow)
+          {
+            Console.WriteLine("next was " + history.GetNext());
+          }
+          if (ct.IsCancellationRequested)
+          {
+            break;
+          }
         }
-      }
+      });
+      Task read = Task.Run(() =>
+      {
+        while (commandText == null)
+        {
+          commandText = Console.ReadLine();
+          if (commandText == null)
+          {
+            continue;
+          }
+        }
+      });
+      read.Wait();
+      ts.Cancel();
       return commandText;
     }
   }
