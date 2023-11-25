@@ -8,6 +8,12 @@ namespace FishStick.Render
 {
   class ConsoleController
   {
+
+    public class GameCursor
+    {
+      public char cursorSymbol = '▮';
+      public int cursorIndex = 0;
+    }
     public static void WriteText(string text)
     {
       string withoutTags = text.Replace("{", "").Replace("}", "");
@@ -60,10 +66,12 @@ namespace FishStick.Render
 
     public static string ReadCommand(SessionHistory history)
     {
+      Console.CursorVisible = false;
       string? finalInput = null;
-
-      string writtenInput = "";
-      int cursorIndex = 0;
+      GameCursor cursor = new();
+      // Fake the cursor
+      string writtenInput = cursor.cursorSymbol.ToString();
+      Console.Write(writtenInput);
       do
       {
         ConsoleKeyInfo readKeyResult = Console.ReadKey(true);
@@ -72,39 +80,79 @@ namespace FishStick.Render
           case ConsoleKey.UpArrow:
             ClearCurrentConsoleLine();
             writtenInput = history.GetPrevious();
-            Console.Write(writtenInput);
-            cursorIndex = writtenInput.Length;
+            Console.Write(writtenInput + cursor.cursorSymbol);
+            cursor.cursorIndex = writtenInput.Length + 1;
             break;
           case ConsoleKey.DownArrow:
             ClearCurrentConsoleLine();
             writtenInput = history.GetNext();
-            Console.Write(writtenInput);
-            cursorIndex = writtenInput.Length;
+            Console.Write(writtenInput + cursor.cursorSymbol);
+            cursor.cursorIndex = writtenInput.Length + 1;
             break;
           case ConsoleKey.Backspace:
-            if (cursorIndex > 0)
+            if (cursor.cursorIndex > 0)
             {
               ClearCurrentConsoleLine();
-              writtenInput = writtenInput.Remove(writtenInput.Length - 1);
+              // Remove the cursor symbol + last character from the end of the string
+              if (cursor.cursorIndex == 0)
+              {
+                break;
+              }
+              // Remove the symbol before the cursor
+              writtenInput = writtenInput.Remove(cursor.cursorIndex - 1, 1);
+              cursor.cursorIndex--;
               Console.Write(writtenInput);
-              cursorIndex = writtenInput.Length;
             }
             break;
           case ConsoleKey.Enter:
-            finalInput = writtenInput;
+            finalInput = RemoveCursor(writtenInput);
+            break;
+          case ConsoleKey.LeftArrow:
+            ClearCurrentConsoleLine();
+            writtenInput = MoveCursor(false, writtenInput, cursor);
+            Console.Write(writtenInput);
+            break;
+          case ConsoleKey.RightArrow:
+            ClearCurrentConsoleLine();
+            writtenInput = MoveCursor(true, writtenInput, cursor);
+            Console.Write(writtenInput);
             break;
           default:
+            // Clear what's been written so far
+            ClearCurrentConsoleLine();
+            // Add the new character + cursor symbol and add it to the written input
             string added = readKeyResult.KeyChar.ToString();
-            writtenInput += added;
-            Console.Write(readKeyResult.KeyChar);
-            cursorIndex += added.Length;
+            writtenInput = writtenInput.Insert(cursor.cursorIndex, added);
+            cursor.cursorIndex++;
+            Console.Write(writtenInput);
             break;
         }
       }
       while (finalInput == null || finalInput.Length < 1);
       Console.WriteLine();
       history.Add(finalInput);
+      Console.CursorVisible = true;
       return finalInput;
+    }
+
+    private static string MoveCursor(bool forward, string text, GameCursor cursor)
+    {
+      // Make sure we don't go out of bounds
+      if (cursor.cursorIndex == 0 && !forward) return text;
+      // -2 because our cursor is at the end of the string, always addind 1 additional symbol and the user cannot move past itself
+      if (cursor.cursorIndex == text.Length - 1 && forward) return text;
+      // Remove cursor from its current index
+      text = text.Remove(cursor.cursorIndex, 1);
+      // Shift the cursor index
+      cursor.cursorIndex = forward ? cursor.cursorIndex + 1 : cursor.cursorIndex - 1;
+      // Assemble the string with the cursor symbol
+      text = text.Insert(cursor.cursorIndex, cursor.cursorSymbol.ToString());
+      return text;
+    }
+
+    private static string RemoveCursor(string input)
+    {
+      return input.Remove(input.Length - 1);
     }
     public static void ClearCurrentConsoleLine()
     {
