@@ -1,4 +1,5 @@
 using FishStick.Player;
+using FishStick.Session;
 using FishStick.World;
 
 namespace FishStick.Commands
