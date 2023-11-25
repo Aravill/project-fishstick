@@ -12,6 +12,7 @@ try
   CommandController commandController = new(player, world);
   SessionHistory sessionHistory = new();
 
+  Console.Clear();
   ConsoleController.WriteText("Welcome to ProjectFishStick!\n");
 
   // Initial scene description before we begin the main gameplay loop
@@ -23,6 +24,8 @@ try
     {
       continue;
     }
+    // Simulate "thinking" time
+    Thread.Sleep(100);
     commandController.Execute(input);
   }
 }
