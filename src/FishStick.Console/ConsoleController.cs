@@ -79,15 +79,15 @@ namespace FishStick.Render
         {
           case ConsoleKey.UpArrow:
             ClearCurrentConsoleLine();
-            writtenInput = history.GetPrevious();
-            Console.Write(writtenInput + cursor.cursorSymbol);
-            cursor.cursorIndex = writtenInput.Length + 1;
+            writtenInput = history.GetPrevious() + cursor.cursorSymbol;
+            Console.Write(writtenInput);
+            cursor.cursorIndex = writtenInput.Length - 1;
             break;
           case ConsoleKey.DownArrow:
             ClearCurrentConsoleLine();
-            writtenInput = history.GetNext();
-            Console.Write(writtenInput + cursor.cursorSymbol);
-            cursor.cursorIndex = writtenInput.Length + 1;
+            writtenInput = history.GetNext() + cursor.cursorSymbol;
+            Console.Write(writtenInput);
+            cursor.cursorIndex = writtenInput.Length - 1;
             break;
           case ConsoleKey.Backspace:
             if (cursor.cursorIndex > 0)
@@ -105,7 +105,13 @@ namespace FishStick.Render
             }
             break;
           case ConsoleKey.Enter:
-            finalInput = RemoveCursor(writtenInput);
+            // Don't do anything if the user hasn't typed anything yet
+            if (writtenInput.Length > 1)
+            {
+              ClearCurrentConsoleLine();
+              finalInput = RemoveCursor(writtenInput, cursor.cursorIndex);
+              Console.Write(finalInput);
+            }
             break;
           case ConsoleKey.LeftArrow:
             ClearCurrentConsoleLine();
@@ -150,9 +156,9 @@ namespace FishStick.Render
       return text;
     }
 
-    private static string RemoveCursor(string input)
+    private static string RemoveCursor(string input, int cursorIndex)
     {
-      return input.Remove(input.Length - 1);
+      return input.Remove(cursorIndex, 1);
     }
     public static void ClearCurrentConsoleLine()
     {

@@ -26,8 +26,10 @@ try
     commandController.Execute(input);
   }
 }
-catch (System.Exception)
+catch (Exception exception)
 {
-  Console.WriteLine("Something went wrong. Sorry!.");
+  Console.WriteLine(exception.Message);
+  Console.WriteLine(exception.StackTrace);
   Console.CursorVisible = true;
+  Environment.Exit(0);
 }
