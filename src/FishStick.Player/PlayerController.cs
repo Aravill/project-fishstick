@@ -32,7 +32,7 @@ namespace FishStick.Player
       _inventory.AddItem(item);
     }
 
-    public void DropItem(IItem item)
+    public void RemoveItem(IItem item)
     {
       _inventory.RemoveItem(item);
     }

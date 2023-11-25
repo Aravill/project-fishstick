@@ -16,5 +16,6 @@ class CommandDictionary : Dictionary<string, ICommand>
     Add(InteractCommand.Name, new InteractCommand(player, world));
     Add(OpenCommand.Name, new OpenCommand(player, world));
     Add(UnlockCommand.Name, new UnlockCommand(player, world));
+    Add(PutCommand.Name, new PutCommand(player, world));
   }
 }
