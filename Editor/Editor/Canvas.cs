@@ -48,6 +48,22 @@ namespace Editor
             CreateNode(location);
         }
 
+        private void Node_MouseMove(object? sender, MouseEventArgs e)
+        {
+            if (sender is not Node { } node)
+                return;
+
+            //var node = (Node)sender;
+
+            // Translate the child control's coordinates to the parent's
+            Point pointInParent = node.PointToScreen(e.Location);
+            pointInParent = this.PointToClient(pointInParent);
+
+            // Invoke the parent's MouseMove event manually
+            MouseEventArgs argsForParent = new MouseEventArgs(e.Button, e.Clicks, pointInParent.X, pointInParent.Y, e.Delta);
+
+            Canvas_MouseMove(sender, argsForParent);
+        }
         private void SelectNode(object? sender, MouseEventArgs e)
         {
             if (sender is not Node { } node)

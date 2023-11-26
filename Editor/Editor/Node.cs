@@ -31,7 +31,25 @@ namespace Editor
             foreach (Control control in Controls)
             {
                 control.MouseMove += this.GetHandler_ChildControl_MouseMove();
+                    //ExChildControl_MouseMove();
             }
+        }
+
+        private MouseEventHandler ChildControl_MouseMove()
+        {
+            return (object? sender, MouseEventArgs e) =>
+            {
+                if (sender is not Control { } control)
+                    return;
+
+                Point pointInParent = control.PointToScreen(e.Location);
+                pointInParent = this.PointToClient(pointInParent);
+
+                // Invoke the parent's MouseMove event manually
+                MouseEventArgs argsForParent = new MouseEventArgs(e.Button, e.Clicks, pointInParent.X, pointInParent.Y, e.Delta);
+
+                OnMouseMove(argsForParent);
+            };
         }
 
         private void OnSelectHandler(object? sender, MouseEventArgs e)
