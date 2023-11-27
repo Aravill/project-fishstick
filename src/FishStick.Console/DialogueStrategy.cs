@@ -15,6 +15,8 @@ namespace FishStick.Render
         if (readNextLine)
         {
           ConsoleController.WriteText(currentLine.Text);
+          // Insert a small deylay to make the game feel more "alive" and less copy-pasty
+          Thread.Sleep(300);
         }
         readNextLine = true;
         if (currentLine.IsDialogueExit)
@@ -77,6 +79,8 @@ namespace FishStick.Render
     }
     private static void ListReplies(List<IReply> replies, int selectedLine)
     {
+      // Create an empty line to make the replies more readable, we will remove it later.
+      Console.WriteLine();
       for (int i = 0; i < replies.Count; i++)
       {
         if (i == selectedLine)
@@ -104,8 +108,8 @@ namespace FishStick.Render
     private static void ClearReplies(int lineCount)
     {
       int originalLine = Console.CursorTop;
-      // Adding 1 to line count to clear the very bottom line
-      for (int i = 0; i < lineCount + 1; i++)
+      // Adding 1 to line count to clear the very bottom line and very top empty line
+      for (int i = 0; i < lineCount + 2; i++)
       {
         Console.SetCursorPosition(0, originalLine - i);
         Console.Write(new string(' ', Console.WindowWidth));

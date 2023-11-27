@@ -185,7 +185,7 @@ namespace FishStick.Render
         if (_writeSlowly)
         {
           Console.Write(word[i]);
-          Thread.Sleep(20);
+          Thread.Sleep(30);
         }
         else
         {
