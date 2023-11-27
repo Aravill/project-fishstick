@@ -16,18 +16,19 @@ try
   ConsoleController.WriteText("Welcome to ProjectFishStick!\n");
 
   // Initial scene description before we begin the main gameplay loop
-  ConsoleController.DescribeScene(world.GetScene(player.GetCurrentSceneId()));
-  while (true)
-  {
-    string input = ConsoleController.ReadCommand(sessionHistory);
-    if (input.Length < 1)
-    {
-      continue;
-    }
-    // Simulate "thinking" time
-    Thread.Sleep(100);
-    commandController.Execute(input);
-  }
+  // ConsoleController.DescribeScene(world.GetScene(player.GetCurrentSceneId()));
+  // while (true)
+  // {
+  ConsoleController.HandleDialogue();
+  // string input = ConsoleController.ReadCommand(sessionHistory);
+  // if (input.Length < 1)
+  // {
+  //   continue;
+  // }
+  // // Simulate "thinking" time
+  // Thread.Sleep(100);
+  // commandController.Execute(input);
+  // }
 }
 catch (Exception exception)
 {

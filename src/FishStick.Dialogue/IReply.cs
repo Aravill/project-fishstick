@@ -3,6 +3,8 @@ namespace Dialogue
   interface IReply
   {
     string Text { get; }
-    IDialogueLine? NextLine { get; }
+    string? NextLineId { get; }
+
+    bool WasUsed { get; set; }
   }
 }

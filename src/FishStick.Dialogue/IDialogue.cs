@@ -5,6 +5,7 @@ namespace Dialogue
     string Id { get; }
     List<IDialogueLine> Lines { get; }
     IDialogueLine CurrentLine { get; }
-    IDialogueLine? GetNextLine(IReply reply);
+    public void ContinueDialogue(IReply reply);
+    public void ContinueDialogue(IDialogueLine line);
   }
 }
