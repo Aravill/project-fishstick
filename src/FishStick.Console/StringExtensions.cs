@@ -5,7 +5,7 @@ namespace FishStick.Render
   public static class StringExtensions
 {
   public static string RemoveTagMarkers(this string text) => text.Replace("{", "").Replace("}", "");
-  public static string FindTags(this string text, out List<string> tags)
+  public static string FindTaggedWords(this string text, out List<string> tags)
   {
     tags = Regex.Matches(text, @"\{([\w ]+)\}", RegexOptions.IgnoreCase).Select(match => match.Groups[1].Value).ToList();
     return text;

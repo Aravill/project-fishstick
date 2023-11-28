@@ -15,13 +15,13 @@ namespace FishStick.Render
     }
     public static void WriteText(string text)
     {
-      string withoutTags = text.FindTags(out var tags)
+      string withoutTags = text.FindTaggedWords(out var taggedWords)
                                .RemoveTagMarkers();
 
       ConsoleWriter.Write(withoutTags)
         .Slowly()
         .WithColor(ConsoleColor.DarkGray)
-        .WithHighlighting(tags.ToDictionary(tag => tag, tag => ConsoleColor.DarkYellow))
+        .WithHighlighting(taggedWords.ToDictionary(tag => tag, tag => ConsoleColor.DarkYellow))
         .ToConsole();
 
       Console.WriteLine();
@@ -38,13 +38,13 @@ namespace FishStick.Render
                                 .Concat(elements);
 
       var allText = string.Join(' ', textList)
-                          .FindTags(out var tags)
+                          .FindTaggedWords(out var taggedWords)
                           .RemoveTagMarkers();
 
       ConsoleWriter.Write(allText)
         .Slowly()
         .WithColor(ConsoleColor.DarkGray)
-        .WithHighlighting(tags.ToDictionary(tag => tag, tag => ConsoleColor.DarkYellow))
+        .WithHighlighting(taggedWords.ToDictionary(tag => tag, tag => ConsoleColor.DarkYellow))
         .ToConsole();
 
       Console.WriteLine();
