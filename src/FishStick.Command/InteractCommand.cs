@@ -40,10 +40,10 @@ namespace FishStick.Commands
       if (AttemptInteraction(commandName, potentialTargetName)) return;
       if (potentialTargetName.Length < 1)
       {
-        ConsoleController.WriteText($"I don't know how to '{commandName}'");
+        ConsoleController.WriteText($"You don't know how to '{commandName}'");
         return;
       }
-      ConsoleController.WriteText($"I don't know how to '{commandName}' a '{potentialTargetName}'.");
+      ConsoleController.WriteText($"You don't know how to '{commandName}' a '{potentialTargetName}'.");
     }
 
     private bool AttemptInteraction(string commandName, string potentialTargetName)
@@ -57,10 +57,10 @@ namespace FishStick.Commands
       if (commandName != element?.Command)
       {
         // We hit the target but the command is incorrect
-        ConsoleController.WriteText($"I cannot {commandName} the {potentialTargetName}.");
+        ConsoleController.WriteText($"You cannot {commandName} the {potentialTargetName}.");
         return true;
       }
-      ConsoleController.WriteText($"I {commandName} the {potentialTargetName}.");
+      ConsoleController.WriteText($"You {commandName} the {potentialTargetName}.");
       _scripts.ExecuteScript(_player, _world, element.OnInteract, element.Args);
       // Command success
       return true;

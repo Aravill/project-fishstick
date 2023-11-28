@@ -10,7 +10,7 @@ namespace FishStick.Item
 
     IItem? IContainer.FindItem(string itemName)
     {
-      return _contents.Find(Item => Item.Name == itemName);
+      return _contents.Find(Item => Item.Name == itemName && Item.Hidden == false);
     }
     void IContainer.RemoveItem(IItem item)
     {

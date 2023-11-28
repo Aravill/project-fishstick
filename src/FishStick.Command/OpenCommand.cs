@@ -46,8 +46,13 @@ namespace FishStick.Commands
       }
       else
       {
-        ConsoleController.WriteText($"You open the {itemName}. Inside you find: ");
-        item.Contents.ForEach(item => ConsoleController.WriteText($"- {item.SceneDescription}"));
+        string conents = $"You open the {itemName}. Inside you find:\n" + String.Join("\n", item.Contents.Select(item => $"- {item.SceneDescription}"));
+        item.Contents.ForEach(item =>
+        {
+          // If any of the items were hidden, reveal them so they can be looted
+          item.Hidden = false;
+        });
+        ConsoleController.WriteText(conents);
       }
       // TODO: Technically doors are also openable, but i'll figure that out another time
     }
