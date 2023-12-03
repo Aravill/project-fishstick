@@ -18,6 +18,7 @@ namespace Editor
         Node? selectedNode;
         Point? selectPoint;
         List<(Node a, Node b)> connections = [];
+
         public Canvas()
         {
             InitializeComponent();
@@ -60,10 +61,17 @@ namespace Editor
             pointInParent = this.PointToClient(pointInParent);
 
             // Invoke the parent's MouseMove event manually
-            MouseEventArgs argsForParent = new MouseEventArgs(e.Button, e.Clicks, pointInParent.X, pointInParent.Y, e.Delta);
+            MouseEventArgs argsForParent = new MouseEventArgs(
+                e.Button,
+                e.Clicks,
+                pointInParent.X,
+                pointInParent.Y,
+                e.Delta
+            );
 
             Canvas_MouseMove(sender, argsForParent);
         }
+
         private void SelectNode(object? sender, MouseEventArgs e)
         {
             if (sender is not Node { } node)
@@ -92,19 +100,20 @@ namespace Editor
 
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
-            if (selectedNode is null || selectPoint is null) return;
+            if (selectedNode is null || selectPoint is null)
+                return;
 
-            selectedNode.Location = new Point(e.Location.X - selectPoint!.Value.X,
-                                              e.Location.Y - selectPoint!.Value.Y);
+            selectedNode.Location = new Point(
+                e.Location.X - selectPoint!.Value.X,
+                e.Location.Y - selectPoint!.Value.Y
+            );
         }
 
         private void Canvas_Paint(object sender, PaintEventArgs e)
         {
             connections.ForEach(connection =>
             {
-                e.Graphics.DrawLine(Pens.Black,
-                                    connection.a.Location,
-                                    connection.b.Location);
+                e.Graphics.DrawLine(Pens.Black, connection.a.Location, connection.b.Location);
             });
         }
 
@@ -119,6 +128,7 @@ namespace Editor
             e.Message = "Add node.";
             e.Effect = DragDropEffects.Copy;
         }
+
         protected override Point ScrollToControl(Control activeControl)
         {
             Point pt = this.AutoScrollPosition;

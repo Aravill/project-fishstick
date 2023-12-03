@@ -1,6 +1,4 @@
 namespace Dialogue
 {
-  class DialogueController
-  {
-  }
+    class DialogueController { }
 }

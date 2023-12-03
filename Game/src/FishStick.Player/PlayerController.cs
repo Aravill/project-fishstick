@@ -3,71 +3,71 @@ using FishStick.Item;
 
 namespace FishStick.Player
 {
-  class PlayerController
-  {
-    private int _hp { get; set; }
-    private Inventory _inventory;
-
-    private string _currentSceneId;
-
-    public void SetCurrentSceneId(string sceneId)
+    class PlayerController
     {
-      _currentSceneId = sceneId;
-    }
+        private int _hp { get; set; }
+        private Inventory _inventory;
 
-    public string GetCurrentSceneId()
-    {
-      return _currentSceneId;
-    }
+        private string _currentSceneId;
 
-    public PlayerController(int hp)
-    {
-      _currentSceneId = "0";
-      _hp = hp;
-      _inventory = new Inventory();
-    }
+        public void SetCurrentSceneId(string sceneId)
+        {
+            _currentSceneId = sceneId;
+        }
 
-    public void TakeItem(IItem item)
-    {
-      _inventory.AddItem(item);
-    }
+        public string GetCurrentSceneId()
+        {
+            return _currentSceneId;
+        }
 
-    public void RemoveItem(IItem item)
-    {
-      _inventory.RemoveItem(item);
-    }
+        public PlayerController(int hp)
+        {
+            _currentSceneId = "0";
+            _hp = hp;
+            _inventory = new Inventory();
+        }
 
-    public List<IItem> GetInventory()
-    {
-      return _inventory.GetItems();
-    }
+        public void TakeItem(IItem item)
+        {
+            _inventory.AddItem(item);
+        }
 
-    public IItem? GetInventoryItem(string name)
-    {
-      return _inventory.GetItem(name);
-    }
-    public int GetHp()
-    {
-      return _hp;
-    }
+        public void RemoveItem(IItem item)
+        {
+            _inventory.RemoveItem(item);
+        }
 
-    public int RollHp()
-    {
-      _hp = DiceRoller.Roll("4d6");
-      return _hp;
-    }
+        public List<IItem> GetInventory()
+        {
+            return _inventory.GetItems();
+        }
 
-    public int TakeDamage(int amount)
-    {
-      _hp -= amount;
-      return _hp;
-    }
+        public IItem? GetInventoryItem(string name)
+        {
+            return _inventory.GetItem(name);
+        }
 
-    public int Heal(int amount)
-    {
-      _hp += amount;
-      return _hp;
-    }
-  }
+        public int GetHp()
+        {
+            return _hp;
+        }
 
+        public int RollHp()
+        {
+            _hp = DiceRoller.Roll("4d6");
+            return _hp;
+        }
+
+        public int TakeDamage(int amount)
+        {
+            _hp -= amount;
+            return _hp;
+        }
+
+        public int Heal(int amount)
+        {
+            _hp += amount;
+            return _hp;
+        }
+    }
 }

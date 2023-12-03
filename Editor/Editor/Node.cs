@@ -20,6 +20,7 @@ namespace Editor
         public event MouseEventHandler? OnUnselect;
 
         bool selected = false;
+
         public Node()
         {
             InitializeComponent();
@@ -31,7 +32,7 @@ namespace Editor
             foreach (Control control in Controls)
             {
                 control.MouseMove += this.GetHandler_ChildControl_MouseMove();
-                    //ExChildControl_MouseMove();
+                //ExChildControl_MouseMove();
             }
         }
 
@@ -46,7 +47,13 @@ namespace Editor
                 pointInParent = this.PointToClient(pointInParent);
 
                 // Invoke the parent's MouseMove event manually
-                MouseEventArgs argsForParent = new MouseEventArgs(e.Button, e.Clicks, pointInParent.X, pointInParent.Y, e.Delta);
+                MouseEventArgs argsForParent = new MouseEventArgs(
+                    e.Button,
+                    e.Clicks,
+                    pointInParent.X,
+                    pointInParent.Y,
+                    e.Delta
+                );
 
                 OnMouseMove(argsForParent);
             };
@@ -75,12 +82,10 @@ namespace Editor
         }
 
         [Obsolete]
-        private void Node_MouseClick(object sender, MouseEventArgs e)
-        {
-
-        }
+        private void Node_MouseClick(object sender, MouseEventArgs e) { }
 
         int cexit = 0; // todo: remove
+
         private void addTransitionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Transitions.Add($"Exit_{cexit++}");
@@ -101,19 +106,10 @@ namespace Editor
         }
 
         [Obsolete]
-        private void Node_MouseUp(object sender, MouseEventArgs e)
-        {
+        private void Node_MouseUp(object sender, MouseEventArgs e) { }
 
-        }
+        private void Node_Paint(object sender, PaintEventArgs e) { }
 
-        private void Node_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void Node_MouseMove(object? sender, MouseEventArgs e)
-        {
-
-        }
+        private void Node_MouseMove(object? sender, MouseEventArgs e) { }
     }
 }

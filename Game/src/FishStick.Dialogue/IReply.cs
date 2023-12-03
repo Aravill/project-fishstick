@@ -1,10 +1,10 @@
 namespace Dialogue
 {
-  interface IReply
-  {
-    string Text { get; }
-    string? NextLineId { get; }
+    interface IReply
+    {
+        string Text { get; }
+        string? NextLineId { get; }
 
-    bool WasUsed { get; set; }
-  }
+        bool WasUsed { get; set; }
+    }
 }
