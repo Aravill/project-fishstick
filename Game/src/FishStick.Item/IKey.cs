@@ -1,7 +1,7 @@
 namespace FishStick.Item
 {
-    interface IKey : IItem
-    {
-        string UnlocksContainer { get; }
-    }
+  interface IKey : IItem
+  {
+    string UnlocksContainer { get; }
+  }
 }

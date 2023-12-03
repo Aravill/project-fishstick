@@ -1,18 +1,21 @@
 namespace Dialogue
 {
-    class Reply : IReply
+  class Reply : IReply
+  {
+    public string Text { get; }
+
+    public string NextLineId { get; }
+
+    public bool WasUsed { get; set; }
+
+    public bool Repeatable { get; }
+
+    public Reply(string text, string nextLineId, bool repeatable = true)
     {
-        public string Text { get; }
-
-        public string NextLineId { get; }
-
-        public bool WasUsed { get; set; }
-
-        public Reply(string text, string nextLineId)
-        {
-            Text = text;
-            NextLineId = nextLineId;
-            WasUsed = false;
-        }
+      Text = text;
+      NextLineId = nextLineId;
+      WasUsed = false;
+      Repeatable = repeatable;
     }
+  }
 }
