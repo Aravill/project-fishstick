@@ -32,7 +32,7 @@ namespace Editor
         {
             Node node = new() { Location = location };
             node.OnRemove += RemoveNode;
-            node.MouseMove += this.GetHandler_ChildControl_MouseMove();
+            node.MouseMove += Child_MouseMove;
             node.OnSelect += SelectNode;
             node.OnUnselect += UnselectNode;
 
