@@ -32,7 +32,7 @@ namespace Editor
         {
             Node node = new() { Location = location };
             node.OnRemove += RemoveNode;
-            node.MouseMove += this.GetHandler_ChildControl_MouseMove();
+            node.MouseMove += Child_MouseMove;
             node.OnSelect += SelectNode;
             node.OnUnselect += UnselectNode;
 
@@ -42,38 +42,30 @@ namespace Editor
             return node;
         }
 
-        public void AddNode(Point location)
-        {
-            // TODO: Přepsat na přidání
-            CreateNode(location);
-        }
+    private void Child_MouseMove(object? sender, MouseEventArgs eventArgs)
+    {
+      if (sender is not Control { } child)
+        return;
 
-        private void Node_MouseMove(object? sender, MouseEventArgs e)
-        {
-            if (sender is not Node { } node)
-                return;
+      eventArgs = eventArgs.WithParentCoordinates(this, child);
+      this.OnMouseMove(eventArgs);
+    }
 
-            //var node = (Node)sender;
+    public void AddNode(Point location)
+    {
+      // TODO: Přepsat na přidání
+      CreateNode(location);
+    }
+    private void SelectNode(object? sender, MouseEventArgs e)
+    {
+      if (sender is not Node { } node)
+        return;
 
-            // Translate the child control's coordinates to the parent's
-            Point pointInParent = node.PointToScreen(e.Location);
-            pointInParent = this.PointToClient(pointInParent);
+      selectedNode ??= node;
+      selectPoint ??= e.Location;
 
-            // Invoke the parent's MouseMove event manually
-            MouseEventArgs argsForParent = new MouseEventArgs(e.Button, e.Clicks, pointInParent.X, pointInParent.Y, e.Delta);
-
-            Canvas_MouseMove(sender, argsForParent);
-        }
-        private void SelectNode(object? sender, MouseEventArgs e)
-        {
-            if (sender is not Node { } node)
-                return;
-
-            selectedNode ??= node;
-            selectPoint ??= e.Location;
-
-            Controls.SetChildIndex(selectedNode, 0);
-        }
+      Controls.SetChildIndex(selectedNode, 0);
+    }
 
         private void UnselectNode(object? sender, MouseEventArgs e)
         {

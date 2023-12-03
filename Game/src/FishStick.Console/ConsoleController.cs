@@ -8,6 +8,7 @@ namespace FishStick.Render
 {
   class ConsoleController
   {
+
     public class GameCursor
     {
       public char cursorSymbol = '▮';
