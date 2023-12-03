@@ -28,29 +28,20 @@ namespace Editor
             OnSelect += OnSelectHandler;
             OnUnselect += OnUnselectHandler;
 
-            foreach (Control control in Controls)
-            {
-                control.MouseMove += this.GetHandler_ChildControl_MouseMove();
-                    //ExChildControl_MouseMove();
-            }
-        }
+      foreach (Control control in Controls)
+      {
+        control.MouseMove += Child_MouseMove;
+      }
+    }
 
-        private MouseEventHandler ChildControl_MouseMove()
-        {
-            return (object? sender, MouseEventArgs e) =>
-            {
-                if (sender is not Control { } control)
-                    return;
+    private void Child_MouseMove(object? sender, MouseEventArgs eventArgs)
+    {
+      if (sender is not Control { } child)
+        return;
 
-                Point pointInParent = control.PointToScreen(e.Location);
-                pointInParent = this.PointToClient(pointInParent);
-
-                // Invoke the parent's MouseMove event manually
-                MouseEventArgs argsForParent = new MouseEventArgs(e.Button, e.Clicks, pointInParent.X, pointInParent.Y, e.Delta);
-
-                OnMouseMove(argsForParent);
-            };
-        }
+      eventArgs = eventArgs.WithParentCoordinates(this, child);
+      this.OnMouseMove(eventArgs);
+    }
 
         private void OnSelectHandler(object? sender, MouseEventArgs e)
         {
