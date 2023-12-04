@@ -17,7 +17,7 @@ namespace FishStick.Dice
 
     public static int Roll(int sides)
     {
-      return new Random().Next(1, sides + 1);
+      return Random.Shared.Next(1, sides + 1);
     }
   }
 }
