@@ -3,15 +3,18 @@
         xmlns:vm="using:AvaloniaEditor.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:controls="clr-namespace:MovableControl.Controls"
+        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="500"
+        Height="600"
+        Width="800"
         x:Class="AvaloniaEditor.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="AvaloniaEditor">
+        Title="AvaloniaEditor"
+        CanResize="True">
 
-<Border Background="LightBlue"
-        Padding="10">
-    <Grid Background="White" ShowGridLines="True">
+<Border Padding="10">
+    <Grid ShowGridLines="False">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="*"/>
@@ -35,7 +38,7 @@
       </Canvas>
     </StackPanel>
 
-    <StackPanel Grid.Column="2" Grid.Row="0"
+    <!-- <StackPanel Grid.Column="2" Grid.Row="0"
                 HorizontalAlignment="Left"
                 Name="StackPanel3"
                 VerticalAlignment="Top">
@@ -48,7 +51,7 @@
         <TextBlock>StackPanel.VerticalAlignment="Top"</TextBlock>
         <TextBlock>StackPanel.Orientation="Vertical"</TextBlock>
         <TextBlock>Button.Margin="10"</TextBlock>
-    </StackPanel>
+    </StackPanel> -->
   </Grid>
 </Border>
 </Window>
