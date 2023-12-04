@@ -32,9 +32,9 @@ namespace FishStick.Player
       _inventory.AddItem(item);
     }
 
-    public void RemoveItem(IItem item)
+    public IItem? RemoveItem(string itemId)
     {
-      _inventory.RemoveItem(item);
+      return _inventory.RemoveItem(itemId);
     }
 
     public List<IItem> GetInventory()
@@ -42,9 +42,14 @@ namespace FishStick.Player
       return _inventory.GetItems();
     }
 
-    public IItem? GetInventoryItem(string name)
+    public IItem? GetInventoryItemByName(string name)
     {
-      return _inventory.GetItem(name);
+      return _inventory.GetItemByName(name);
+    }
+
+    public IItem? GetInventoryItem(string itemId)
+    {
+      return _inventory.GetItem(itemId);
     }
 
     public int GetHp()

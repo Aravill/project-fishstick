@@ -4,10 +4,11 @@ namespace FishStick.Render
 {
   class DialogueStrategy
   {
-    public static void HandleDialogue(IDialogue dialogue)
+    public static List<IReply> HandleDialogue(IDialogue dialogue)
     {
       bool ongoingDialogue = true;
       bool readNextLine = true;
+      List<IReply> chosenReplies = new List<IReply>();
       while (ongoingDialogue)
       {
         IDialogueLine currentLine = dialogue.CurrentLine;
@@ -57,6 +58,13 @@ namespace FishStick.Render
                   ClearReplies(usableReplies.Count);
                   IReply chosenReply = usableReplies[selectedReply];
                   ConsoleWriter.Write(chosenReply.Text).ToConsole();
+                  // TODO: I currently cannot think of a better way to process replies than this
+                  // This class should not handle script execution, but it is the only class
+                  // that knows about the selected replies
+                  if (!chosenReplies.Contains(chosenReply))
+                  {
+                    chosenReplies.Add(chosenReply);
+                  }
                   Console.WriteLine();
                   dialogue.ContinueDialogue(chosenReply);
                   chosen = true;
@@ -80,6 +88,7 @@ namespace FishStick.Render
           ongoingDialogue = false;
         }
       }
+      return chosenReplies;
     }
 
     private static List<IReply> FilterUsableReplies(IDialogueLine currentLine)

@@ -29,7 +29,7 @@ namespace FishStick.Commands
       string itemName = string.Join(" ", args[0..into]);
       string containerName = string.Join(" ", args[(into + 1)..]);
       // Make sure the player has the item in their inventory
-      IItem? item = _player.GetInventoryItem(itemName);
+      IItem? item = _player.GetInventoryItemByName(itemName);
       if (item == null)
       {
         ConsoleController.WriteText($"You don't have a {itemName} on you.");
@@ -65,7 +65,7 @@ namespace FishStick.Commands
       // TODO: In the future, we could check if items in the container don't fill it up already and if the container has space for more items. Right now, it's assumed that the container has infinite space.
       // Add item into the container and remove it from the inventory
       container.Contents.Add(item);
-      _player.RemoveItem(item);
+      _player.RemoveItem(item.Id);
       ConsoleController.WriteText($"You put the {itemName} into the {containerName}.");
     }
 
@@ -77,7 +77,7 @@ namespace FishStick.Commands
     private IContainer? FindContainer(string containerName)
     {
       // Find container in inventory
-      IContainer? container = _player.GetInventoryItem(containerName) as IContainer;
+      IContainer? container = _player.GetInventoryItemByName(containerName) as IContainer;
       if (container == null)
       {
         // Find container in scene

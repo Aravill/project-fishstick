@@ -25,14 +25,14 @@ namespace FishStick.Commands
       string itemName = string.Join(" ", args[0..withIndex]);
       string keyName = string.Join(" ", args[(withIndex + 1)..]);
       // Make sure the player has the key in their inventory
-      IKey? key = _player.GetInventoryItem(keyName) as IKey;
+      IKey? key = _player.GetInventoryItemByName(keyName) as IKey;
       if (key == null)
       {
         ConsoleController.WriteText($"You don't have a {keyName} on you.");
         return;
       }
       // Find first in inventory
-      IContainer? item = _player.GetInventoryItem(itemName) as IContainer;
+      IContainer? item = _player.GetInventoryItemByName(itemName) as IContainer;
       if (item == null)
       {
         // Find in scene

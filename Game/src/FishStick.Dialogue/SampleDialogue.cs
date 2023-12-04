@@ -1,10 +1,13 @@
+using FishStick.Item;
+using FishStick.Scripts;
+
 namespace Dialogue
 {
   class SampleDialogue
   {
     public static List<IDialogue> GetSampleDialogues()
     {
-      return new List<IDialogue> { BuildD1(), BuildD2() };
+      return new List<IDialogue> { BuildD1(), BuildD2(), BuildD3() };
     }
 
     private static IDialogue BuildD1()
@@ -163,7 +166,7 @@ namespace Dialogue
         l16
       };
 
-      return new BaseDialogue("SampleDialogue1", lines, "line5", 1);
+      return new BaseDialogue("SampleDialogue1", lines, "line5", 2);
     }
 
     private static IDialogue BuildD2()
@@ -187,7 +190,41 @@ namespace Dialogue
 
       List<IDialogueLine> lines = new List<IDialogueLine> { l0, l1, l2, };
 
-      return new BaseDialogue("SampleDialogue2", lines, "line0", 0, false);
+      return new BaseDialogue("SampleDialogue2", lines, "line0", 1, false);
+    }
+
+    private static IDialogue BuildD3()
+    {
+      DialogueLine l1 = new DialogueLine("line1", "Farewell, stranger.");
+
+      DialogueLine l0 = new DialogueLine(
+        "line0",
+        "Oh, thee have found the key. Grand! Take this as a reward.",
+        new List<IReply>
+        {
+          new ScriptReply(
+            "Thank you.",
+            "line1",
+
+            [
+              new TakePlayerItemScript("key-1"),
+              new GivePlayerItemScript(new BaseItem("given-item-1", "wool scarf", "Cost wool scarf made by a mysterious Maiden.", "Ooga Booga", "clothing", false))
+            ],
+            false
+          ),
+        }
+      );
+
+      List<IDialogueLine> lines = new List<IDialogueLine> { l0, l1 };
+
+      return new BaseDialogue(
+        "SampleDialogue3",
+        lines,
+        "line0",
+        0,
+        false,
+        new HasItemCondition("key-1")
+      );
     }
   }
 }

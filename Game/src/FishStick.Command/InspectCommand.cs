@@ -21,7 +21,7 @@ namespace FishStick.Commands
         return;
       }
       string? itemDescription =
-        _player.GetInventoryItem(targetItemName)?.Description
+        _player.GetInventoryItemByName(targetItemName)?.Description
         ?? _world
           .GetScene(_player.GetCurrentSceneId())
           .Items

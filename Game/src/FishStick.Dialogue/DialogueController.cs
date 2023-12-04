@@ -1,5 +1,6 @@
 using FishStick.Player;
 using FishStick.Render;
+using FishStick.Scripts;
 using FishStick.World;
 using NPC;
 
@@ -20,7 +21,8 @@ namespace Dialogue
         ConsoleController.WriteText($"{npc.Name} has nothing to say.");
         return;
       }
-      DialogueStrategy.HandleDialogue(nextDialogue);
+      List<IReply> chosenReplies = DialogueStrategy.HandleDialogue(nextDialogue);
+      ProcessReplies(chosenReplies);
       UseDialogue(nextDialogue);
       RememberDialogue(npc.Id, nextDialogue.Id);
     }
@@ -77,6 +79,21 @@ namespace Dialogue
       ordered.RemoveAll(dialogue => dialogue.WasHad == false);
       // Concatenate the two lists and return them, with the not had dialogues first
       return notHad.Concat(ordered).ToList();
+    }
+
+    private void ProcessReplies(List<IReply> replies)
+    {
+      foreach (IReply reply in replies)
+      {
+        if (reply is ScriptReply)
+        {
+          ScriptReply scriptReply = (ScriptReply)reply;
+          foreach (IDialogueScript script in scriptReply.Scripts)
+          {
+            script.Execute(_player, _world);
+          }
+        }
+      }
     }
 
     private void UseDialogue(IDialogue dialogue)

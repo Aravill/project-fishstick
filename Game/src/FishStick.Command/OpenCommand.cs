@@ -17,7 +17,7 @@ namespace FishStick.Commands
       // Can be used either on inventory items or on interactable containers
       string itemName = string.Join(" ", args);
       // Find first in inventory
-      IContainer? item = _player.GetInventoryItem(itemName) as IContainer;
+      IContainer? item = _player.GetInventoryItemByName(itemName) as IContainer;
       if (item == null)
       {
         // Find in scene

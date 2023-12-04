@@ -11,7 +11,7 @@ namespace FishStick.Scene
     {
       return new BaseScene(
         id: "scene-0",
-        description: "You are in a big stone room.",
+        description: "You are in a snowy forest clearing.",
         // exits: new List<ITransition>() {
         //   new BaseTransition(
         //     name: "north",
@@ -26,7 +26,7 @@ namespace FishStick.Scene
             "key-1",
             "metal key",
             "A small metal key.",
-            "There is a small metal key on the floor.",
+            "There is a {metal key} on the floor.",
             "key",
             false
           )
@@ -37,7 +37,7 @@ namespace FishStick.Scene
           new NonPlayableCharacter(
             "npc-1",
             "Maiden",
-            "A young {Maiden} stands in the corner of the room.",
+            "A young {Maiden} stands near a small campfire nearby.",
             SampleDialogue.GetSampleDialogues()
           )
         }
