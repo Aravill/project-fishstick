@@ -36,6 +36,12 @@
       return this;
     }
 
+    public ConsoleWriter WithHighlighting(IEnumerable<string> highlightedWords, ConsoleColor highlighColor)
+    {
+      _highlightedPhrases = highlightedWords.ToDictionary(word => word, word => highlighColor);
+      return this;
+    }
+
     public void ToConsole()
     {
       Console.ForegroundColor = _foregroundColor;

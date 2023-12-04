@@ -22,7 +22,7 @@ namespace FishStick.Render
       ConsoleWriter.Write(withoutTags)
         .Slowly()
         .WithColor(ConsoleColor.DarkGray)
-        .WithHighlighting(taggedWords.ToDictionary(tag => tag, tag => ConsoleColor.DarkYellow))
+        .WithHighlighting(taggedWords, ConsoleColor.DarkYellow)
         .ToConsole();
 
       Console.WriteLine();
@@ -45,7 +45,7 @@ namespace FishStick.Render
       ConsoleWriter.Write(allText)
         .Slowly()
         .WithColor(ConsoleColor.DarkGray)
-        .WithHighlighting(taggedWords.ToDictionary(tag => tag, tag => ConsoleColor.DarkYellow))
+        .WithHighlighting(taggedWords, ConsoleColor.DarkYellow)
         .ToConsole();
 
       Console.WriteLine();
