@@ -2,12 +2,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:controls="clr-namespace:MovableControl.Controls"
+             xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
              xmlns:styles="clr-namespace:Material.Styles;assembly=Material.Styles"
              xmlns:vm="using:AvaloniaEditor.ViewModels"
              mc:Ignorable="d" d:DesignWidth="250" d:DesignHeight="450"
              x:Class="AvaloniaEditor.Views.SceneView"
-              x:DataType="vm:SceneViewModel">
+            x:DataType="vm:SceneViewModel">
 
   <Border Padding="20">
     <Grid ShowGridLines="False">
@@ -35,11 +35,9 @@
         <ItemsControl ItemsSource="{Binding ListScenes}">
           <ItemsControl.ItemTemplate>
             <DataTemplate>
-              <Border Width="100" Height="100" Background="AliceBlue">
-                <StackPanel>
+              <controls:Card Margin="2">
                   <TextBlock Text="{Binding SceneDescription}"/>
-                </StackPanel>
-              </Border>
+              </controls:Card>
             </DataTemplate>
           </ItemsControl.ItemTemplate>
         </ItemsControl>
@@ -48,6 +46,4 @@
     </StackPanel>
   </Grid>
   </Border>
-    
-
 </UserControl>
