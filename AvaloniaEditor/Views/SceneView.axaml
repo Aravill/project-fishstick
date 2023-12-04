@@ -1,0 +1,53 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:MovableControl.Controls"
+             xmlns:styles="clr-namespace:Material.Styles;assembly=Material.Styles"
+             xmlns:vm="using:AvaloniaEditor.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="250" d:DesignHeight="450"
+             x:Class="AvaloniaEditor.Views.SceneView"
+              x:DataType="vm:SceneViewModel">
+
+  <Border Padding="20">
+    <Grid ShowGridLines="False">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+
+    <StackPanel Grid.Column="0" Grid.Row="0"
+                HorizontalAlignment="Left"
+                Name="ElementPanel"
+                VerticalAlignment="Top">
+        <TextBlock FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,15">Elements</TextBlock>
+        <Button Margin="0,10,0,10" Click="AddSceneHandler">Add Scene</Button>
+    </StackPanel>
+
+    <StackPanel Grid.Column="1" Grid.Row="0"
+                HorizontalAlignment="Stretch"
+                Name="StackPanel2"
+                VerticalAlignment="Top"
+                Orientation="Vertical">
+      <Canvas x:Name="SceneCanvas">
+        <!-- BEGIN: Add all scenes as panels -->
+        <ItemsControl ItemsSource="{Binding ListScenes}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <Border Width="100" Height="100" Background="AliceBlue">
+                <StackPanel>
+                  <TextBlock Text="{Binding SceneDescription}"/>
+                </StackPanel>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <!-- END: Add all scenes as panels -->
+      </Canvas>
+    </StackPanel>
+  </Grid>
+  </Border>
+    
+
+</UserControl>

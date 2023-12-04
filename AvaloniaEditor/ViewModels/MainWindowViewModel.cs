@@ -1,8 +1,14 @@
-﻿namespace AvaloniaEditor.ViewModels;
+﻿using AvaloniaEditor.Services;
+
+namespace AvaloniaEditor.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
-#pragma warning disable CA1822 // Mark members as static
-  public string Greeting => "Welcome to Avalonia!";
-#pragma warning restore CA1822 // Mark members as static
+  public MainWindowViewModel()
+  {
+    var service = new SceneService();
+    Scenes = new SceneViewModel(service.GetItems());
+  }
+
+  public SceneViewModel Scenes { get; }
 }
