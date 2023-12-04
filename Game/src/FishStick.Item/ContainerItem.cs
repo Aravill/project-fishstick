@@ -26,7 +26,8 @@ namespace FishStick.Item
       _locked = true;
     }
 
-    public ContainerItem(string Id, string Name, string Description, string SceneDescription, string Type, bool Hidden, bool Locked, List<IItem> Contents) : base(Id, Name, Description, SceneDescription, Type, Hidden)
+    public ContainerItem(string Id, string Name, string Description, string SceneDescription, string Type, bool Hidden, bool Locked, List<IItem> Contents) 
+      : base(Id, Name, Description, SceneDescription, Type, Hidden)
     {
       _contents = Contents;
       _locked = Locked;
