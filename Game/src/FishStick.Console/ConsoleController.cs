@@ -75,70 +75,75 @@ namespace FishStick.Render
 
         ClearCurrentConsoleLine();
 
-        switch (readKeyResult.Key)
-        {
-          case ConsoleKey.UpArrow:
-          ClearCurrentConsoleLine();
-            writtenInput = history.GetPrevious() + cursor.cursorSymbol;
-            Console.Write(writtenInput);
-            cursor.cursorIndex = writtenInput.Length - 1;
-            break;
-          case ConsoleKey.DownArrow:
-          ClearCurrentConsoleLine();
-            writtenInput = history.GetNext() + cursor.cursorSymbol;
-            Console.Write(writtenInput);
-            cursor.cursorIndex = writtenInput.Length - 1;
-            break;
-          case ConsoleKey.Backspace:
-          if (cursor.cursorIndex > 0)
-          {
-            ClearCurrentConsoleLine();
-            // Remove the cursor symbol + last character from the end of the string
-            if (cursor.cursorIndex == 0)
-            {
-              break;
-            }
-            // Remove the symbol before the cursor
-            writtenInput = writtenInput.Remove(cursor.cursorIndex - 1, 1);
-            cursor.cursorIndex--;
-            Console.Write(writtenInput);
-          }
-            break;
-          case ConsoleKey.Enter:
-          // Don't do anything if the user hasn't typed anything yet
-          if (writtenInput.Length > 1)
-          {
-            ClearCurrentConsoleLine();
-            finalInput = RemoveCursor(writtenInput, cursor.cursorIndex);
-            Console.Write(finalInput);
-          }
-            break;
-          case ConsoleKey.LeftArrow:
-          ClearCurrentConsoleLine();
-            writtenInput = MoveCursor(false, writtenInput, cursor);
-            Console.Write(writtenInput);
-            break;
-          case ConsoleKey.RightArrow:
-          ClearCurrentConsoleLine();
-            writtenInput = MoveCursor(true, writtenInput, cursor);
-            Console.Write(writtenInput);
-            break;
-          default:
-          // Clear what's been written so far
-          ClearCurrentConsoleLine();
-            // Add the new character + cursor symbol and add it to the written input
-            string added = readKeyResult.KeyChar.ToString();
-            writtenInput = writtenInput.Insert(cursor.cursorIndex, added);
-            cursor.cursorIndex++;
-            Console.Write(writtenInput);
-            break;
-        }
+        writtenInput = HandleInputKey(readKeyResult, history, cursor, ref writtenInput, ref finalInput);
+        Console.Write(writtenInput);
       }
       while (finalInput == null || finalInput.Length < 1);
+      
       Console.WriteLine();
       history.Add(finalInput);
       Console.CursorVisible = true;
+      
       return finalInput;
+    }
+
+    private static string HandleInputKey(ConsoleKeyInfo readKeyResult,
+                                          SessionHistory history,
+                                          GameCursor cursor,
+                                          ref string writtenInput,
+                                          ref string? finalInput) 
+    => readKeyResult.Key switch
+    {
+      ConsoleKey.UpArrow => PreviousCommand(history, cursor),
+      ConsoleKey.DownArrow => NextCommand(history, cursor),
+      ConsoleKey.Backspace => Backspace(cursor, writtenInput),
+      ConsoleKey.Enter => ConfirmInput(cursor, writtenInput, ref finalInput),
+      ConsoleKey.LeftArrow => MoveCursor(false, writtenInput, cursor),
+      ConsoleKey.RightArrow => MoveCursor(true, writtenInput, cursor),
+      _ => AddChar(cursor, writtenInput, readKeyResult)
+    };
+
+    private static string AddChar(GameCursor cursor, string writtenInput, ConsoleKeyInfo readKeyResult)
+    {
+      // Add the new character + cursor symbol and add it to the written input
+      string added = readKeyResult.KeyChar.ToString();
+      writtenInput = writtenInput.Insert(cursor.cursorIndex, added);
+      cursor.cursorIndex++;
+      return writtenInput;
+    }
+
+    private static string ConfirmInput(GameCursor cursor, string writtenInput, ref string? finalInput)
+    {
+      if (writtenInput.Length <= 1)
+        return writtenInput;
+
+      finalInput = RemoveCursor(writtenInput, cursor.cursorIndex);
+      return finalInput;
+    }
+
+    private static string Backspace(GameCursor cursor, string writtenInput)
+    {
+      if (cursor.cursorIndex <= 0)
+        return writtenInput;
+      
+      // Remove the symbol before the cursor
+      writtenInput = writtenInput.Remove(cursor.cursorIndex - 1, 1);
+      cursor.cursorIndex--;
+      return writtenInput;
+    }
+
+    private static string NextCommand(SessionHistory history, GameCursor cursor)
+    {
+      string writtenInput = history.GetNext() + cursor.cursorSymbol;
+      cursor.cursorIndex = writtenInput.Length - 1;
+      return writtenInput;
+    }
+
+    private static string PreviousCommand(SessionHistory history, GameCursor cursor)
+    {
+      string writtenInput = history.GetPrevious() + cursor.cursorSymbol;
+      cursor.cursorIndex = writtenInput.Length - 1;
+      return writtenInput;
     }
 
     private static string MoveCursor(bool forward, string text, GameCursor cursor)
