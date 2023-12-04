@@ -6,8 +6,7 @@
     private ConsoleColor _foregroundColor = Console.ForegroundColor;
     private ConsoleColor _backgroundColor = Console.BackgroundColor;
     private bool _writeSlowly = false;
-    private Dictionary<string, ConsoleColor> _highlightedPhrases =
-      new Dictionary<string, ConsoleColor>();
+    private Dictionary<string, ConsoleColor> _highlightedPhrases = new Dictionary<string, ConsoleColor>();
 
     private ConsoleWriter() { }
 
@@ -24,10 +23,7 @@
       return this;
     }
 
-    public ConsoleWriter WithColor(
-      ConsoleColor foregroundColor,
-      ConsoleColor? backgroundColor = null
-    )
+    public ConsoleWriter WithColor(ConsoleColor foregroundColor, ConsoleColor? backgroundColor = null)
     {
       _foregroundColor = foregroundColor;
       _backgroundColor = backgroundColor ?? _backgroundColor;
@@ -72,8 +68,9 @@
         if (nextPhrase != null)
         {
           Console.ForegroundColor = nextWordColor;
-          WriteWord(nextPhrase);
+          WriteWord("[" + nextPhrase + "]");
           Console.ForegroundColor = _foregroundColor;
+
           currentPos = nextWordPos + nextPhrase.Length;
         }
         else
@@ -88,38 +85,26 @@
 
     private void WriteWord(string word)
     {
-      var ts = new CancellationTokenSource();
-      CancellationToken ct = ts.Token;
-      Task interruptSlow = Task.Run(() =>
-      {
-        while (true)
-        {
-          if (Console.KeyAvailable)
-          {
-            Console.ReadKey(true);
-            _writeSlowly = false;
-            break;
-          }
-          if (ct.IsCancellationRequested)
-          {
-            break;
-          }
-        }
-      });
       for (int i = 0; i < word.Length; i++)
       {
         if (_writeSlowly)
         {
+          // Check for key press
+          if (Console.KeyAvailable)
+          {
+            Console.ReadKey(true); // Clears the key press
+            _writeSlowly = false;
+          }
+
           Console.Write(word[i]);
-          Thread.Sleep(20);
+          Thread.Sleep(20);  // For async do await Task.Delay(20);
         }
         else
         {
-          Console.Write(word[i..]);
+          Console.Write(word[i..]); // Write the rest of the word
           break;
         }
       }
-      ts.Cancel();
     }
   }
 }
