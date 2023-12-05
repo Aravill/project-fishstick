@@ -1,11 +1,11 @@
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
+using Material.Styles.Controls;
 
 namespace AvaloniaEditor.Controls
 {
-  public class ScenePanel : Panel
+  public class SceneCard : Card
   {
     private bool _isPressed;
     private Point _positionInBlock;
