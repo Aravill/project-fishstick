@@ -3,12 +3,10 @@ using Avalonia.Controls;
 
 namespace AvaloniaEditor.Views;
 
-public partial class SceneView : UserControl
+public partial class AddSceneView : UserControl
 {
-
-  public SceneView()
+  public AddSceneView()
   {
     InitializeComponent();
-
   }
 }

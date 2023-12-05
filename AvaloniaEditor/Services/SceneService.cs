@@ -7,9 +7,9 @@ namespace AvaloniaEditor.Services
   {
     public IEnumerable<Scene> GetItems() => new[]
     {
-            new Scene { SceneDescription = "Room 1" },
-            new Scene { SceneDescription = "Room 2" },
-            new Scene { SceneDescription = "Room 3" },
+            new Scene { Description = "Room 1" },
+            new Scene { Description = "Room 2" },
+            new Scene { Description = "Room 3" },
         };
   }
 }

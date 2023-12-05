@@ -8,7 +8,9 @@
   xmlns:vm="using:AvaloniaEditor.ViewModels" mc:Ignorable="d" d:DesignWidth="250" d:DesignHeight="450" x:Class="AvaloniaEditor.Views.SceneView" x:DataType="vm:SceneViewModel">
 
   <Border Padding="20">
+
     <Grid ShowGridLines="False">
+
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="*"/>
@@ -17,33 +19,37 @@
 
       <StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Name="ElementPanel" VerticalAlignment="Top">
         <TextBlock FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,15">Elements</TextBlock>
-        <Button Margin="0,10,0,10" Click="AddSceneHandler">Add Scene</Button>
+        <Button Margin="0,10,0,10" x:CompileBindings="False" Command="{Binding $parent[Window].DataContext.AddScene}">Add Scene</Button>
       </StackPanel>
 
-      <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" Name="StackPanel2" VerticalAlignment="Top" Orientation="Vertical">
-        <ItemsControl ItemsSource="{Binding ListScenes}" x:Name="SceneCollection">
+      <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" Name="ScenesPanel" VerticalAlignment="Top" Orientation="Vertical">
+
+        <ItemsControl ItemsSource="{Binding ListScenes}">
           <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-              <Panel Background="White" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+              <Canvas HorizontalAlignment="Stretch" Height="1000" />
             </ItemsPanelTemplate>
           </ItemsControl.ItemsPanel>
+          <!-- <ItemsControl.Styles>
+            <Style Selector="ItemsControl">
+              <Setter Property="Canvas.Left" Value="10"/>
+              <Setter Property="Canvas.Top" Value="10"/>
+            </Style>
+          </ItemsControl.Styles> -->
           <ItemsControl.ItemTemplate>
             <DataTemplate>
-              <custom-controls:ScenePanel Background="Pink">
-                <controls:Card Margin="2">
-                  <TextBlock Text="{Binding SceneDescription}"/>
+              <custom-controls:ScenePanel>
+                <controls:Card Margin="2" Height="100" Width="100">
+                  <TextBlock Text="{Binding Description}" />
                 </controls:Card>
               </custom-controls:ScenePanel>
             </DataTemplate>
           </ItemsControl.ItemTemplate>
-          <!-- <ItemsControl.ItemContainerTheme>
-            <Style>
-              <Setter Property="Panel.Top" Value="{Binding Path=Y}" />
-              <Setter Property="Panel.Left" Value="{Binding Path=X}" />
-            </Style>
-          </ItemsControl.ItemContainerTheme> -->
         </ItemsControl>
+
       </StackPanel>
+
     </Grid>
+
   </Border>
 </UserControl>

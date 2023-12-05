@@ -2,7 +2,7 @@ namespace AvaloniaEditor.Models
 {
   public class Scene
   {
-    public string SceneDescription { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
 
   }
 
