@@ -1,9 +1,31 @@
-using System;
+using System.Reactive;
+using AvaloniaEditor.Models;
+using ReactiveUI;
 
 namespace AvaloniaEditor.ViewModels
 {
   public class AddSceneViewModel : ViewModelBase
   {
-    public string Description { get; set; } = string.Empty;
+    private string _description = string.Empty;
+
+
+    public ReactiveCommand<Unit, Scene> OkCommand { get; }
+    public ReactiveCommand<Unit, Unit> CancelCommand { get; }
+    public AddSceneViewModel()
+    {
+      var isValidObservable = this.WhenAnyValue(
+        viewModel => viewModel.Description,
+        descriptionValue => !string.IsNullOrWhiteSpace(descriptionValue));
+
+      OkCommand = ReactiveCommand.Create(
+          () => new Scene { Description = Description }, isValidObservable);
+      CancelCommand = ReactiveCommand.Create(() => { });
+    }
+
+    public string Description
+    {
+      get => _description;
+      set => this.RaiseAndSetIfChanged(ref _description, value);
+    }
   }
 }

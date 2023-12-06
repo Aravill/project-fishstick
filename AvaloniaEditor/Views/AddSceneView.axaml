@@ -1,11 +1,19 @@
 <UserControl xmlns="https://github.com/avaloniaui"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450" x:Class="AvaloniaEditor.Views.AddSceneView"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+  x:Class="AvaloniaEditor.Views.AddSceneView" d:DesignWidth="300" d:DesignHeight="600"
   xmlns:vm="using:AvaloniaEditor.ViewModels" x:DataType="vm:AddSceneViewModel">
-  <DockPanel>
-    <Button DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center">Cancel</Button>
-    <Button DockPanel.Dock="Bottom" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center">OK</Button>
-    <TextBox AcceptsReturn="True" Text="{Binding Description}" Watermark="Enter scene description"/>
-  </DockPanel>
+  <Border Padding="20">
+    <StackPanel HorizontalAlignment="Stretch" Spacing="5">
+      <!-- <TextBox Text="{Binding Name}"
+        Watermark="Enter scene name" /> -->
+      <TextBox Text="{Binding Description}"
+        Watermark="Enter scene description" Height="200" AcceptsReturn="True" TextWrapping="Wrap" />
+      <Grid ColumnDefinitions="1*,5,1*">
+        <Button Grid.Column="0" Command="{Binding CancelCommand}">Cancel</Button>
+        <Button Grid.Column="2" Command="{Binding OkCommand}">Create</Button>
+      </Grid>
+    </StackPanel>
+  </Border>
 </UserControl>

@@ -1,14 +1,14 @@
 <Application xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="AvaloniaEditor.App"
-             xmlns:local="using:AvaloniaEditor"
-             xmlns:themes="clr-namespace:Material.Styles.Themes;assembly=Material.Styles"
-             RequestedThemeVariant="Light">
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  x:Class="AvaloniaEditor.App"
+  xmlns:local="using:AvaloniaEditor"
+  xmlns:themes="clr-namespace:Material.Styles.Themes;assembly=Material.Styles"
+  RequestedThemeVariant="Light">
   <Application.Styles>
-    <themes:MaterialTheme BaseTheme="Dark" PrimaryColor="Purple" SecondaryColor="Lime" />
+    <themes:MaterialTheme BaseTheme="Light" PrimaryColor="Amber" SecondaryColor="LightGreen" />
   </Application.Styles>
-    <Application.DataTemplates>
-        <local:ViewLocator/>
-    </Application.DataTemplates>
+  <Application.DataTemplates>
+    <local:ViewLocator />
+  </Application.DataTemplates>
 
 </Application>
