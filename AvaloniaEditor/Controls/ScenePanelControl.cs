@@ -1,17 +1,13 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Presenters;
 using Avalonia.Input;
-using Avalonia.Media;
 using AvaloniaEditor.Models;
 namespace AvaloniaEditor.Controls
 {
   public class ScenePanel : Panel
   {
     private bool _isPressed;
-    private Point _positionInBlock;
-    private TranslateTransform _transform = null!;
-
+    private Point _startPoint;
 
     public static readonly AvaloniaProperty<string> PanelIdProperty =
          AvaloniaProperty.Register<ScenePanel, string>(nameof(PanelId));
@@ -25,12 +21,8 @@ namespace AvaloniaEditor.Controls
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
       _isPressed = true;
-      _positionInBlock = e.GetPosition(this);
-
-      if (_transform != null!)
-        _positionInBlock = new Point(
-            _positionInBlock.X - _transform.X,
-            _positionInBlock.Y - _transform.Y);
+      _startPoint = e.GetPosition(this);
+      UpdatePanelPosition(e);
 
       base.OnPointerPressed(e);
     }
@@ -39,12 +31,7 @@ namespace AvaloniaEditor.Controls
     {
 
       _isPressed = false;
-      var viewModel = DataContext as Scene;
-      if (viewModel != null)
-      {
-        var position = e.GetPosition(this);
-        viewModel.Position = new Point(position.X, position.Y);
-      }
+      UpdatePanelPosition(e);
 
       base.OnPointerReleased(e);
     }
@@ -57,15 +44,39 @@ namespace AvaloniaEditor.Controls
       if (Parent == null)
         return;
 
-      var currentPosition = e.GetPosition(this);
-
-      var offsetX = currentPosition.X - _positionInBlock.X;
-      var offsetY = currentPosition.Y - _positionInBlock.Y;
-
-      _transform = new TranslateTransform(offsetX, offsetY);
-      RenderTransform = _transform;
+      UpdatePanelPosition(e);
 
       base.OnPointerMoved(e);
+    }
+
+    private T? FindParentOfType<T>(Control control) where T : class
+    {
+      var parent = control.Parent;
+      while (parent != null && !(parent is T))
+      {
+        parent = parent.Parent;
+      }
+      return parent as T;
+    }
+
+    private void UpdatePanelPosition(PointerEventArgs e)
+    {
+      Scene? scene = DataContext as Scene;
+      Point mousePosition = e.GetPosition(this);
+      ItemsControl? control = FindParentOfType<ItemsControl>(this);
+      Canvas? canvas = control?.ItemsPanelRoot as Canvas;
+      if (canvas != null && scene != null && Parent != null)
+      {
+        Point? posOnCanvas = this.TranslatePoint(mousePosition, canvas);
+        if (posOnCanvas.HasValue)
+        {
+          var offsetX = posOnCanvas.Value.X - _startPoint.X;
+          var offsetY = posOnCanvas.Value.Y - _startPoint.Y;
+          Canvas.SetLeft(Parent, offsetX);
+          Canvas.SetTop(Parent, offsetY);
+          scene.Position = new Point(offsetX, offsetY);
+        }
+      }
     }
   }
 }
