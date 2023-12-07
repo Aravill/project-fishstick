@@ -11,10 +11,13 @@ public class MainWindowViewModel : ViewModelBase
   private ViewModelBase _contentViewModel;
   public SceneViewModel ScenesView { get; }
 
+
   public MainWindowViewModel()
   {
     var service = new SceneService();
-    ScenesView = new SceneViewModel(service.GetItems());
+    var scenes = service.GetItems();
+
+    ScenesView = new SceneViewModel(scenes);
     _contentViewModel = ScenesView;
   }
 
@@ -43,6 +46,5 @@ public class MainWindowViewModel : ViewModelBase
 
     ContentViewModel = addItemViewModel;
   }
-
 
 }

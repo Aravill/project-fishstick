@@ -1,8 +1,9 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
 using Avalonia.Input;
 using Avalonia.Media;
-
+using AvaloniaEditor.Models;
 namespace AvaloniaEditor.Controls
 {
   public class ScenePanel : Panel
@@ -10,6 +11,16 @@ namespace AvaloniaEditor.Controls
     private bool _isPressed;
     private Point _positionInBlock;
     private TranslateTransform _transform = null!;
+
+
+    public static readonly AvaloniaProperty<string> PanelIdProperty =
+         AvaloniaProperty.Register<ScenePanel, string>(nameof(PanelId));
+
+    public string PanelId
+    {
+      get => GetValue(PanelIdProperty) as string ?? string.Empty;
+      set => SetValue(PanelIdProperty, value);
+    }
 
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
@@ -26,7 +37,14 @@ namespace AvaloniaEditor.Controls
 
     protected override void OnPointerReleased(PointerReleasedEventArgs e)
     {
+
       _isPressed = false;
+      var viewModel = DataContext as Scene;
+      if (viewModel != null)
+      {
+        var position = e.GetPosition(this);
+        viewModel.Position = new Point(position.X, position.Y);
+      }
 
       base.OnPointerReleased(e);
     }
