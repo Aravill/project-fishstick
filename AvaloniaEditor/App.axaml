@@ -3,9 +3,9 @@
   x:Class="AvaloniaEditor.App"
   xmlns:local="using:AvaloniaEditor"
   xmlns:themes="clr-namespace:Material.Styles.Themes;assembly=Material.Styles"
-  RequestedThemeVariant="Light">
+  RequestedThemeVariant="Dark">
   <Application.Styles>
-    <themes:MaterialTheme BaseTheme="Light" PrimaryColor="Amber" SecondaryColor="LightGreen" />
+    <themes:MaterialTheme BaseTheme="Dark" PrimaryColor="Amber" SecondaryColor="LightGreen" />
   </Application.Styles>
   <Application.DataTemplates>
     <local:ViewLocator />
