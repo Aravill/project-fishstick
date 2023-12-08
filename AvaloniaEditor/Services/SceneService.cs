@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
-using System.Text.Json;
 using AvaloniaEditor.Models;
 
 namespace AvaloniaEditor.Services
@@ -11,16 +9,21 @@ namespace AvaloniaEditor.Services
   public class SceneService
   {
 
-    private IEnumerable<Scene> _scenes;
+    private List<Scene> _scenes;
 
     public SceneService()
     {
-      _scenes = Array.Empty<Scene>();
+      _scenes = new();
       LoadScenes();
     }
     public IEnumerable<Scene> GetItems()
     {
       return _scenes;
+    }
+
+    public void AddItem(Scene scene)
+    {
+      _scenes.Add(scene);
     }
     public void SaveScenes()
     {
@@ -41,10 +44,10 @@ namespace AvaloniaEditor.Services
     {
       if (SceneFileExists())
       {
-        IEnumerable<Scene>? deserializedList = Array.Empty<Scene>();
+        List<Scene>? deserializedList = new();
         MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(File.ReadAllText("Scenes.json")));
         var ser = new DataContractJsonSerializer(deserializedList.GetType());
-        deserializedList = ser.ReadObject(stream) as IEnumerable<Scene>;
+        deserializedList = ser.ReadObject(stream) as List<Scene>;
         stream.Close();
         if (deserializedList != null)
         {
@@ -53,7 +56,7 @@ namespace AvaloniaEditor.Services
       }
       else
       {
-        _scenes = new[]
+        _scenes = new()
             {
             new Scene { Id = "1", Description = "Room 1", Position = new Avalonia.Point(100, 100) },
             new Scene { Id = "2", Description = "Room 2", Position = new Avalonia.Point(200, 200) },

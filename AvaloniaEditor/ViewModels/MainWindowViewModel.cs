@@ -52,6 +52,7 @@ public class MainWindowViewModel : ViewModelBase
         {
           if (newScene != null)
           {
+            _sceneService.AddItem(newScene);
             ScenesView.Scenes.Add(newScene);
           }
           ContentViewModel = ScenesView;
