@@ -9,11 +9,10 @@ namespace AvaloniaEditor.ViewModels
 
     public SceneViewModel(IEnumerable<Scene> scenes)
     {
-      ListScenes = new ObservableCollection<Scene>(scenes);
-
+      Scenes = new ObservableCollection<Scene>(scenes);
     }
 
-    public ObservableCollection<Scene> ListScenes { get; }
+    public ObservableCollection<Scene> Scenes { get; }
 
   }
 }
