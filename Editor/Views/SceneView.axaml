@@ -38,7 +38,7 @@
           </ItemsControl.ItemsPanel>
 
           <ItemsControl.Styles>
-            <Style Selector="ContentPresenter" x:DataType="m:Scene">
+            <Style Selector="ContentPresenter" x:DataType="m:SceneModel">
               <Setter Property="Canvas.Left" Value="{Binding X}" />
               <Setter Property="Canvas.Top" Value="{Binding Y}" />
             </Style>

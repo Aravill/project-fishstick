@@ -6,7 +6,7 @@
 bin/
 obj/
 .vscode/
-
+Editor/Scenes.json
 # dotenv files
 .env
 

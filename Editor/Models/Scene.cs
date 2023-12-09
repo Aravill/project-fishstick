@@ -1,11 +1,13 @@
+using System;
 using System.Runtime.Serialization;
 using Avalonia;
+// using FishStick.Scene;
 
 namespace AvaloniaEditor.Models
 {
 
   [DataContract]
-  public class Scene
+  public class SceneModel
   {
 
     [IgnoreDataMember]
@@ -19,9 +21,13 @@ namespace AvaloniaEditor.Models
       }
     }
     [DataMember]
-    public string Id { get; set; } = string.Empty;
+    public string Id { get; set; } = Guid.NewGuid().ToString();
+
     [DataMember]
     public string Description { get; set; } = string.Empty;
+
+    // [DataMember]
+    // List<ITransition> Transitions { get; }
 
 
     [DataMember]

@@ -46,7 +46,7 @@ public class MainWindowViewModel : ViewModelBase
 
     Observable.Merge(
         addItemViewModel.OkCommand,
-        addItemViewModel.CancelCommand.Select(_ => (Scene?)null))
+        addItemViewModel.CancelCommand.Select(_ => (SceneModel?)null))
         .Take(1)
         .Subscribe(newScene =>
         {

@@ -9,7 +9,7 @@ namespace AvaloniaEditor.ViewModels
     private string _description = string.Empty;
 
 
-    public ReactiveCommand<Unit, Scene> OkCommand { get; }
+    public ReactiveCommand<Unit, SceneModel> OkCommand { get; }
     public ReactiveCommand<Unit, Unit> CancelCommand { get; }
     public AddSceneViewModel()
     {
@@ -18,7 +18,7 @@ namespace AvaloniaEditor.ViewModels
         descriptionValue => !string.IsNullOrWhiteSpace(descriptionValue));
 
       OkCommand = ReactiveCommand.Create(
-          () => new Scene { Description = Description }, isValidObservable);
+          () => new SceneModel { Description = Description }, isValidObservable);
       CancelCommand = ReactiveCommand.Create(() => { });
     }
 

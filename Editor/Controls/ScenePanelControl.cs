@@ -61,7 +61,7 @@ namespace AvaloniaEditor.Controls
 
     private void UpdatePanelPosition(PointerEventArgs e)
     {
-      Scene? scene = DataContext as Scene;
+      SceneModel? scene = DataContext as SceneModel;
       Point mousePosition = e.GetPosition(this);
       ItemsControl? control = FindParentOfType<ItemsControl>(this);
       Canvas? canvas = control?.ItemsPanelRoot as Canvas;
