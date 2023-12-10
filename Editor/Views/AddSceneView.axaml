@@ -6,8 +6,8 @@
   xmlns:vm="using:AvaloniaEditor.ViewModels" x:DataType="vm:AddSceneViewModel">
   <Border Padding="20">
     <StackPanel HorizontalAlignment="Stretch" Spacing="5">
-      <!-- <TextBox Text="{Binding Name}"
-        Watermark="Enter scene name" /> -->
+      <TextBox Text="{Binding Name}"
+        Watermark="Enter scene name" />
       <TextBox Text="{Binding Description}"
         Watermark="Enter scene description" Height="200" AcceptsReturn="True" TextWrapping="Wrap" />
       <Grid ColumnDefinitions="1*,5,1*">
