@@ -10,9 +10,30 @@
         Watermark="Enter scene name" />
       <TextBox Text="{Binding Description}"
         Watermark="Enter scene description" Height="200" AcceptsReturn="True" TextWrapping="Wrap" />
-      <Grid ColumnDefinitions="1*,5,1*">
+      <TextBlock Text="Transitions" FontSize="10" FontWeight="Light" />
+      <ItemsControl ItemsSource="{Binding Transitions}">
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate>
+            <StackPanel />
+          </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <Grid ColumnDefinitions="1*,5*,1*,1*">
+              <TextBlock Grid.Column="0" Text="{Binding Name}" FontSize="12" />
+              <TextBlock Grid.Column="1" Text="{Binding Description}" FontSize="12" />
+              <TextBlock Grid.Column="2" Text="adadad" FontSize="12" />
+              <Button Grid.Column="3"
+                Command="{Binding $parent[ItemsControl].$parent[Panel].$parent[ContentPresenter].$parent[ItemsControl].DataContext.RemoveTransitionCommand}"
+                CommandParameter="{Binding}">Remove</Button>
+            </Grid>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+      <Grid ColumnDefinitions="1*,5,1*,5,1*">
         <Button Grid.Column="0" Command="{Binding CancelCommand}">Cancel</Button>
-        <Button Grid.Column="2" Command="{Binding OkCommand}">Create</Button>
+        <Button Grid.Column="2" Command="{Binding AddTransitionCommand}">Add Transition</Button>
+        <Button Grid.Column="4" Command="{Binding CreateCommand}">Create</Button>
       </Grid>
     </StackPanel>
   </Border>
