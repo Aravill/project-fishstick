@@ -1,7 +1,11 @@
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Media;
+using AvaloniaEditor.Helpers;
 using AvaloniaEditor.Models;
+using Material.Styles.Controls;
 namespace AvaloniaEditor.Controls
 {
   public class ScenePanel : Panel
@@ -9,13 +13,17 @@ namespace AvaloniaEditor.Controls
     private bool _isPressed;
     private Point _startPoint;
 
-    public static readonly AvaloniaProperty<string> PanelIdProperty =
-         AvaloniaProperty.Register<ScenePanel, string>(nameof(PanelId));
+    private Card? _card = null;
 
-    public string PanelId
+    private IBrush? _originalBackground = null;
+    private readonly IBrush _selectedBackground = ColorUtils.GetBrushFromColor(Material.Colors.Recommended.AmberSwatch.Amber700);
+    public static readonly AvaloniaProperty<string> SceneIdProperty =
+         AvaloniaProperty.Register<ScenePanel, string>(nameof(SceneId));
+
+    public string SceneId
     {
-      get => GetValue(PanelIdProperty) as string ?? string.Empty;
-      set => SetValue(PanelIdProperty, value);
+      get => GetValue(SceneIdProperty) as string ?? string.Empty;
+      set => SetValue(SceneIdProperty, value);
     }
 
     protected override void OnPointerPressed(PointerPressedEventArgs e)
@@ -49,21 +57,39 @@ namespace AvaloniaEditor.Controls
       base.OnPointerMoved(e);
     }
 
-    private T? FindParentOfType<T>(Control control) where T : class
+    public void Select()
     {
-      var parent = control.Parent;
-      while (parent != null && !(parent is T))
+      Card? card = GetCard();
+      if (card != null)
       {
-        parent = parent.Parent;
+        _originalBackground = card.Background;
+        card.Background = _selectedBackground;
       }
-      return parent as T;
+
+    }
+
+    public void Deselect()
+    {
+      Card? card = GetCard();
+      if (card != null)
+        card.Background = _originalBackground;
+    }
+
+    private Card? GetCard()
+    {
+      if (_card != null)
+        return _card;
+      Card? card = (Card?)Children.Where(c => c is Card).FirstOrDefault();
+      if (card != null)
+        _card = card;
+      return _card;
     }
 
     private void UpdatePanelPosition(PointerEventArgs e)
     {
       SceneModel? scene = DataContext as SceneModel;
       Point mousePosition = e.GetPosition(this);
-      ItemsControl? control = FindParentOfType<ItemsControl>(this);
+      ItemsControl? control = ControlUtils.FindParentOfType<ItemsControl>(this);
       Canvas? canvas = control?.ItemsPanelRoot as Canvas;
       if (canvas != null && scene != null && Parent != null)
       {

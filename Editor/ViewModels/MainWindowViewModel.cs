@@ -42,11 +42,11 @@ public class MainWindowViewModel : ViewModelBase
 
   public void AddScene()
   {
-    AddSceneViewModel addItemViewModel = new();
+    AddSceneViewModel addSceneViewModel = new();
 
     Observable.Merge(
-        addItemViewModel.OkCommand,
-        addItemViewModel.CancelCommand.Select(_ => (SceneModel?)null))
+        addSceneViewModel.OkCommand,
+        addSceneViewModel.CancelCommand.Select(_ => (SceneModel?)null))
         .Take(1)
         .Subscribe(newScene =>
         {
@@ -58,7 +58,7 @@ public class MainWindowViewModel : ViewModelBase
           ContentViewModel = ScenesView;
         });
 
-    ContentViewModel = addItemViewModel;
+    ContentViewModel = addSceneViewModel;
   }
 
 }

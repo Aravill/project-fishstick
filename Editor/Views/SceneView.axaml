@@ -26,14 +26,15 @@
           Command="{Binding $parent[Window].DataContext.AddScene}">Add Scene</Button>
       </StackPanel>
 
-      <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" Name="ScenesPanel"
-        VerticalAlignment="Top" Orientation="Vertical">
 
-
+      <StackPanel Grid.Column="1" Grid.Row="0"
+        HorizontalAlignment="Stretch" Name="ScenesPanel"
+        VerticalAlignment="Top">
         <ItemsControl ItemsSource="{Binding Scenes}">
           <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-              <Canvas HorizontalAlignment="Stretch" Height="1000" />
+              <Canvas PointerPressed="Canvas_PointerPressed" HorizontalAlignment="Stretch"
+                Height="1000" Background="Transparent" />
             </ItemsPanelTemplate>
           </ItemsControl.ItemsPanel>
 
@@ -46,7 +47,7 @@
 
           <ItemsControl.ItemTemplate>
             <DataTemplate>
-              <custom-controls:ScenePanel>
+              <custom-controls:ScenePanel SceneId="{Binding Id}">
                 <controls:Card Margin="2" Height="100" Width="100" Name="SceneCard">
                   <TextBlock Text="{Binding Description}" />
                 </controls:Card>
@@ -56,8 +57,8 @@
 
         </ItemsControl>
 
-
       </StackPanel>
+
 
     </Grid>
 

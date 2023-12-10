@@ -13,6 +13,6 @@ namespace AvaloniaEditor.ViewModels
     }
 
     public ObservableCollection<SceneModel> Scenes { get; }
-
   }
+
 }
