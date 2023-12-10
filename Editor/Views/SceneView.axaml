@@ -14,27 +14,26 @@
     <Grid ShowGridLines="False">
 
       <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="Auto" />
-        <ColumnDefinition Width="*" />
-        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="1*" />
+        <ColumnDefinition Width="7*" />
+        <ColumnDefinition Width="1*" />
       </Grid.ColumnDefinitions>
 
       <StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Name="ElementPanel"
         VerticalAlignment="Top">
-        <TextBlock FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,15">Elements</TextBlock>
+        <TextBlock FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,15">Controls</TextBlock>
         <Button Margin="0,10,0,10" x:CompileBindings="False"
           Command="{Binding $parent[Window].DataContext.AddScene}">Add Scene</Button>
       </StackPanel>
 
+      <Panel Grid.Column="1" Grid.Row="0"
+        HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="ScenesPanel">
 
-      <StackPanel Grid.Column="1" Grid.Row="0"
-        HorizontalAlignment="Stretch" Name="ScenesPanel"
-        VerticalAlignment="Top">
         <ItemsControl ItemsSource="{Binding Scenes}">
           <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-              <Canvas PointerPressed="Canvas_PointerPressed" HorizontalAlignment="Stretch"
-                Height="1000" Background="Transparent" />
+              <Canvas PointerPressed="Canvas_PointerPressed"
+                Background="Transparent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
             </ItemsPanelTemplate>
           </ItemsControl.ItemsPanel>
 
@@ -48,8 +47,32 @@
           <ItemsControl.ItemTemplate>
             <DataTemplate>
               <custom-controls:ScenePanel SceneId="{Binding Id}">
-                <controls:Card Margin="2" Height="100" Width="100" Name="SceneCard">
-                  <TextBlock Text="{Binding Description}" />
+                <controls:Card Margin="2" Height="150" Width="150" Name="SceneCard">
+                  <StackPanel Spacing="10">
+                    <StackPanel Spacing="5">
+                      <TextBlock Text="{Binding Id}" TextAlignment="Center" FontSize="7"
+                        FontWeight="Light" />
+                      <TextBlock Text="{Binding Name}" TextAlignment="Center" FontSize="14"
+                        FontWeight="Bold" />
+                    </StackPanel>
+                    <StackPanel>
+                      <TextBlock FontWeight="Light" FontSize="8">Description:</TextBlock>
+                      <TextBlock Text="{Binding ShortDescription}" FontSize="12"
+                        FontWeight="Light"
+                        TextAlignment="Justify" Height="34" Padding="2" Background="#08AAAAAA"
+                        TextWrapping="Wrap" />
+                      <TextBlock FontWeight="Light" FontSize="8">Transitions:</TextBlock>
+                      <StackPanel Orientation="Horizontal">
+                        <ItemsControl ItemsSource="{Binding Transitions}">
+                          <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                              <TextBlock Text="{Binding Name}" FontSize="12" />
+                            </DataTemplate>
+                          </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                      </StackPanel>
+                    </StackPanel>
+                  </StackPanel>
                 </controls:Card>
               </custom-controls:ScenePanel>
             </DataTemplate>
@@ -57,10 +80,8 @@
 
         </ItemsControl>
 
-      </StackPanel>
-
+      </Panel>
 
     </Grid>
-
   </Border>
 </UserControl>
