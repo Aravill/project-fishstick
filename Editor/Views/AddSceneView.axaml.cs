@@ -13,6 +13,7 @@ public partial class AddSceneView : UserControl
   public AddSceneView()
   {
     InitializeComponent();
+    DataContext = new AddSceneViewModel();
     DataContextChanged += OnDataContextChanged;
   }
 

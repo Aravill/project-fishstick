@@ -12,11 +12,21 @@ namespace AvaloniaEditor.Services
 
     private List<SceneModel> _scenes;
 
-    public SceneService()
+    private static readonly SceneService _instance = new();
+    private SceneService()
     {
       _scenes = new();
       LoadScenes();
     }
+
+    public static SceneService Instance
+    {
+      get
+      {
+        return _instance;
+      }
+    }
+
     public IEnumerable<SceneModel> GetItems()
     {
       return _scenes;

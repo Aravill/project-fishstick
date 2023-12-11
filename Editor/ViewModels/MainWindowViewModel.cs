@@ -18,7 +18,7 @@ public class MainWindowViewModel : ViewModelBase
 
   public MainWindowViewModel()
   {
-    _sceneService = new SceneService();
+    _sceneService = SceneService.Instance;
     var scenes = _sceneService.GetItems();
 
     ScenesView = new SceneViewModel(scenes);
@@ -43,7 +43,7 @@ public class MainWindowViewModel : ViewModelBase
 
   public void AddScene()
   {
-    AddSceneViewModel addSceneViewModel = new(_sceneService.GetItems().ToList());
+    AddSceneViewModel addSceneViewModel = new();
 
     Observable.Merge(
         addSceneViewModel.CreateCommand,
