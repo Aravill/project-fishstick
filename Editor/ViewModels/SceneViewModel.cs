@@ -6,6 +6,7 @@ using ReactiveUI;
 using System;
 using System.Reactive;
 using System.Linq;
+using System.Windows.Input;
 
 namespace AvaloniaEditor.ViewModels
 {
@@ -18,8 +19,10 @@ namespace AvaloniaEditor.ViewModels
     private MainWindowViewModel _mainWindow;
 
     public ReactiveCommand<SceneModel, Unit> EditSceneCommand { get; }
-    public ReactiveCommand<SceneModel, Unit> RemoveSceneCommand { get; }
     public ReactiveCommand<Unit, Unit> AddSceneCommand { get; }
+
+    public ICommand RemoveSceneCommand { get; }
+    public Interaction<YesNoViewModel, bool> ShowDialog { get; }
     public SceneViewModel(MainWindowViewModel mainWindow)
     {
       _mainWindow = mainWindow;
@@ -28,7 +31,17 @@ namespace AvaloniaEditor.ViewModels
       Scenes = new ObservableCollection<SceneModel>(_sceneService.GetScenes());
 
       EditSceneCommand = ReactiveCommand.Create<SceneModel>(EditScene);
-      RemoveSceneCommand = ReactiveCommand.Create<SceneModel>(RemoveScene);
+
+      ShowDialog = new Interaction<YesNoViewModel, bool>();
+
+      RemoveSceneCommand = ReactiveCommand.CreateFromTask<SceneModel>(async (scene) =>
+      {
+        var yesNoVm = new YesNoViewModel() { Message = $"Are you sure you want to remove scene {scene.Name}?" };
+        var result = await ShowDialog.Handle(yesNoVm);
+        if (result)
+          RemoveScene(scene);
+      });
+
       AddSceneCommand = ReactiveCommand.Create(AddScene);
     }
 
