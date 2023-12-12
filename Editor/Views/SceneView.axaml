@@ -22,8 +22,8 @@
         <ColumnDefinition Width="1*" />
       </Grid.ColumnDefinitions>
 
-      <StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Name="ElementPanel"
-        VerticalAlignment="Top">
+      <StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Stretch" Name="ElementPanel"
+        VerticalAlignment="Top" Background="#08AAAAAA">
         <TextBlock FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,15">Controls</TextBlock>
         <Button Margin="0,10,0,10" x:CompileBindings="False"
           Command="{Binding AddSceneCommand}">Add Scene</Button>
@@ -32,7 +32,7 @@
           TextWrapping="Wrap" Height="1000"></TextBlock> -->
       </StackPanel>
 
-      <Panel Grid.Column="1" Grid.Row="0"
+      <Panel Grid.Column="1"
         HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="ScenesPanel">
 
         <ItemsControl ItemsSource="{Binding Scenes}">
@@ -105,6 +105,40 @@
 
       </Panel>
 
+      <Border Margin="10" Grid.Column="2" VerticalAlignment="Stretch"
+        HorizontalAlignment="Stretch" Background="#08AAAAAA">
+        <Panel Margin="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+          <StackPanel VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch" Spacing="5">
+            <TextBlock FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,15">Properties</TextBlock>
+            <TextBlock Text="Name:" FontSize="12" FontWeight="Bold" />
+            <TextBlock
+              Text="{Binding SelectedScene.Name}"
+              FontSize="12"
+              FontWeight="Light" />
+            <TextBlock Text="Description:" FontSize="12" FontWeight="Bold" />
+            <TextBlock
+              Text="{Binding SelectedScene.Description}"
+              FontSize="12"
+              FontWeight="Light"
+              TextWrapping="Wrap" />
+            <TextBlock Text="Transitions:" FontSize="12" FontWeight="Bold" />
+            <ListBox ItemsSource="{Binding SelectedScene.Transitions}">
+              <ListBox.ItemTemplate>
+                <DataTemplate>
+                  <Grid RowDefinitions="Auto" ColumnDefinitions="1*,5,4*">
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Name}" FontSize="12"
+                      VerticalAlignment="Center" TextWrapping="Wrap" />
+                    <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Description}"
+                      FontSize="12"
+                      TextWrapping="Wrap" />
+                  </Grid>
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+            </ListBox>
+          </StackPanel>
+        </Panel>
+      </Border>
     </Grid>
   </Border>
 </UserControl>
