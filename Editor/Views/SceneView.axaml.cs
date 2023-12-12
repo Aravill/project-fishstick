@@ -1,11 +1,13 @@
 
 using System;
-using System.Drawing;
-using Avalonia;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.VisualTree;
 using AvaloniaEditor.Controls;
 using AvaloniaEditor.Helpers;
+using AvaloniaEditor.ViewModels;
+using ReactiveUI;
 
 namespace AvaloniaEditor.Views;
 
@@ -16,6 +18,7 @@ public partial class SceneView : UserControl
   public SceneView()
   {
     InitializeComponent();
+    DataContextChanged += OnDataContextChanged;
   }
 
   public void Canvas_PointerPressed(object sender, PointerPressedEventArgs e)
@@ -47,5 +50,25 @@ public partial class SceneView : UserControl
     // Return selected panel back to normal background color
     _selectedScenePanel.Deselect();
     _selectedScenePanel = null;
+  }
+  private void OnDataContextChanged(object? sender, EventArgs e)
+  {
+    if (DataContext is SceneViewModel vm)
+      vm.ShowDialog.RegisterHandler(DoShowDialogAsync);
+  }
+
+  private async Task DoShowDialogAsync(InteractionContext<YesNoViewModel, bool> context)
+  {
+    var dialog = new YesNoView
+    {
+      DataContext = context.Input
+    };
+
+    var window = this.GetVisualRoot() as Window;
+    if (window != null)
+    {
+      var result = await dialog.ShowDialog<bool>(window);
+      context.SetOutput(result);
+    }
   }
 }

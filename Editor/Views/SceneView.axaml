@@ -7,7 +7,10 @@
   xmlns:styles="clr-namespace:Material.Styles;assembly=Material.Styles"
   xmlns:vm="using:AvaloniaEditor.ViewModels" mc:Ignorable="d" d:DesignWidth="250"
   xmlns:m="using:AvaloniaEditor.Models"
-  d:DesignHeight="450" x:Class="AvaloniaEditor.Views.SceneView" x:DataType="vm:SceneViewModel">
+  xmlns:v="using:AvaloniaEditor.Views"
+  d:DesignHeight="450" x:Class="AvaloniaEditor.Views.SceneView" x:DataType="vm:SceneViewModel"
+  xmlns:local="clr-namespace:AvaloniaEditor.Helpers"
+  x:Name="uc">
 
   <Border Padding="20">
 
@@ -23,7 +26,10 @@
         VerticalAlignment="Top">
         <TextBlock FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,15">Controls</TextBlock>
         <Button Margin="0,10,0,10" x:CompileBindings="False"
-          Command="{Binding $parent[Window].DataContext.AddScene}">Add Scene</Button>
+          Command="{Binding AddSceneCommand}">Add Scene</Button>
+        <!-- <TextBlock
+          Text="{Binding DataContext, ElementName=uc, Converter={StaticResource DebugConverter}}}"
+          TextWrapping="Wrap" Height="1000"></TextBlock> -->
       </StackPanel>
 
       <Panel Grid.Column="1" Grid.Row="0"
@@ -49,30 +55,47 @@
               <custom-controls:ScenePanel SceneId="{Binding Id}">
                 <controls:Card Margin="2" Height="150" Width="150" Name="SceneCard">
                   <StackPanel Spacing="10">
+
                     <StackPanel Spacing="5">
                       <TextBlock Text="{Binding Id}" TextAlignment="Center" FontSize="7"
                         FontWeight="Light" />
                       <TextBlock Text="{Binding Name}" TextAlignment="Center" FontSize="14"
                         FontWeight="Bold" />
                     </StackPanel>
+
                     <StackPanel>
                       <TextBlock FontWeight="Light" FontSize="8">Description:</TextBlock>
                       <TextBlock Text="{Binding ShortDescription}" FontSize="12"
                         FontWeight="Light"
                         TextAlignment="Justify" Height="34" Padding="2" Background="#08AAAAAA"
                         TextWrapping="Wrap" />
-                      <TextBlock FontWeight="Light" FontSize="8">Transitions:</TextBlock>
-                      <StackPanel Orientation="Horizontal">
-                        <ItemsControl ItemsSource="{Binding Transitions}">
-                          <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                              <TextBlock Text="{Binding Name}" FontSize="12" />
-                            </DataTemplate>
-                          </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                      </StackPanel>
+                      <!-- <TextBlock FontWeight="Light" FontSize="8">Transitions:</TextBlock> -->
                     </StackPanel>
+
+                    <!-- <StackPanel Orientation="Horizontal">
+                      <ItemsControl ItemsSource="{Binding Transitions}">
+                        <ItemsControl.ItemTemplate>
+                          <DataTemplate>
+                            <TextBlock Text="{Binding Name}" FontSize="12" />
+                          </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                      </ItemsControl>
+                    </StackPanel> -->
+
+                    <Grid x:Name="Interactions" IsVisible="False" ColumnDefinitions="1*,5,1.5*">
+                      <Button Grid.Column="0" Content="Edit"
+                        Command="{Binding DataContext.EditSceneCommand, ElementName=uc}"
+                        CommandParameter="{Binding}"
+                        x:CompileBindings="False"
+                        FontSize="12" />
+                      <Button Grid.Column="2" Content="Remove"
+                        Command="{Binding DataContext.RemoveSceneCommand, ElementName=uc}"
+                        CommandParameter="{Binding}"
+                        x:CompileBindings="False"
+                        FontSize="12" />
+                    </Grid>
                   </StackPanel>
+
                 </controls:Card>
               </custom-controls:ScenePanel>
             </DataTemplate>

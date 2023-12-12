@@ -27,14 +27,28 @@ namespace AvaloniaEditor.Services
       }
     }
 
-    public IEnumerable<SceneModel> GetItems()
+    public IEnumerable<SceneModel> GetScenes()
     {
       return _scenes;
     }
 
-    public void AddItem(SceneModel scene)
+    public void AddScene(SceneModel scene)
     {
       _scenes.Add(scene);
+    }
+
+    public void UpdateScene(SceneModel scene)
+    {
+      var index = _scenes.FindIndex(s => s.Id == scene.Id);
+      if (index != -1)
+      {
+        _scenes[index] = scene;
+      }
+    }
+
+    public void RemoveScene(SceneModel scene)
+    {
+      _scenes.Remove(scene);
     }
     public void SaveScenes()
     {
