@@ -13,6 +13,7 @@ namespace AvaloniaEditor.ViewModels
   public class SceneViewModel : ViewModelBase
   {
 
+    private SceneModel? _selectedScene;
     private ViewModelBase _contentViewModel;
     private SceneService _sceneService;
 
@@ -112,7 +113,23 @@ namespace AvaloniaEditor.ViewModels
       private set => this.RaiseAndSetIfChanged(ref _contentViewModel, value);
     }
 
+    public SceneModel? SelectedScene
+    {
+      get => _selectedScene;
+      set
+      {
+        this.RaiseAndSetIfChanged(ref _selectedScene, value);
+      }
+    }
+
+    public void SelectSceneById(string sceneId)
+    {
+      SelectedScene = Scenes.FirstOrDefault(s => s.Id == sceneId);
+    }
+
+    public void DeselectScene()
+    {
+      SelectedScene = null;
+    }
   }
-
-
 }

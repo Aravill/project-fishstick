@@ -41,6 +41,10 @@ public partial class SceneView : UserControl
     DeselectScenePanel();
     _selectedScenePanel = scenePanel;
     _selectedScenePanel.Select();
+    if (DataContext is SceneViewModel vm)
+    {
+      vm.SelectSceneById(_selectedScenePanel.SceneId);
+    }
   }
 
   public void DeselectScenePanel()
@@ -50,6 +54,10 @@ public partial class SceneView : UserControl
     // Return selected panel back to normal background color
     _selectedScenePanel.Deselect();
     _selectedScenePanel = null;
+    if (DataContext is SceneViewModel vm)
+    {
+      vm.DeselectScene();
+    }
   }
   private void OnDataContextChanged(object? sender, EventArgs e)
   {
