@@ -23,7 +23,7 @@ public partial class AddSceneView : UserControl
       vm.ShowDialog.RegisterHandler(DoShowDialogAsync);
   }
 
-  private async Task DoShowDialogAsync(InteractionContext<AddSceneTransitionViewModel, ITransition?> context)
+  private async Task DoShowDialogAsync(InteractionContext<AddSceneTransitionViewModel, BaseTransition?> context)
   {
     var dialog = new AddSceneTransitionView
     {
@@ -33,7 +33,7 @@ public partial class AddSceneView : UserControl
     var window = this.GetVisualRoot() as Window;
     if (window != null)
     {
-      var result = await dialog.ShowDialog<ITransition?>(window);
+      var result = await dialog.ShowDialog<BaseTransition?>(window);
       context.SetOutput(result);
     }
   }

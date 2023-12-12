@@ -7,7 +7,7 @@ namespace AvaloniaEditor.Helpers
 {
   public class DebugConverter : IValueConverter
   {
-    public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+    public object Convert(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)
     {
       if (value == null)
       {
@@ -26,9 +26,9 @@ namespace AvaloniaEditor.Helpers
       return output;
     }
 
-    public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+    public object ConvertBack(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)
     {
-      Console.WriteLine($"Debug Output: {value.ToString()}");
+      Console.WriteLine($"Debug Output: {value?.ToString()}");
       return $"Debug Output: {value}"; ;
     }
   }

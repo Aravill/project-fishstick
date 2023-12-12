@@ -4,6 +4,7 @@ using System.Reactive;
 using AvaloniaEditor.Models;
 using FishStick.Scene;
 using ReactiveUI;
+using Avalonia.Data;
 
 namespace AvaloniaEditor.ViewModels
 {
@@ -18,15 +19,17 @@ namespace AvaloniaEditor.ViewModels
     public ReactiveCommand<Unit, Unit> CancelCommand { get; }
 
     private List<SceneModel> _scenes { get; set; }
-
-    public Interaction<ITransition?, Unit> CloseDialog { get; } = new Interaction<ITransition?, Unit>();
-    public AddSceneTransitionViewModel(List<SceneModel> availableScenes)
+    private List<BaseTransition> _transitions { get; set; }
+    public Interaction<BaseTransition?, Unit> CloseDialog { get; } = new Interaction<BaseTransition?, Unit>();
+    public AddSceneTransitionViewModel(List<SceneModel> availableScenes, List<BaseTransition> availableTransitions)
     {
+      _scenes = availableScenes;
+      _transitions = availableTransitions;
       var isValidObservable = this.WhenAnyValue(
           viewModel => viewModel.Name,
           viewModel => viewModel.Description,
           viewModel => viewModel.SelectedScene,
-          (name, description, targetSceneId) => !string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(description) && SelectedScene != null);
+          (name, description, targetSceneId) => !TransitionExists(name) && !string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(description) && SelectedScene != null);
       CreateCommand = ReactiveCommand.CreateFromTask(
            async () =>
            {
@@ -39,7 +42,6 @@ namespace AvaloniaEditor.ViewModels
       {
         await CloseDialog.Handle(null);
       });
-      _scenes = availableScenes;
     }
 
     public string Description
@@ -51,7 +53,14 @@ namespace AvaloniaEditor.ViewModels
     public string Name
     {
       get => _name;
-      set => this.RaiseAndSetIfChanged(ref _name, value);
+      set
+      {
+        if (TransitionExists(value))
+        {
+          throw new DataValidationException("Transition with this name already exists");
+        }
+        this.RaiseAndSetIfChanged(ref _name, value);
+      }
     }
 
     public IEnumerable<string> SceneNames
@@ -67,7 +76,12 @@ namespace AvaloniaEditor.ViewModels
       set => this.RaiseAndSetIfChanged(ref _selectedScene, value);
     }
 
-    public ITransition? CreatedTransition { get; set; }
+    public BaseTransition? CreatedTransition { get; set; }
+
+    private bool TransitionExists(string transitionName)
+    {
+      return _transitions.Find(t => t.Name == transitionName) != null;
+    }
 
   }
 

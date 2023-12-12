@@ -21,7 +21,7 @@ public partial class AddSceneTransitionView : Window
       vm.CloseDialog.RegisterHandler(CloseDialog);
   }
 
-  private void CloseDialog(InteractionContext<ITransition?, Unit> context)
+  private void CloseDialog(InteractionContext<BaseTransition?, Unit> context)
   {
     Close(context.Input);
   }
