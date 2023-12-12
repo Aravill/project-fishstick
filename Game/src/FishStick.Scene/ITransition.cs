@@ -1,6 +1,7 @@
 
 namespace FishStick.Scene
 {
+
   public interface ITransition
   {
 

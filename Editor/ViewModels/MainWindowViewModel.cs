@@ -5,6 +5,7 @@ using AvaloniaEditor.Models;
 using AvaloniaEditor.Services;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
+using System.Linq;
 
 namespace AvaloniaEditor.ViewModels;
 
@@ -17,7 +18,7 @@ public class MainWindowViewModel : ViewModelBase
 
   public MainWindowViewModel()
   {
-    _sceneService = new SceneService();
+    _sceneService = SceneService.Instance;
     var scenes = _sceneService.GetItems();
 
     ScenesView = new SceneViewModel(scenes);
@@ -45,7 +46,7 @@ public class MainWindowViewModel : ViewModelBase
     AddSceneViewModel addSceneViewModel = new();
 
     Observable.Merge(
-        addSceneViewModel.OkCommand,
+        addSceneViewModel.CreateCommand,
         addSceneViewModel.CancelCommand.Select(_ => (SceneModel?)null))
         .Take(1)
         .Subscribe(newScene =>

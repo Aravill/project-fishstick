@@ -36,7 +36,7 @@ namespace AvaloniaEditor.Models
     public string ShortDescription { get => Description.Length > 42 ? Description.Substring(0, 42).Trim() + "..." : Description; }
 
     [DataMember]
-    public List<ITransition> Transitions { get; set; } = new();
+    public List<BaseTransition> Transitions { get; set; } = new();
 
     [DataMember]
     public List<IItem> Items { get; } = new();
