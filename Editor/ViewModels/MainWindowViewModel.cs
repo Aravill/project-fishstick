@@ -1,11 +1,7 @@
 ﻿using ReactiveUI;
-using System;
-using System.Reactive.Linq;
-using AvaloniaEditor.Models;
 using AvaloniaEditor.Services;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using System.Linq;
 
 namespace AvaloniaEditor.ViewModels;
 
@@ -13,16 +9,14 @@ public class MainWindowViewModel : ViewModelBase
 {
   private ViewModelBase _contentViewModel;
   private SceneService _sceneService;
-  public SceneViewModel ScenesView { get; }
+  public SceneViewModel SceneViewModel { get; }
 
 
   public MainWindowViewModel()
   {
     _sceneService = SceneService.Instance;
-    var scenes = _sceneService.GetItems();
-
-    ScenesView = new SceneViewModel(scenes);
-    _contentViewModel = ScenesView;
+    SceneViewModel = new SceneViewModel(this);
+    _contentViewModel = SceneViewModel;
 
     if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
     {
@@ -41,25 +35,9 @@ public class MainWindowViewModel : ViewModelBase
     _sceneService.SaveScenes();
   }
 
-  public void AddScene()
+  public void SwitchToView(ViewModelBase viewModel)
   {
-    AddSceneViewModel addSceneViewModel = new();
-
-    Observable.Merge(
-        addSceneViewModel.CreateCommand,
-        addSceneViewModel.CancelCommand.Select(_ => (SceneModel?)null))
-        .Take(1)
-        .Subscribe(newScene =>
-        {
-          if (newScene != null)
-          {
-            _sceneService.AddItem(newScene);
-            ScenesView.Scenes.Add(newScene);
-          }
-          ContentViewModel = ScenesView;
-        });
-
-    ContentViewModel = addSceneViewModel;
+    ContentViewModel = viewModel;
   }
 
 }

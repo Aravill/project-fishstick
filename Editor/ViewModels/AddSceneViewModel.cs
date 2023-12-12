@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -14,13 +15,14 @@ namespace AvaloniaEditor.ViewModels
   public class AddSceneViewModel : ViewModelBase
   {
 
+    private SceneModel _scene = new SceneModel();
     private string _description = string.Empty;
     private string _name = string.Empty;
 
     private List<SceneModel> _availableScenes;
     private ObservableCollection<PairModel<BaseTransition, string>> _transitions = new ObservableCollection<PairModel<BaseTransition, string>>();
 
-    public ReactiveCommand<Unit, SceneModel> CreateCommand { get; }
+    public ReactiveCommand<Unit, SceneModel> OkCommand { get; }
     public ReactiveCommand<Unit, Unit> CancelCommand { get; }
 
     public ReactiveCommand<PairModel<BaseTransition, string>, Unit> RemoveTransitionCommand { get; }
@@ -30,15 +32,21 @@ namespace AvaloniaEditor.ViewModels
     public Interaction<AddSceneTransitionViewModel, BaseTransition?> ShowDialog { get; }
     public AddSceneViewModel()
     {
-      _availableScenes = SceneService.Instance.GetItems().ToList();
+      _availableScenes = SceneService.Instance.GetScenes().ToList();
       ShowDialog = new Interaction<AddSceneTransitionViewModel, BaseTransition?>();
       var isValidObservable = this.WhenAnyValue(
           viewModel => viewModel.Name,
           viewModel => viewModel.Description,
           (name, description) => !string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(description));
 
-      CreateCommand = ReactiveCommand.Create(
-          () => new SceneModel { Description = Description, Name = Name, Transitions = Transitions.Select(t => t.First).ToList() }, isValidObservable);
+      OkCommand = ReactiveCommand.Create(
+          () =>
+          {
+            _scene.Name = Name;
+            _scene.Description = Description;
+            _scene.Transitions = Transitions.Select(t => t.First).ToList();
+            return _scene;
+          }, isValidObservable);
 
       AddTransitionCommand = ReactiveCommand.CreateFromTask(async () =>
       {
@@ -52,6 +60,18 @@ namespace AvaloniaEditor.ViewModels
 
       RemoveTransitionCommand = ReactiveCommand.Create<PairModel<BaseTransition, string>>(
         RemoveTransition);
+    }
+
+    public void InitializeFromExisting(SceneModel scene)
+    {
+      _scene = scene;
+      Transitions = new ObservableCollection<PairModel<BaseTransition, string>>();
+      foreach (var transition in scene.Transitions)
+      {
+        Transitions.Add(new PairModel<BaseTransition, string>(transition, FindSceneName(transition.NextSceneId) ?? string.Empty));
+      }
+      Name = scene.Name;
+      Description = scene.Description;
     }
 
     private void RemoveTransition(PairModel<BaseTransition, string> transitionPair)

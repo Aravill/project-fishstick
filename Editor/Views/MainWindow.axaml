@@ -5,6 +5,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:controls="clr-namespace:AvaloniaEditor.Controls"
   xmlns:views="clr-namespace:AvaloniaEditor.Views"
+  xmlns:viewmodels="clr-namespace:AvaloniaEditor.ViewModels"
   xmlns:styles="clr-namespace:Material.Styles;assembly=Material.Styles" mc:Ignorable="d"
   d:DesignWidth="500" d:DesignHeight="500" Height="600" Width="800"
   x:Class="AvaloniaEditor.Views.MainWindow" x:DataType="vm:MainWindowViewModel"
@@ -16,6 +17,6 @@
     <vm:MainWindowViewModel />
   </Design.DataContext>
 
-  <views:SceneView DataContext="{Binding ScenesView}" />
+  <views:SceneView DataContext="{Binding SceneViewModel}" />
 
 </Window>

@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
+using Avalonia.VisualTree;
 using AvaloniaEditor.Helpers;
 using AvaloniaEditor.Models;
 using Material.Styles.Controls;
@@ -64,6 +65,11 @@ namespace AvaloniaEditor.Controls
       {
         _originalBackground = card.Background;
         card.Background = _selectedBackground;
+        Grid? grid = card.FindDescendantOfType<Grid>();
+        if (grid != null)
+        {
+          grid.IsVisible = true;
+        }
       }
 
     }
@@ -72,7 +78,15 @@ namespace AvaloniaEditor.Controls
     {
       Card? card = GetCard();
       if (card != null)
+      {
         card.Background = _originalBackground;
+        Grid? grid = card.FindDescendantOfType<Grid>();
+        if (grid != null)
+        {
+          grid.IsVisible = false;
+        }
+      }
+
     }
 
     private Card? GetCard()
