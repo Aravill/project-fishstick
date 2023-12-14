@@ -6,4 +6,11 @@ namespace FishStick.Combat
     Piercing,
     Slashing,
   }
+
+  public enum CreatureTypeEnum
+  {
+    Humanoid,
+    Animal,
+    Insect,
+  }
 }

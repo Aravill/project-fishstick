@@ -1,4 +1,4 @@
-namespace FishStick.Combat.CombatWordTable
+namespace FishStick.Combat.Narration
 {
   public class Range
   {

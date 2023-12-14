@@ -1,8 +1,8 @@
 using FishStick.Util;
 
-namespace FishStick.Combat.CombatWordTable
+namespace FishStick.Combat.Narration
 {
-  class DamageTypeVerbTable : Dictionary<DamageTypeEnum, List<string>>
+  class InjuryVerbTable
   {
     private static readonly Dictionary<DamageTypeEnum, List<string>> _table = new()
     {
