@@ -1,10 +1,15 @@
+using Dialogue;
 using FishStick.Commands;
 using FishStick.Player;
 using FishStick.World;
 
 class CommandDictionary : Dictionary<string, ICommand>
 {
-  public CommandDictionary(PlayerController player, WorldController world)
+  public CommandDictionary(
+    PlayerController player,
+    WorldController world,
+    DialogueController dialogues
+  )
   {
     // TODO: It would be really sexy if we could just add all the commands in the assembly, identified by the ICommand interface.
     Add(GoCommand.Name, new GoCommand(player, world));
@@ -17,5 +22,6 @@ class CommandDictionary : Dictionary<string, ICommand>
     Add(OpenCommand.Name, new OpenCommand(player, world));
     Add(UnlockCommand.Name, new UnlockCommand(player, world));
     Add(PutCommand.Name, new PutCommand(player, world));
+    Add(TalkCommand.Name, new TalkCommand(player, world, dialogues));
   }
 }

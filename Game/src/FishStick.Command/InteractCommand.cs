@@ -1,4 +1,3 @@
-
 using FishStick.Player;
 using FishStick.Render;
 using FishStick.Scripts;
@@ -14,6 +13,7 @@ namespace FishStick.Commands
     public static string Name = "interact";
 
     private ScriptController _scripts = new();
+
     void ICommand.Execute(string[] args)
     {
       // Uniquely, a part of this command's args is the command name itself.
@@ -25,7 +25,8 @@ namespace FishStick.Commands
       for (int i = 0; i < args.Length; i++)
       {
         potentialTargetName = args[i];
-        if (!AttemptInteraction(commandName, potentialTargetName)) continue;
+        if (!AttemptInteraction(commandName, potentialTargetName))
+          continue;
       }
       // Then try to join them together
       potentialTargetName = string.Join(" ", args);
@@ -37,18 +38,23 @@ namespace FishStick.Commands
       //   if (!result) continue;
       //   return;
       // }
-      if (AttemptInteraction(commandName, potentialTargetName)) return;
+      if (AttemptInteraction(commandName, potentialTargetName))
+        return;
       if (potentialTargetName.Length < 1)
       {
         ConsoleController.WriteText($"You don't know how to '{commandName}'");
         return;
       }
-      ConsoleController.WriteText($"You don't know how to '{commandName}' a '{potentialTargetName}'.");
+      ConsoleController.WriteText(
+        $"You don't know how to '{commandName}' a '{potentialTargetName}'."
+      );
     }
 
     private bool AttemptInteraction(string commandName, string potentialTargetName)
     {
-      IInteractable? element = _world.GetScene(_player.GetCurrentSceneId()).GetElementByName(potentialTargetName);
+      IInteractable? element = _world
+        .GetScene(_player.GetCurrentSceneId())
+        .GetElementByName(potentialTargetName);
       if (element == null || element.Hidden)
       {
         // Command failure5
@@ -65,7 +71,5 @@ namespace FishStick.Commands
       // Command success
       return true;
     }
-
-
   }
 }

@@ -5,6 +5,5 @@ namespace Scene
     string Id { get; }
     string SceneDescription { get; }
     bool Hidden { get; set; }
-
   }
 }

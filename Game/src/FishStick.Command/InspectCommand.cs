@@ -9,17 +9,24 @@ namespace FishStick.Commands
     private PlayerController _player = player;
     private WorldController _world = world;
     public static string Name = "inspect";
+
     void ICommand.Execute(string[] args)
     {
       string targetItemName;
 
-      targetItemName = String.Join(" ", args);
+      targetItemName = string.Join(" ", args);
       if (targetItemName.Length < 1)
       {
         ConsoleController.WriteText("Inspect what?");
         return;
       }
-      string? itemDescription = _player.GetInventoryItem(targetItemName)?.Description ?? _world.GetScene(_player.GetCurrentSceneId()).Items.Find(item => item.Name == targetItemName)?.Description;
+      string? itemDescription =
+        _player.GetInventoryItemByName(targetItemName)?.Description
+        ?? _world
+          .GetScene(_player.GetCurrentSceneId())
+          .Items
+          .Find(item => item.Name == targetItemName)
+          ?.Description;
       if (itemDescription is null)
       {
         ConsoleController.WriteText($"You don't have a {targetItemName}.");

@@ -12,7 +12,6 @@ namespace FishStick.Commands
     private WorldController _world = world;
     public static string Name = "take";
 
-
     /// <summary>
     /// Take an item from the current scene, or from a container in the current scene, or from a container in the player's inventory
     /// </summary>
@@ -21,14 +20,17 @@ namespace FishStick.Commands
     {
       string targetItemName;
 
-      targetItemName = String.Join(" ", args);
+      targetItemName = string.Join(" ", args);
       if (targetItemName.Length < 1)
       {
         ConsoleController.WriteText("Take what?");
         return;
       }
       IScene currentScene = _world.GetScene(_player.GetCurrentSceneId());
-      IItem? item = TakeItemFromScene(targetItemName, currentScene) ?? TakeItemFromSceneContainer(targetItemName, currentScene) ?? TakeItemFromInventoryContainer(targetItemName);
+      IItem? item =
+        TakeItemFromScene(targetItemName, currentScene)
+        ?? TakeItemFromSceneContainer(targetItemName, currentScene)
+        ?? TakeItemFromInventoryContainer(targetItemName);
       if (item == null)
       {
         ConsoleController.WriteText($"You do not see a '{targetItemName}' here.");
@@ -45,9 +47,14 @@ namespace FishStick.Commands
     /// <returns>IItem?</returns>
     private IItem? TakeItemFromScene(string targetItemName, IScene currentScene)
     {
-      IItem? item = currentScene.Items.Find(item => item.Name == targetItemName && item.Hidden == false);
+      IItem? item = currentScene
+        .Items
+        .Find(item => item.Name == targetItemName && item.Hidden == false);
       if (item != null)
-      { currentScene.Items.Remove(item); _player.TakeItem(item); }
+      {
+        currentScene.Items.Remove(item);
+        _player.TakeItem(item);
+      }
       return item;
     }
 
@@ -61,7 +68,11 @@ namespace FishStick.Commands
     {
       IItem? item = null;
 
-      List<IContainer> containers = currentScene.Items.OfType<IContainer>().ToList().FindAll(container => container.Locked == false);
+      List<IContainer> containers = currentScene
+        .Items
+        .OfType<IContainer>()
+        .ToList()
+        .FindAll(container => container.Locked == false);
       foreach (IContainer container in containers)
       {
         item = container.FindItem(targetItemName);
@@ -84,7 +95,11 @@ namespace FishStick.Commands
     {
       IItem? item = null;
 
-      List<IContainer> containers = _player.GetInventory().OfType<IContainer>().ToList().FindAll(container => container.Locked == false);
+      List<IContainer> containers = _player
+        .GetInventory()
+        .OfType<IContainer>()
+        .ToList()
+        .FindAll(container => container.Locked == false);
       foreach (IContainer container in containers)
       {
         item = container.FindItem(targetItemName);

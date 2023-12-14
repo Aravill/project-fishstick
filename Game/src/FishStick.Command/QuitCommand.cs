@@ -9,6 +9,7 @@ namespace FishStick.Commands
     private PlayerController _player = player;
     private WorldController _world = world;
     public static string Name = "quit";
+
     void ICommand.Execute(string[] args)
     {
       ConsoleController.WriteText("Thanks for playing!");

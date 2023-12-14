@@ -3,7 +3,7 @@ using FishStick.Item;
 
 namespace FishStick.Player
 {
-  class PlayerController
+  public class PlayerController
   {
     private int _hp { get; set; }
     private Inventory _inventory;
@@ -20,9 +20,9 @@ namespace FishStick.Player
       return _currentSceneId;
     }
 
-    public PlayerController(int hp)
+    public PlayerController(int hp, string startingSceneId)
     {
-      _currentSceneId = "0";
+      _currentSceneId = startingSceneId;
       _hp = hp;
       _inventory = new Inventory();
     }
@@ -32,9 +32,9 @@ namespace FishStick.Player
       _inventory.AddItem(item);
     }
 
-    public void RemoveItem(IItem item)
+    public IItem? RemoveItem(string itemId)
     {
-      _inventory.RemoveItem(item);
+      return _inventory.RemoveItem(itemId);
     }
 
     public List<IItem> GetInventory()
@@ -42,10 +42,16 @@ namespace FishStick.Player
       return _inventory.GetItems();
     }
 
-    public IItem? GetInventoryItem(string name)
+    public IItem? GetInventoryItemByName(string name)
     {
-      return _inventory.GetItem(name);
+      return _inventory.GetItemByName(name);
     }
+
+    public IItem? GetInventoryItem(string itemId)
+    {
+      return _inventory.GetItem(itemId);
+    }
+
     public int GetHp()
     {
       return _hp;
@@ -69,5 +75,4 @@ namespace FishStick.Player
       return _hp;
     }
   }
-
 }

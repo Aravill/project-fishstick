@@ -1,4 +1,5 @@
 using FishStick.Item;
+using NPC;
 using Scene;
 
 namespace FishStick.Scene
@@ -11,6 +12,8 @@ namespace FishStick.Scene
     List<IItem> Items { get; }
 
     List<IElement> Elements { get; }
+
+    List<INonPlayableCharacter> NPCs { get; }
     List<ITransition> Transitions { get; }
 
     IItem? GetItem(string itemId);
@@ -18,6 +21,8 @@ namespace FishStick.Scene
 
     IInteractable? GetElementByName(string target);
     ITransition? GetTransition(string exitName);
+
+    INonPlayableCharacter? GetNPC(string npcId);
+    INonPlayableCharacter? GetNPCByName(string npcId);
   }
 }
-

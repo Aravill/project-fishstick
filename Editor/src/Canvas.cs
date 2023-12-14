@@ -11,36 +11,36 @@ using System.Xml.Linq;
 
 namespace Editor
 {
-    public partial class Canvas : UserControl
+  public partial class Canvas : UserControl
+  {
+    List<Node> nodes = [];
+    Point lastClick = new();
+    Node? selectedNode;
+    Point? selectPoint;
+    List<(Node a, Node b)> connections = [];
+    public Canvas()
     {
-        List<Node> nodes = [];
-        Point lastClick = new();
-        Node? selectedNode;
-        Point? selectPoint;
-        List<(Node a, Node b)> connections = [];
-        public Canvas()
-        {
-            InitializeComponent();
-        }
+      InitializeComponent();
+    }
 
-        private void NewNodeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            CreateNode(lastClick);
-        }
+    private void NewNodeToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      CreateNode(lastClick);
+    }
 
-        private Node CreateNode(Point location)
-        {
-            Node node = new() { Location = location };
-            node.OnRemove += RemoveNode;
-            node.MouseMove += Child_MouseMove;
-            node.OnSelect += SelectNode;
-            node.OnUnselect += UnselectNode;
+    private Node CreateNode(Point location)
+    {
+      Node node = new() { Location = location };
+      node.OnRemove += RemoveNode;
+      node.MouseMove += Child_MouseMove;
+      node.OnSelect += SelectNode;
+      node.OnUnselect += UnselectNode;
 
-            nodes.Add(node);
-            Controls.Add(node);
+      nodes.Add(node);
+      Controls.Add(node);
 
-            return node;
-        }
+      return node;
+    }
 
     private void Child_MouseMove(object? sender, MouseEventArgs eventArgs)
     {
@@ -67,59 +67,59 @@ namespace Editor
       Controls.SetChildIndex(selectedNode, 0);
     }
 
-        private void UnselectNode(object? sender, MouseEventArgs e)
-        {
-            selectedNode = null;
-            selectPoint = null;
-        }
-
-        private void RemoveNode(object? sender, EventArgs e)
-        {
-            if (sender is not Node { } node)
-                return;
-
-            nodes.Remove(node);
-            Controls.Remove(node);
-        }
-
-        private void Canvas_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (selectedNode is null || selectPoint is null) return;
-
-            selectedNode.Location = new Point(e.Location.X - selectPoint!.Value.X,
-                                              e.Location.Y - selectPoint!.Value.Y);
-        }
-
-        private void Canvas_Paint(object sender, PaintEventArgs e)
-        {
-            connections.ForEach(connection =>
-            {
-                e.Graphics.DrawLine(Pens.Black,
-                                    connection.a.Location,
-                                    connection.b.Location);
-            });
-        }
-
-        private void Canvas_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-                ContextMenu.Show(this, lastClick = e.Location);
-        }
-
-        private void Canvas_DragEnter(object sender, DragEventArgs e)
-        {
-            e.Message = "Add node.";
-            e.Effect = DragDropEffects.Copy;
-        }
-        protected override Point ScrollToControl(Control activeControl)
-        {
-            Point pt = this.AutoScrollPosition;
-            return pt;
-        }
-
-        private void Canvas_DragDrop(object sender, DragEventArgs e)
-        {
-            AddNode(PointToClient(new Point(e.X, e.Y)));
-        }
+    private void UnselectNode(object? sender, MouseEventArgs e)
+    {
+      selectedNode = null;
+      selectPoint = null;
     }
+
+    private void RemoveNode(object? sender, EventArgs e)
+    {
+      if (sender is not Node { } node)
+        return;
+
+      nodes.Remove(node);
+      Controls.Remove(node);
+    }
+
+    private void Canvas_MouseMove(object sender, MouseEventArgs e)
+    {
+      if (selectedNode is null || selectPoint is null) return;
+
+      selectedNode.Location = new Point(e.Location.X - selectPoint!.Value.X,
+                                        e.Location.Y - selectPoint!.Value.Y);
+    }
+
+    private void Canvas_Paint(object sender, PaintEventArgs e)
+    {
+      connections.ForEach(connection =>
+      {
+        e.Graphics.DrawLine(Pens.Black,
+                                  connection.a.Location,
+                                  connection.b.Location);
+      });
+    }
+
+    private void Canvas_MouseDown(object sender, MouseEventArgs e)
+    {
+      if (e.Button == MouseButtons.Right)
+        ContextMenu.Show(this, lastClick = e.Location);
+    }
+
+    private void Canvas_DragEnter(object sender, DragEventArgs e)
+    {
+      e.Message = "Add node.";
+      e.Effect = DragDropEffects.Copy;
+    }
+    protected override Point ScrollToControl(Control activeControl)
+    {
+      Point pt = this.AutoScrollPosition;
+      return pt;
+    }
+
+    private void Canvas_DragDrop(object sender, DragEventArgs e)
+    {
+      AddNode(PointToClient(new Point(e.X, e.Y)));
+    }
+  }
 }

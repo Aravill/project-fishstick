@@ -2,7 +2,6 @@ namespace FishStick.Item
 {
   public interface IItem
   {
-
     // Returns the item's name
     string Name { get; }
 

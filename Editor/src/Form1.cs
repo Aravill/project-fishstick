@@ -8,7 +8,7 @@ namespace Editor
         public MainForm()
         {
             InitializeComponent();
-            
+
             var node = treeView.Nodes.Add("Hello node!");
             node.Nodes.Add("subnode 1");
             node.Nodes.Add("subnode 2");
@@ -26,6 +26,7 @@ namespace Editor
 
     static class Extensions
     {
-        public static void AddConnection(this List<(Node a, Node b)> list, Node a, Node b) => list.Add((a, b));
+        public static void AddConnection(this List<(Node a, Node b)> list, Node a, Node b) =>
+            list.Add((a, b));
     }
 }

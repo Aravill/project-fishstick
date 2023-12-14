@@ -11,12 +11,13 @@ namespace FishStick.Commands
     private PlayerController _player = player;
     private WorldController _world = world;
     public static string Name = "open";
+
     void ICommand.Execute(string[] args)
     {
       // Can be used either on inventory items or on interactable containers
-      string itemName = String.Join(" ", args);
+      string itemName = string.Join(" ", args);
       // Find first in inventory
-      IContainer? item = _player.GetInventoryItem(itemName) as IContainer;
+      IContainer? item = _player.GetInventoryItemByName(itemName) as IContainer;
       if (item == null)
       {
         // Find in scene
@@ -46,7 +47,9 @@ namespace FishStick.Commands
       }
       else
       {
-        string conents = $"You open the {itemName}. Inside you find:\n" + String.Join("\n", item.Contents.Select(item => $"- {item.SceneDescription}"));
+        string conents =
+          $"You open the {itemName}. Inside you find:\n"
+          + string.Join("\n", item.Contents.Select(item => $"- {item.SceneDescription}"));
         item.Contents.ForEach(item =>
         {
           // If any of the items were hidden, reveal them so they can be looted

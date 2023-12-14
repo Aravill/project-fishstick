@@ -5,7 +5,12 @@ namespace FishStick.Scripts
 {
   class ScriptController
   {
-    public void ExecuteScript(PlayerController player, WorldController world, string scriptName, string[] args)
+    public void ExecuteScript(
+      PlayerController player,
+      WorldController world,
+      string scriptName,
+      string[] args
+    )
     {
       switch (scriptName)
       {

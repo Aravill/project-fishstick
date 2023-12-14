@@ -1,7 +1,12 @@
-
 namespace FishStick.AssetData
 {
-  public class ElementData(string id, string sceneDescription, bool hidden, string type, string inScene)
+  public class ElementData(
+    string id,
+    string sceneDescription,
+    bool hidden,
+    string type,
+    string inScene
+  )
   {
     public string Id { get; set; } = id;
     public string InScene { get; set; } = inScene;

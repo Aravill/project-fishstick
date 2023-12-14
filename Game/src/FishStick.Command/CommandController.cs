@@ -1,12 +1,16 @@
+using Dialogue;
 using FishStick.Player;
-using FishStick.Session;
 using FishStick.World;
 
 namespace FishStick.Commands
 {
-  class CommandController(PlayerController player, WorldController world)
+  class CommandController(
+    PlayerController player,
+    WorldController world,
+    DialogueController dialogues
+  )
   {
-    private CommandDictionary _commands = new(player, world);
+    private CommandDictionary _commands = new(player, world, dialogues);
 
     public void Execute(string input)
     {
@@ -30,7 +34,7 @@ namespace FishStick.Commands
       {
         // Progressiely join the args to form possible multi-worded commands
         ICommand? command;
-        string commandName = String.Join(" ", input[0..(i + 1)]);
+        string commandName = string.Join(" ", input[0..(i + 1)]);
         _commands.TryGetValue(commandName, out command);
         if (command != null)
         {

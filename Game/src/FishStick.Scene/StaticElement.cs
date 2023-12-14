@@ -14,6 +14,5 @@ namespace Scene
     public string SceneDescription { get; }
 
     public bool Hidden { get; set; }
-
   }
 }
