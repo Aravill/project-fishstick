@@ -123,19 +123,21 @@
               FontWeight="Light"
               TextWrapping="Wrap" />
             <TextBlock Text="Transitions:" FontSize="12" FontWeight="Bold" />
-            <ListBox ItemsSource="{Binding SelectedScene.Transitions}">
-              <ListBox.ItemTemplate>
-                <DataTemplate>
-                  <Grid RowDefinitions="Auto" ColumnDefinitions="1*,5,4*">
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Name}" FontSize="12"
-                      VerticalAlignment="Center" TextWrapping="Wrap" />
-                    <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Description}"
-                      FontSize="12"
-                      TextWrapping="Wrap" />
-                  </Grid>
-                </DataTemplate>
-              </ListBox.ItemTemplate>
-            </ListBox>
+            <ScrollViewer>
+              <ListBox ItemsSource="{Binding SelectedScene.Transitions}" Height="500">
+                <ListBox.ItemTemplate>
+                  <DataTemplate>
+                    <Grid RowDefinitions="Auto" ColumnDefinitions="1*,5,4*">
+                      <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Name}" FontSize="12"
+                        VerticalAlignment="Center" TextWrapping="Wrap" />
+                      <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Description}"
+                        FontSize="12"
+                        TextWrapping="Wrap" />
+                    </Grid>
+                  </DataTemplate>
+                </ListBox.ItemTemplate>
+              </ListBox>
+            </ScrollViewer>
           </StackPanel>
         </Panel>
       </Border>
