@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Dialogue;
+using FishStick.Combat;
 using FishStick.Commands;
 using FishStick.Player;
 using FishStick.Render;
@@ -17,19 +18,38 @@ try
   Console.Clear();
   ConsoleController.WriteText("Welcome to {Project FishStick}!\n");
 
-  // Initial scene description before we begin the main gameplay loop
-  ConsoleController.DescribeScene(world.GetScene(player.GetCurrentSceneId()));
-  while (true)
-  {
-    string input = ConsoleController.ReadCommand(sessionHistory);
-    if (input.Length < 1)
-    {
-      continue;
-    }
-    // Simulate "thinking" time
-    Thread.Sleep(100);
-    commandController.Execute(input);
-  }
+  // // Initial scene description before we begin the main gameplay loop
+  // ConsoleController.DescribeScene(world.GetScene(player.GetCurrentSceneId()));
+  // while (true)
+  // {
+  //   string input = ConsoleController.ReadCommand(sessionHistory);
+  //   if (input.Length < 1)
+  //   {
+  //     continue;
+  //   }
+  //   // Simulate "thinking" time
+  //   Thread.Sleep(100);
+  //   commandController.Execute(input);
+  // }
+
+  ConsoleController.WriteText(CombatNarrationGenerator.GenerateEnemyAttackSentence("unicorn", "horn", DamageTypeEnum.Piercing, new Random().Next(0, 2) == 1, new Random().Next(0, 100)));
+  ConsoleController.WriteText(CombatNarrationGenerator.GenerateEnemyAttackSentence("orc", "two handed axe", DamageTypeEnum.Slashing, new Random().Next(0, 2) == 1, new Random().Next(0, 100)));
+  ConsoleController.WriteText(CombatNarrationGenerator.GenerateEnemyAttackSentence("goblin", "rusty spear", DamageTypeEnum.Piercing, new Random().Next(0, 2) == 1, new Random().Next(0, 100)));
+  ConsoleController.WriteText(CombatNarrationGenerator.GenerateEnemyAttackSentence("bandit", "club", DamageTypeEnum.Bludgeoning, new Random().Next(0, 2) == 1, new Random().Next(0, 100)));
+  ConsoleController.WriteText(CombatNarrationGenerator.GenerateEnemyAttackSentence("unicorn", "horn", DamageTypeEnum.Piercing, new Random().Next(0, 2) == 1, new Random().Next(0, 100)));
+  ConsoleController.WriteText(CombatNarrationGenerator.GenerateEnemyAttackSentence("orc", "two handed axe", DamageTypeEnum.Slashing, new Random().Next(0, 2) == 1, new Random().Next(0, 100)));
+  ConsoleController.WriteText(CombatNarrationGenerator.GenerateEnemyAttackSentence("goblin", "rusty spear", DamageTypeEnum.Piercing, new Random().Next(0, 2) == 1, new Random().Next(0, 100)));
+  ConsoleController.WriteText(CombatNarrationGenerator.GenerateEnemyAttackSentence("bandit", "club", DamageTypeEnum.Bludgeoning, new Random().Next(0, 2) == 1, new Random().Next(0, 100)));
+  ConsoleController.WriteText(CombatNarrationGenerator.GenerateEnemyAttackSentence("unicorn", "horn", DamageTypeEnum.Piercing, new Random().Next(0, 2) == 1, new Random().Next(0, 100)));
+  ConsoleController.WriteText(CombatNarrationGenerator.GenerateEnemyAttackSentence("orc", "two handed axe", DamageTypeEnum.Slashing, new Random().Next(0, 2) == 1, new Random().Next(0, 100)));
+  ConsoleController.WriteText(CombatNarrationGenerator.GenerateEnemyAttackSentence("goblin", "rusty spear", DamageTypeEnum.Piercing, new Random().Next(0, 2) == 1, new Random().Next(0, 100)));
+  ConsoleController.WriteText(CombatNarrationGenerator.GenerateEnemyAttackSentence("bandit", "club", DamageTypeEnum.Bludgeoning, new Random().Next(0, 2) == 1, new Random().Next(0, 100)));
+  ConsoleController.WriteText(CombatNarrationGenerator.GenerateEnemyAttackSentence("unicorn", "horn", DamageTypeEnum.Piercing, new Random().Next(0, 2) == 1, new Random().Next(0, 100)));
+  ConsoleController.WriteText(CombatNarrationGenerator.GenerateEnemyAttackSentence("orc", "two handed axe", DamageTypeEnum.Slashing, new Random().Next(0, 2) == 1, new Random().Next(0, 100)));
+  ConsoleController.WriteText(CombatNarrationGenerator.GenerateEnemyAttackSentence("goblin", "rusty spear", DamageTypeEnum.Piercing, new Random().Next(0, 2) == 1, new Random().Next(0, 100)));
+  ConsoleController.WriteText(CombatNarrationGenerator.GenerateEnemyAttackSentence("bandit", "club", DamageTypeEnum.Bludgeoning, new Random().Next(0, 2) == 1, new Random().Next(0, 100)));
+
+
 }
 catch (Exception exception)
 {
