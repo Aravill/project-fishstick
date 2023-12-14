@@ -12,9 +12,7 @@ namespace Dialogue
     public IDialogueCondition? Condition { get; }
 
     int Order { get; }
-    bool WasHad { get; }
-
-    public void Use();
+    bool WasHad { get; set; }
     bool Repeatable { get; set; }
   }
 }

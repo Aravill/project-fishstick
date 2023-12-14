@@ -1,9 +1,9 @@
-﻿using Dialogue;
+﻿// See https://aka.ms/new-console-template for more information
+using Dialogue;
 using FishStick.Commands;
 using FishStick.Player;
 using FishStick.Render;
 using FishStick.Session;
-using FishStick.SimpleDialogues;
 using FishStick.World;
 
 try
@@ -13,8 +13,6 @@ try
   DialogueController dialogues = new(world, player);
   CommandController commandController = new(player, world, dialogues);
   SessionHistory sessionHistory = new();
-  // Load all the dialogues
-  DialogueStorage.Init();
 
   Console.Clear();
   ConsoleController.WriteText("Welcome to {Project FishStick}!\n");

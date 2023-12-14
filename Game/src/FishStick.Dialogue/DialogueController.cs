@@ -1,8 +1,8 @@
-using Character;
 using FishStick.Player;
 using FishStick.Render;
 using FishStick.Scripts;
 using FishStick.World;
+using NPC;
 
 namespace Dialogue
 {
@@ -13,7 +13,7 @@ namespace Dialogue
 
     private Dictionary<string, string> _dialogueDictionary = new Dictionary<string, string>();
 
-    public void InitiateDialogue(NPC npc)
+    public void InitiateDialogue(INonPlayableCharacter npc)
     {
       IDialogue? nextDialogue = GetNextDialogue(npc);
       if (nextDialogue == null) // No dialogues we can initiate
@@ -27,7 +27,7 @@ namespace Dialogue
       RememberDialogue(npc.Id, nextDialogue.Id);
     }
 
-    private IDialogue? GetNextDialogue(NPC npc)
+    private IDialogue? GetNextDialogue(INonPlayableCharacter npc)
     {
       string? lastDialogueId = _dialogueDictionary.ContainsKey(npc.Id)
         ? _dialogueDictionary[npc.Id]
@@ -54,17 +54,14 @@ namespace Dialogue
       return possibleDialogues[lastUsedIndex + 1];
     }
 
-
-
     /// <summary>
-    /// Filters out dialogues that are ineligible to be initiated. Either by being not repeatable or by having a condition that is not met.Cascadia Mono Light
+    /// Filters out dialogues that are ineligible to be initiated. Either by being not repeatable or by having a condition that is not met.
     /// </summary>
     /// <param name="npc">An NPC instance</param>
     /// <returns>A list of initiatable dialogues</returns>
-    private List<IDialogue> FilterDialogues(NPC npc)
+    private List<IDialogue> FilterDialogues(INonPlayableCharacter npc)
     {
-      List<IDialogue> dialogues = DialogueParser.ParseAllDialogues(npc.Dialogues);
-      List<IDialogue> ordered = dialogues
+      List<IDialogue> ordered = npc.Dialogues
         .Where(
           dialogue =>
             // Filter out dialogues that have a condition that is not met
@@ -84,10 +81,6 @@ namespace Dialogue
       return notHad.Concat(ordered).ToList();
     }
 
-    /// <summary>
-    /// Executes the scripts in the replies
-    /// </summary>
-    /// <param name="replies"></param>
     private void ProcessReplies(List<IReply> replies)
     {
       foreach (IReply reply in replies)
@@ -103,20 +96,11 @@ namespace Dialogue
       }
     }
 
-    /// <summary>
-    /// Marks a dialogue as used
-    /// </summary>
-    /// <param name="dialogue"></param>
     private void UseDialogue(IDialogue dialogue)
     {
-      dialogue.Use();
+      dialogue.WasHad = true;
     }
 
-    /// <summary>
-    /// Remembers the last dialogue used by an NPC
-    /// </summary>
-    /// <param name="npcId"></param>
-    /// <param name="dialogueId"></param>
     private void RememberDialogue(string npcId, string dialogueId)
     {
       if (_dialogueDictionary.ContainsKey(npcId))

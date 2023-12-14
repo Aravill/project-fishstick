@@ -1,8 +1,6 @@
-using System.Xml;
-using FishStick.Item;
 using FishStick.Scene;
 using FishStick.Session;
-using Scene;
+using Render;
 
 namespace FishStick.Render
 {
@@ -10,10 +8,10 @@ namespace FishStick.Render
   {
     public static void WriteText(string text)
     {
-      string withoutTags = text.FindTaggedWords(out var taggedWords)
-                               .RemoveTagMarkers();
+      string withoutTags = text.FindTaggedWords(out var taggedWords).RemoveTagMarkers();
 
-      ConsoleWriter.Write(withoutTags)
+      ConsoleWriter
+        .Write(withoutTags)
         .Slowly()
         .WithColor(ConsoleColor.DarkGray)
         .WithHighlighting(taggedWords, ConsoleColor.DarkYellow)
@@ -21,6 +19,7 @@ namespace FishStick.Render
 
       Console.WriteLine();
     }
+
     public static void DescribeScene(IScene scene)
     {
       var description = scene.Description;

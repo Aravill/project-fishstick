@@ -1,9 +1,9 @@
-using Character;
 using Dialogue;
 using FishStick.Player;
 using FishStick.Render;
 using FishStick.Scene;
 using FishStick.World;
+using NPC;
 
 namespace FishStick.Commands
 {
@@ -28,7 +28,7 @@ namespace FishStick.Commands
       {
         throw new Exception("Player is not in any known scene.");
       }
-      NPC? npc = currentScene.GetNPCByName(npcName);
+      INonPlayableCharacter? npc = currentScene.GetNPCByName(npcName);
       if (npc == null)
       {
         ConsoleController.WriteText($"There is no {npcName} here.");

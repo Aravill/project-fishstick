@@ -1,8 +1,6 @@
-using FishStick;
-
 namespace Dialogue
 {
-  public class BaseDialogue : IDialogue
+  class BaseDialogue : IDialogue
   {
     public string Id { get; }
 
@@ -12,7 +10,7 @@ namespace Dialogue
 
     public IDialogueCondition? Condition { get; }
 
-    public bool WasHad { get => CheckUsage(); }
+    public bool WasHad { get; set; }
 
     public bool Repeatable { get; set; }
 
@@ -22,7 +20,7 @@ namespace Dialogue
 
     void IDialogue.ContinueDialogue(IReply reply)
     {
-      reply.Use();
+      reply.WasUsed = true;
       IDialogueLine? nextLine = Lines.Find(line => line.Id == reply.NextLineId);
       if (nextLine == null)
       {
@@ -47,16 +45,6 @@ namespace Dialogue
       return;
     }
 
-    void IDialogue.Use()
-    {
-      Global.DialogueData[Id].WasHad = true;
-    }
-
-    private bool CheckUsage()
-    {
-      return Global.DialogueData[Id].WasHad;
-    }
-
     void IDialogue.EndDialogue()
     {
       CurrentLine = _startingLine;
@@ -68,7 +56,8 @@ namespace Dialogue
       string startingLineId,
       int order,
       bool repeatable = true,
-      IDialogueCondition? condition = null
+      IDialogueCondition? condition = null,
+      bool wasHad = false
     )
     {
       Id = id;
@@ -76,6 +65,7 @@ namespace Dialogue
       CurrentLine = lines.Find(line => line.Id == startingLineId) ?? lines[0];
       _startingLine = CurrentLine;
       Condition = condition;
+      WasHad = wasHad;
       Order = order;
       Repeatable = repeatable;
     }

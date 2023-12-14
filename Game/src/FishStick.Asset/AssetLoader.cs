@@ -1,8 +1,8 @@
 using System.Text.RegularExpressions;
-using Character;
 using FishStick.AssetData;
 using FishStick.Item;
 using FishStick.Scene;
+using NPC;
 using Scene;
 
 namespace FishStick.Assets
@@ -68,7 +68,7 @@ namespace FishStick.Assets
             relatedExits,
             relatedItems,
             relatedElements,
-            new List<NPC>()
+            new List<INonPlayableCharacter>()
           )
         );
       }

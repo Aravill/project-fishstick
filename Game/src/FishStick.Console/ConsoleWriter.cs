@@ -6,7 +6,8 @@
     private ConsoleColor _foregroundColor = Console.ForegroundColor;
     private ConsoleColor _backgroundColor = Console.BackgroundColor;
     private bool _writeSlowly = false;
-    private Dictionary<string, ConsoleColor> _highlightedPhrases = new Dictionary<string, ConsoleColor>();
+    private Dictionary<string, ConsoleColor> _highlightedPhrases =
+      new Dictionary<string, ConsoleColor>();
 
     private ConsoleWriter() { }
 
@@ -23,7 +24,10 @@
       return this;
     }
 
-    public ConsoleWriter WithColor(ConsoleColor foregroundColor, ConsoleColor? backgroundColor = null)
+    public ConsoleWriter WithColor(
+      ConsoleColor foregroundColor,
+      ConsoleColor? backgroundColor = null
+    )
     {
       _foregroundColor = foregroundColor;
       _backgroundColor = backgroundColor ?? _backgroundColor;
@@ -33,12 +37,6 @@
     public ConsoleWriter WithHighlighting(Dictionary<string, ConsoleColor>? highlightedWords)
     {
       _highlightedPhrases = highlightedWords ?? _highlightedPhrases;
-      return this;
-    }
-
-    public ConsoleWriter WithHighlighting(IEnumerable<string> highlightedWords, ConsoleColor highlighColor)
-    {
-      _highlightedPhrases = highlightedWords.ToDictionary(word => word, word => highlighColor);
       return this;
     }
 

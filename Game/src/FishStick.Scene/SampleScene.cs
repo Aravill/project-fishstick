@@ -1,5 +1,6 @@
-using Character;
+using Dialogue;
 using FishStick.Item;
+using NPC;
 using Scene;
 
 namespace FishStick.Scene
@@ -31,18 +32,13 @@ namespace FishStick.Scene
           )
         },
         elements: new List<IElement>(),
-        npcs: new List<NPC>()
+        npcs: new List<INonPlayableCharacter>()
         {
-          new NPC(
+          new NonPlayableCharacter(
             "npc-1",
             "Maiden",
             "A young {Maiden} stands near a small campfire nearby.",
-            new List<string>()
-            {
-              "maiden.first-meeting",
-              "maiden.generic",
-              "maiden.key-1-found"
-            }
+            SampleDialogue.GetSampleDialogues()
           )
         }
       );
