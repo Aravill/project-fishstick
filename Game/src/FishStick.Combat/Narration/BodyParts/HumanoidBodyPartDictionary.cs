@@ -91,11 +91,11 @@ namespace FishStick.Combat.Narration.BodyParts
       { HumanoidBodyPartEnum.Foot, _foot }
     };
 
-    public static string GetRandomBodyPart(bool isPlayer)
+    public static string GetRandomBodyPart(SubjectEnum subject)
     {
       HumanoidBodyPartEnum bodyPartEnum = HumanoidBodyPartEnum.GetRandomBodyPart();
       string bodyPart = bodyPartEnum.Value;
-      string pronoun = isPlayer ? "your" : "their";
+      string pronoun = subject == SubjectEnum.Player ? "your" : "their";
       if (_adjectiveDictionary.ContainsKey(bodyPartEnum))
       {
         (string, bool) flavor = ListUtils.GetRandomItem(_adjectiveDictionary[bodyPartEnum]);

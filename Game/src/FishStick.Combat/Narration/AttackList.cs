@@ -5,24 +5,31 @@ namespace FishStick.Combat.Narration
   public class AttackList
   {
 
-    private static readonly List<string> _list = new() {
-      "attacks you",
-      "strikes out at you",
-      "takes a swing at you",
-      "swings at you",
-      "charges you",
-      "lunges at you",
-      "attacks you",
+    private static readonly List<string> _enemyList = new() {
+      "attacks",
+      "strikes out at",
+      "takes a swing at",
+      "swings at",
+      "charges",
+      "lunges at",
     };
 
-    public static List<string> GetList()
-    {
-      return _list;
-    }
+    private static readonly List<string> _playerList = new() {
+      "attack",
+      "strike out at",
+      "take a swing at",
+      "swing at",
+      "charge",
+      "lunge at",
+    };
 
-    public static string GetRandomWord()
+    public static string GetRandomWord(SubjectEnum subject)
     {
-      return ListUtils.GetRandomItem(_list);
+      if (subject == SubjectEnum.Player)
+      {
+        return ListUtils.GetRandomItem(_playerList);
+      }
+      return ListUtils.GetRandomItem(_enemyList);
     }
   }
 }

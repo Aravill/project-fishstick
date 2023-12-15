@@ -5,12 +5,12 @@ namespace FishStick.Combat.Narration
   class BodyPartGenerator
   {
 
-    public static string GetRandomBodyPart(CreatureTypeEnum creatureType, bool isPlayer)
+    public static string GetRandomBodyPart(CreatureTypeEnum creatureType, SubjectEnum subject)
     {
       switch (creatureType)
       {
         case CreatureTypeEnum.Humanoid:
-          return HumanoidBodyPartDictionary.GetRandomBodyPart(isPlayer);
+          return HumanoidBodyPartDictionary.GetRandomBodyPart(subject);
         default:
           return "body";
       }
