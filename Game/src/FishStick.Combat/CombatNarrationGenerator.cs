@@ -4,6 +4,18 @@ namespace FishStick.Combat
 {
   public static class CombatNarrationGenerator
   {
+    /// <summary>
+    /// Generates a couple of sentences describing an attack based on the parameters passed. Adding
+    /// flavour to make combat more interesting.
+    /// </summary>
+    /// <param name="enemyName">Name of the enemy</param>
+    /// <param name="enemyCreatureType">Type of the enemy</param>
+    /// <param name="weaponName">Name of the weapon the player / enemy is using</param>
+    /// <param name="damageType">Type of damage the weapon deals</param>
+    /// <param name="hitResult">Whether the player / enemy hit their attack</param>
+    /// <param name="subject">Subject of the sentence (are we decribing a player's or an enemy's action)</param>
+    /// <param name="damagePercentage">The amount of damage relative to the subject's health that has been dealt</param>
+    /// <returns></returns>
     public static string GenerateAttackNarration(
       string enemyName,
       CreatureTypeEnum enemyCreatureType,
