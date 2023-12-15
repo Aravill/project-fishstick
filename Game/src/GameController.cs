@@ -1,5 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-using Dialogue;
+﻿using Dialogue;
 using FishStick.Commands;
 using FishStick.Player;
 using FishStick.Render;
