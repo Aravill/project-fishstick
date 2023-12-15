@@ -1,7 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-using Dialogue;
-using FishStick.Combat;
-using FishStick.Combat.Narration;
+﻿using Dialogue;
 using FishStick.Commands;
 using FishStick.Player;
 using FishStick.Render;
@@ -19,41 +16,19 @@ try
   Console.Clear();
   ConsoleController.WriteText("Welcome to {Project FishStick}!\n");
 
-  // // Initial scene description before we begin the main gameplay loop
-  // ConsoleController.DescribeScene(world.GetScene(player.GetCurrentSceneId()));
-  // while (true)
-  // {
-  //   string input = ConsoleController.ReadCommand(sessionHistory);
-  //   if (input.Length < 1)
-  //   {
-  //     continue;
-  //   }
-  //   // Simulate "thinking" time
-  //   Thread.Sleep(100);
-  //   commandController.Execute(input);
-  // }
-
-  ConsoleController.WriteText(CombatNarrationGenerator.GenerateAttackNarration("unicorn", CreatureTypeEnum.Humanoid, "horn", DamageTypeEnum.Piercing, new Random().Next(0, 2) == 1, SubjectEnum.NPC, new Random().Next(0, 100)));
-  ConsoleController.WriteText(CombatNarrationGenerator.GenerateAttackNarration("orc", CreatureTypeEnum.Humanoid, "two handed axe", DamageTypeEnum.Slashing, new Random().Next(0, 2) == 1, SubjectEnum.NPC, new Random().Next(0, 100)));
-  ConsoleController.WriteText(CombatNarrationGenerator.GenerateAttackNarration("goblin", CreatureTypeEnum.Humanoid, "rusty spear", DamageTypeEnum.Piercing, new Random().Next(0, 2) == 1, SubjectEnum.NPC, new Random().Next(0, 100)));
-  ConsoleController.WriteText(CombatNarrationGenerator.GenerateAttackNarration("bandit", CreatureTypeEnum.Humanoid, "club", DamageTypeEnum.Bludgeoning, new Random().Next(0, 2) == 1, SubjectEnum.NPC, new Random().Next(0, 100)));
-  ConsoleController.WriteText(CombatNarrationGenerator.GenerateAttackNarration("unicorn", CreatureTypeEnum.Humanoid, "horn", DamageTypeEnum.Piercing, new Random().Next(0, 2) == 1, SubjectEnum.NPC, new Random().Next(0, 100)));
-  ConsoleController.WriteText(CombatNarrationGenerator.GenerateAttackNarration("orc", CreatureTypeEnum.Humanoid, "two handed axe", DamageTypeEnum.Slashing, new Random().Next(0, 2) == 1, SubjectEnum.NPC, new Random().Next(0, 100)));
-  ConsoleController.WriteText(CombatNarrationGenerator.GenerateAttackNarration("goblin", CreatureTypeEnum.Humanoid, "rusty spear", DamageTypeEnum.Piercing, new Random().Next(0, 2) == 1, SubjectEnum.NPC, new Random().Next(0, 100)));
-  ConsoleController.WriteText(CombatNarrationGenerator.GenerateAttackNarration("bandit", CreatureTypeEnum.Humanoid, "club", DamageTypeEnum.Bludgeoning, new Random().Next(0, 2) == 1, SubjectEnum.NPC, new Random().Next(0, 100)));
-  ConsoleController.WriteText(CombatNarrationGenerator.GenerateAttackNarration("unicorn", CreatureTypeEnum.Humanoid, "horn", DamageTypeEnum.Piercing, new Random().Next(0, 2) == 1, SubjectEnum.NPC, new Random().Next(0, 100)));
-
-  ConsoleController.WriteText(CombatNarrationGenerator.GenerateAttackNarration("unicorn", CreatureTypeEnum.Humanoid, "horn", DamageTypeEnum.Piercing, new Random().Next(0, 2) == 1, SubjectEnum.Player, new Random().Next(0, 100)));
-  ConsoleController.WriteText(CombatNarrationGenerator.GenerateAttackNarration("orc", CreatureTypeEnum.Humanoid, "two handed axe", DamageTypeEnum.Slashing, new Random().Next(0, 2) == 1, SubjectEnum.Player, new Random().Next(0, 100)));
-  ConsoleController.WriteText(CombatNarrationGenerator.GenerateAttackNarration("goblin", CreatureTypeEnum.Humanoid, "rusty spear", DamageTypeEnum.Piercing, new Random().Next(0, 2) == 1, SubjectEnum.Player, new Random().Next(0, 100)));
-  ConsoleController.WriteText(CombatNarrationGenerator.GenerateAttackNarration("bandit", CreatureTypeEnum.Humanoid, "club", DamageTypeEnum.Bludgeoning, new Random().Next(0, 2) == 1, SubjectEnum.Player, new Random().Next(0, 100)));
-  ConsoleController.WriteText(CombatNarrationGenerator.GenerateAttackNarration("unicorn", CreatureTypeEnum.Humanoid, "horn", DamageTypeEnum.Piercing, new Random().Next(0, 2) == 1, SubjectEnum.Player, new Random().Next(0, 100)));
-  ConsoleController.WriteText(CombatNarrationGenerator.GenerateAttackNarration("orc", CreatureTypeEnum.Humanoid, "two handed axe", DamageTypeEnum.Slashing, new Random().Next(0, 2) == 1, SubjectEnum.Player, new Random().Next(0, 100)));
-  ConsoleController.WriteText(CombatNarrationGenerator.GenerateAttackNarration("goblin", CreatureTypeEnum.Humanoid, "rusty spear", DamageTypeEnum.Piercing, new Random().Next(0, 2) == 1, SubjectEnum.Player, new Random().Next(0, 100)));
-  ConsoleController.WriteText(CombatNarrationGenerator.GenerateAttackNarration("bandit", CreatureTypeEnum.Humanoid, "club", DamageTypeEnum.Bludgeoning, new Random().Next(0, 2) == 1, SubjectEnum.Player, new Random().Next(0, 100)));
-  ConsoleController.WriteText(CombatNarrationGenerator.GenerateAttackNarration("unicorn", CreatureTypeEnum.Humanoid, "horn", DamageTypeEnum.Piercing, new Random().Next(0, 2) == 1, SubjectEnum.Player, new Random().Next(0, 100)));
-
-
+  // Initial scene description before we begin the main gameplay loop
+  ConsoleController.DescribeScene(world.GetScene(player.GetCurrentSceneId()));
+  while (true)
+  {
+    string input = ConsoleController.ReadCommand(sessionHistory);
+    if (input.Length < 1)
+    {
+      continue;
+    }
+    // Simulate "thinking" time
+    Thread.Sleep(100);
+    commandController.Execute(input);
+  }
 }
 catch (Exception exception)
 {
