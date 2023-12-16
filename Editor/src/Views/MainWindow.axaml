@@ -9,7 +9,7 @@
   xmlns:styles="clr-namespace:Material.Styles;assembly=Material.Styles" mc:Ignorable="d"
   d:DesignWidth="500" d:DesignHeight="500"
   x:Class="AvaloniaEditor.Views.MainWindow" x:DataType="vm:MainWindowViewModel"
-  Icon="/Assets/avalonia-logo.ico" Title="AvaloniaEditor" Content="{Binding ContentViewModel}"
+  Title="AvaloniaEditor" Content="{Binding ContentViewModel}"
   WindowStartupLocation="CenterScreen"
   CanResize="True">
 
