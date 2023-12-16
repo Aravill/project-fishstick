@@ -1,12 +1,12 @@
 using FishStick.Assets;
 using FishStick.Item;
+using FishStick.Player;
 using FishStick.Scene;
 
 namespace FishStick.World
 {
-  class WorldController
+  public class WorldController
   {
-
     private Dictionary<string, IScene> SceneMap = new();
 
     public WorldController()
@@ -16,13 +16,25 @@ namespace FishStick.World
       {
         SceneMap.Add(scene.Id, scene);
       });
+      // TODO: Remove this later, it's just for testing
+      IScene sampleScene = SampleScene.BuildSampleScenes();
+      SceneMap.Add(sampleScene.Id, sampleScene);
     }
 
     public IScene GetScene(string sceneId)
     {
       if (!SceneMap.TryGetValue(sceneId, out IScene? scene))
       {
-        throw new System.Exception($"Scene {sceneId} not found.");
+        throw new Exception($"Scene {sceneId} not found.");
+      }
+      return scene;
+    }
+
+    public IScene? GetPlayerCurrentScene(PlayerController player)
+    {
+      if (!SceneMap.TryGetValue(player.GetCurrentSceneId(), out IScene? scene))
+      {
+        return null;
       }
       return scene;
     }
@@ -33,7 +45,8 @@ namespace FishStick.World
       {
         return null;
       }
-      return scene.GetItem(itemId); ;
+      return scene.GetItem(itemId);
+      ;
     }
   }
 }

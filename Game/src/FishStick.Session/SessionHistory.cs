@@ -14,14 +14,24 @@ namespace FishStick.Session
     public string GetPrevious()
     {
       _historyIndex--;
-      if (_historyIndex < 0) { _historyIndex = -1; return ""; };
+      if (_historyIndex < 0)
+      {
+        _historyIndex = -1;
+        return "";
+      }
+      ;
       return _history[_historyIndex];
     }
 
     public string GetNext()
     {
       _historyIndex++;
-      if (_historyIndex >= _history.Count) { _historyIndex = _history.Count; return ""; };
+      if (_historyIndex >= _history.Count)
+      {
+        _historyIndex = _history.Count;
+        return "";
+      }
+      ;
       return _history[_historyIndex];
     }
   }

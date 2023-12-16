@@ -9,6 +9,7 @@ namespace FishStick.Commands
     private PlayerController _player = player;
     private WorldController _world = world;
     public static string Name = "look around";
+
     void ICommand.Execute(string[] args)
     {
       ConsoleController.DescribeScene(_world.GetScene(_player.GetCurrentSceneId()));

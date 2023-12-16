@@ -9,9 +9,10 @@ namespace FishStick.Commands
     private PlayerController _player = player;
     private WorldController _world = world;
     public static string Name = "inventory";
+
     void ICommand.Execute(string[] args)
     {
-      string items = String.Join(", ", _player.GetInventory().Select(item => item.Name).ToArray());
+      string items = string.Join(", ", _player.GetInventory().Select(item => item.Name).ToArray());
       if (items.Length < 1)
       {
         ConsoleController.WriteText("You look into your bag. It is empty.");

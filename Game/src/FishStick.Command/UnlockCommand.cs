@@ -11,6 +11,7 @@ namespace FishStick.Commands
     private PlayerController _player = player;
     private WorldController _world = world;
     public static string Name = "unlock";
+
     void ICommand.Execute(string[] args)
     {
       // first argument will be the what we're unlocking, then the word "with" and then the key
@@ -21,17 +22,17 @@ namespace FishStick.Commands
         ConsoleController.WriteText("What you want to unlock and with what?");
         return;
       }
-      string itemName = String.Join(" ", args[0..withIndex]);
-      string keyName = String.Join(" ", args[(withIndex + 1)..]);
+      string itemName = string.Join(" ", args[0..withIndex]);
+      string keyName = string.Join(" ", args[(withIndex + 1)..]);
       // Make sure the player has the key in their inventory
-      IKey? key = _player.GetInventoryItem(keyName) as IKey;
+      IKey? key = _player.GetInventoryItemByName(keyName) as IKey;
       if (key == null)
       {
         ConsoleController.WriteText($"You don't have a {keyName} on you.");
         return;
       }
       // Find first in inventory
-      IContainer? item = _player.GetInventoryItem(itemName) as IContainer;
+      IContainer? item = _player.GetInventoryItemByName(itemName) as IContainer;
       if (item == null)
       {
         // Find in scene
@@ -61,7 +62,9 @@ namespace FishStick.Commands
         return;
       }
       item.Unlock();
-      ConsoleController.WriteText($"You unlock the {itemName} with the {keyName}. It can now be opened.");
+      ConsoleController.WriteText(
+        $"You unlock the {itemName} with the {keyName}. It can now be opened."
+      );
     }
   }
 }

@@ -1,4 +1,3 @@
-
 using FishStick.Player;
 using FishStick.Render;
 using FishStick.Scene;
@@ -11,11 +10,14 @@ namespace FishStick.Commands
     private PlayerController _player = player;
     private WorldController _world = world;
     public static string Name = "go";
+
     void ICommand.Execute(string[] args)
     {
       string targetSceneName = args[0];
       IScene currentScene = _world.GetScene(_player.GetCurrentSceneId());
-      ITransition? transition = currentScene.Transitions.Find(transition => transition.Name == targetSceneName);
+      ITransition? transition = currentScene
+        .Transitions
+        .Find(transition => transition.Name == targetSceneName);
       if (transition is null)
       {
         ConsoleController.WriteText($"You cannot go '{targetSceneName}' from here.");

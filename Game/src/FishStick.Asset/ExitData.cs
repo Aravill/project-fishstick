@@ -1,4 +1,3 @@
-
 namespace FishStick.AssetData
 {
   public class ExitData(string name, string from, string to, string description)
