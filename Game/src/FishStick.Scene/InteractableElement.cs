@@ -1,5 +1,8 @@
+using System.Runtime.Serialization;
+
 namespace Scene
 {
+  [DataContract]
   public class InteractableElement : IInteractable
   {
     public InteractableElement(
@@ -21,18 +24,23 @@ namespace Scene
       Command = command;
     }
 
+    [DataMember]
     public string Name { get; }
 
+    [DataMember]
     public string Command { get; }
 
+    [DataMember]
     public string OnInteract { get; }
 
+    [DataMember]
     public string[] Args { get; }
 
+    [DataMember]
     public string Id { get; }
-
+    [DataMember]
     public string SceneDescription { get; }
-
+    [DataMember]
     public bool Hidden { get; set; }
   }
 }

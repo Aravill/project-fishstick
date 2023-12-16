@@ -1,25 +1,34 @@
+using System.Runtime.Serialization;
 using FishStick.Item;
 using NPC;
 using Scene;
 
 namespace FishStick.Scene
 {
+  [DataContract]
   public class BaseScene(
-    string id,
-    string description,
-    List<ITransition> exits,
-    List<IItem> items,
-    List<IElement> elements,
-    List<INonPlayableCharacter> npcs
-  ) : IScene
+      string id,
+      string description,
+      List<ITransition> exits,
+      List<IItem> items,
+      List<IElement> elements,
+      List<INonPlayableCharacter> npcs
+    ) : IScene
   {
+
+    [DataMember]
     public string Id { get; } = id;
+    [DataMember]
     public string Description { get; } = description;
+    [DataMember]
     public List<ITransition> Transitions { get; } = exits;
+    [DataMember]
     public List<IItem> Items { get; set; } = items;
 
+    [DataMember]
     public List<IElement> Elements { get; set; } = elements;
 
+    [DataMember]
     public List<INonPlayableCharacter> NPCs { get; set; } = npcs;
 
     IElement? IScene.GetElement(string elementId)
