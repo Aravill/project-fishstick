@@ -7,6 +7,8 @@ bin/
 obj/
 .vscode/
 Editor/Scenes.json
+Editor/.avalonia-build-tasks
+Editor/Screenshots 
 # dotenv files
 .env
 
