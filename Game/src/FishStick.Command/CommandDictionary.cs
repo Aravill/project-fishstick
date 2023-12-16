@@ -23,5 +23,6 @@ class CommandDictionary : Dictionary<string, ICommand>
     Add(UnlockCommand.Name, new UnlockCommand(player, world));
     Add(PutCommand.Name, new PutCommand(player, world));
     Add(TalkCommand.Name, new TalkCommand(player, world, dialogues));
+    Add(SuicideCommand.Name, new SuicideCommand(player, world));
   }
 }

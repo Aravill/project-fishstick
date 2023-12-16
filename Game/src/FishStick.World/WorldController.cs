@@ -11,6 +11,12 @@ namespace FishStick.World
 
     public WorldController()
     {
+      LoadScenes();
+      AddImplicitScenes();
+    }
+
+    private void LoadScenes()
+    {
       List<IScene> scenes = AssetLoader.Load();
       scenes.ForEach(scene =>
       {
@@ -19,6 +25,11 @@ namespace FishStick.World
       // TODO: Remove this later, it's just for testing
       IScene sampleScene = SampleScene.BuildSampleScenes();
       SceneMap.Add(sampleScene.Id, sampleScene);
+    }
+
+    private void AddImplicitScenes()
+    {
+      SceneMap.Add("death", new DeathScene());
     }
 
     public IScene GetScene(string sceneId)

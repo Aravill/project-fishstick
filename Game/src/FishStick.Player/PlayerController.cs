@@ -1,14 +1,14 @@
-using FishStick.Dice;
 using FishStick.Item;
 
 namespace FishStick.Player
 {
   public class PlayerController
   {
-    private int _hp { get; set; }
+    private int _health { get; set; }
     private Inventory _inventory;
-
     private string _currentSceneId;
+
+    private bool _isAlive = true;
 
     public void SetCurrentSceneId(string sceneId)
     {
@@ -20,10 +20,10 @@ namespace FishStick.Player
       return _currentSceneId;
     }
 
-    public PlayerController(int hp, string startingSceneId)
+    public PlayerController(int health, string startingSceneId)
     {
       _currentSceneId = startingSceneId;
-      _hp = hp;
+      _health = health;
       _inventory = new Inventory();
     }
 
@@ -52,27 +52,24 @@ namespace FishStick.Player
       return _inventory.GetItem(itemId);
     }
 
-    public int GetHp()
-    {
-      return _hp;
-    }
+    public int Health { get => _health; private set => _health = value; }
 
-    public int RollHp()
-    {
-      _hp = DiceRoller.Roll("4d6");
-      return _hp;
-    }
+    public bool IsAlive { get => _isAlive; private set => _isAlive = value; }
 
     public int TakeDamage(int amount)
     {
-      _hp -= amount;
-      return _hp;
+      Health -= amount;
+      if (Health <= 0)
+      {
+        IsAlive = false;
+      }
+      return Health;
     }
 
     public int Heal(int amount)
     {
-      _hp += amount;
-      return _hp;
+      Health += amount;
+      return Health;
     }
   }
 }

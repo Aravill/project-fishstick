@@ -3,38 +3,85 @@ using Dialogue;
 using FishStick.Commands;
 using FishStick.Player;
 using FishStick.Render;
+using FishStick.Scene;
 using FishStick.Session;
 using FishStick.World;
 
-try
+public class GameController
 {
-  WorldController world = new();
-  PlayerController player = new(20, "scene-0");
-  DialogueController dialogues = new(world, player);
-  CommandController commandController = new(player, world, dialogues);
-  SessionHistory sessionHistory = new();
+  private WorldController _world;
+  private PlayerController _player;
+  private DialogueController _dialogues;
+  private CommandController _commandController;
+  private SessionHistory _sessionHistory;
 
-  Console.Clear();
-  ConsoleController.WriteText("Welcome to {Project FishStick}!\n");
-
-  // Initial scene description before we begin the main gameplay loop
-  ConsoleController.DescribeScene(world.GetScene(player.GetCurrentSceneId()));
-  while (true)
+  public GameController()
   {
-    string input = ConsoleController.ReadCommand(sessionHistory);
-    if (input.Length < 1)
-    {
-      continue;
-    }
-    // Simulate "thinking" time
-    Thread.Sleep(100);
-    commandController.Execute(input);
+    _world = new();
+    _player = new(20, "scene-0");
+    _dialogues = new(_world, _player);
+    _commandController = new(_player, _world, _dialogues);
+    _sessionHistory = new();
   }
-}
-catch (Exception exception)
-{
-  Console.WriteLine(exception.Message);
-  Console.WriteLine(exception.StackTrace);
-  Console.CursorVisible = true;
-  Environment.Exit(0);
+
+  public void Start()
+  {
+    Console.Clear();
+    ConsoleController.WriteText("Welcome to {Project FishStick}!\n");
+    // Initial scene description before we begin the main gameplay loop
+    ConsoleController.DescribeScene(_world.GetScene(_player.GetCurrentSceneId()));
+    GamePlayLoop();
+    if (!_player.IsAlive)
+    {
+      HandleDeath(_world);
+    }
+  }
+
+  private void GamePlayLoop()
+  {
+    while (_player.IsAlive)
+    {
+      string input = ConsoleController.ReadCommand(_sessionHistory);
+      if (input.Length < 1)
+      {
+        continue;
+      }
+      // Simulate "thinking" time
+      Thread.Sleep(100);
+      _commandController.Execute(input);
+    }
+  }
+
+  private void HandleDeath(WorldController world)
+  {
+    DeathScene? death = world.GetScene("death") as DeathScene;
+    if (death == null)
+    {
+      throw new Exception("Death scene not found.");
+    }
+    ConsoleController.DescribeScene(death);
+    while (true)
+    {
+      string input = ConsoleController.ReadCommand(_sessionHistory);
+      // TODO: This is a bit "raw" but works for now, make it pretty later
+      if (input == "quit")
+      {
+        _commandController.Execute("quit");
+      }
+      if (input == "restart")
+      {
+        ClearData();
+        Start();
+      }
+    };
+  }
+
+  private void ClearData()
+  {
+    _world = new();
+    _player = new(20, "scene-0");
+    _dialogues = new(_world, _player);
+    _commandController = new(_player, _world, _dialogues);
+  }
+
 }

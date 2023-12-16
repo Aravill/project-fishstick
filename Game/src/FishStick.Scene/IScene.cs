@@ -9,6 +9,9 @@ namespace FishStick.Scene
     string Id { get; }
     string Description { get; }
 
+    // TODO: These following properties should not be on IScene
+    // The very basic scene does not require items, elements, npcs or transitions
+    // These should be moved to a more specific class, like InteractiveScene (now BaseScene)
     List<IItem> Items { get; }
 
     List<IElement> Elements { get; }
