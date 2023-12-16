@@ -1,5 +1,6 @@
 namespace FishStick.Scene
 {
+
   public interface ITransition
   {
     string NextSceneId { get; }
