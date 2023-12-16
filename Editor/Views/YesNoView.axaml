@@ -1,0 +1,28 @@
+<Window xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:vm="clr-namespace:AvaloniaEditor.ViewModels"
+  mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="200"
+  Title="Yes/No" TransparencyLevelHint="AcrylicBlur"
+  ExtendClientAreaToDecorationsHint="True"
+  Width="200"
+  SizeToContent="Height"
+  x:Class="AvaloniaEditor.Views.YesNoView"
+  x:DataType="vm:YesNoViewModel"
+  WindowStartupLocation="CenterOwner">
+
+  <Border Padding="20">
+    <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Spacing="15">
+      <Grid RowDefinitions="Auto">
+        <TextBlock Grid.Row="0" FontSize="14" FontWeight="Medium"
+          VerticalAlignment="Center"
+          HorizontalAlignment="Center" Text="{Binding Message}" TextWrapping="Wrap" />
+      </Grid>
+      <Grid ColumnDefinitions="1*,5,1*">
+        <Button Grid.Column="0" Content="No" Command="{Binding NoCommand}" />
+        <Button Grid.Column="2" Content="Yes" Command="{Binding YesCommand}" />
+      </Grid>
+    </StackPanel>
+  </Border>
+</Window>
