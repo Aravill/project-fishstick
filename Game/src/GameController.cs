@@ -14,13 +14,13 @@ try
   DialogueController dialogues = new(world, player);
   CommandController commandController = new(player, world, dialogues);
   SessionHistory sessionHistory = new();
-  SoundBox soundBox = new(new NAudioPlayerWrapper());
+  SoundBox soundBox = new(new OpenTkWrapper());
 
   Console.Clear();
   ConsoleController.WriteText("Welcome to {Project FishStick}!\n");
 
   // Initial scene description before we begin the main gameplay loop
-  soundBox.Play(SoundEnum.AmbienceForest.Value);
+  soundBox.Play(SoundEnum.AmbienceForest.Value, false);
   ConsoleController.DescribeScene(world.GetScene(player.GetCurrentSceneId()));
   while (true)
   {

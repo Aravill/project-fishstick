@@ -8,11 +8,11 @@ namespace FishStick.Sounds
     {
       _player = player;
     }
-    public void Play(string soundFilePath)
+    public void Play(string soundFilePath, bool once)
     {
       _player.SoundLocation = soundFilePath;
       _player.Load();
-      _player.Play();
+      _player.Play(once);
     }
 
     public void Stop()
