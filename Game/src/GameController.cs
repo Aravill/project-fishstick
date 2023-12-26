@@ -14,7 +14,7 @@ try
   DialogueController dialogues = new(world, player);
   CommandController commandController = new(player, world, dialogues);
   SessionHistory sessionHistory = new();
-  SoundBox soundBox = new(new OpenTkWrapper());
+  SoundBox soundBox = new(new VlcWrapper());
 
   Console.Clear();
   ConsoleController.WriteText("Welcome to {Project FishStick}!\n");
