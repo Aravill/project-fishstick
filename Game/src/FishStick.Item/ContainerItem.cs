@@ -1,5 +1,8 @@
+using System.Runtime.Serialization;
+
 namespace FishStick.Item
 {
+  [DataContract]
   class ContainerItem : BaseItem, IContainer
   {
     bool IContainer.Locked
@@ -12,7 +15,9 @@ namespace FishStick.Item
       set => _contents = value;
     }
 
+    [DataMember]
     private bool _locked;
+    [DataMember]
     private List<IItem> _contents;
 
     IItem? IContainer.FindItem(string itemName)

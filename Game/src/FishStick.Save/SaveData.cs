@@ -1,5 +1,4 @@
 using System.Runtime.Serialization;
-using FishStick.Item;
 using FishStick.Player;
 using FishStick.Scene;
 using FishStick.World;
@@ -11,40 +10,25 @@ namespace FishStick.Save
   public class SaveData
   {
     [DataMember]
-    private List<IScene> _scenes;
+    private List<BaseScene> _scenes;
     [DataMember]
-    private List<IItem> _playerItems;
-    [DataMember]
-    private int _playerHp;
-    [DataMember]
-    private string _playerCurrentSceneId;
+    private PlayerController _player;
 
-    public List<IScene> Scenes
+    public List<BaseScene> Scenes
     {
       get => _scenes;
     }
 
-    public List<IItem> PlayerItems
+    public PlayerController Player
     {
-      get => _playerItems;
-    }
-
-    public int PlayerHp
-    {
-      get => _playerHp;
-    }
-
-    public string PlayerCurrentSceneId
-    {
-      get => _playerCurrentSceneId;
+      get => _player;
     }
 
     public SaveData(WorldController world, PlayerController player)
     {
-      _scenes = world.GetScenes().Where(scene => scene is BaseScene).ToList();
-      _playerCurrentSceneId = player.GetCurrentSceneId();
-      _playerItems = player.GetInventory();
-      _playerHp = player.GetHp();
+      List<BaseScene> toSave = world.GetScenes().OfType<BaseScene>().ToList();
+      _scenes = toSave;
+      _player = player;
     }
   }
 }

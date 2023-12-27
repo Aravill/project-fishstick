@@ -1,11 +1,15 @@
+using System.Runtime.Serialization;
+
 namespace FishStick.Item
 {
+  [DataContract]
   class KeyItem : BaseItem, IKey
   {
     string IKey.UnlocksContainer
     {
       get => _unlocksContainer;
     }
+    [DataMember]
     private string _unlocksContainer;
 
     public KeyItem(

@@ -1,21 +1,29 @@
+using System.Runtime.Serialization;
+
 namespace Dialogue
 {
+  [DataContract]
   class BaseDialogue : IDialogue
   {
+    [DataMember]
     public string Id { get; }
-
+    [DataMember]
     public List<IDialogueLine> Lines { get; }
-
+    [DataMember]
     public IDialogueLine CurrentLine { get; set; }
-
+    [DataMember]
     public IDialogueCondition? Condition { get; }
 
+    [DataMember]
     public bool WasHad { get; set; }
 
+    [DataMember]
     public bool Repeatable { get; set; }
 
+    [DataMember]
     public int Order { get; set; }
 
+    [DataMember]
     private IDialogueLine _startingLine;
 
     void IDialogue.ContinueDialogue(IReply reply)

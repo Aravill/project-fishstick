@@ -1,8 +1,5 @@
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
-using FishStick.Item;
 using FishStick.Player;
-using FishStick.Scene;
 using FishStick.World;
 
 namespace FishStick.Save
@@ -45,21 +42,6 @@ namespace FishStick.Save
     {
       Name = SaveName;
       _saveData = new SaveData(world, player);
-    }
-
-    public void Persist()
-    {
-      MemoryStream stream = new MemoryStream();
-      var ser = new DataContractJsonSerializer(typeof(IEnumerable<Save>));
-      ser.WriteObject(stream, this);
-      byte[] file = stream.ToArray();
-      stream.Close();
-      File.WriteAllBytes($"{GetSaveName()}.json", file);
-    }
-
-    private string GetSaveName()
-    {
-      return $"save_{Name.ToLower()}_{Created}";
     }
 
   }

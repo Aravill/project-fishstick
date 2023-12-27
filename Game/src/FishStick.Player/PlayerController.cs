@@ -1,13 +1,18 @@
+using System.Runtime.Serialization;
 using FishStick.Dice;
 using FishStick.Item;
 
 namespace FishStick.Player
 {
+  [DataContract]
   public class PlayerController
   {
+    [DataMember]
     private int _hp { get; set; }
+    [DataMember]
     private Inventory _inventory;
 
+    [DataMember]
     private string _currentSceneId;
 
     public void SetCurrentSceneId(string sceneId)

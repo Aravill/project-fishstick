@@ -1,7 +1,10 @@
-﻿using Dialogue;
+﻿using System.Text.Json;
+using Dialogue;
 using FishStick.Commands;
 using FishStick.Player;
 using FishStick.Render;
+using FishStick.Save;
+using FishStick.Scene;
 using FishStick.Session;
 using FishStick.World;
 
@@ -14,21 +17,25 @@ try
   SessionHistory sessionHistory = new();
 
   Console.Clear();
-  ConsoleController.WriteText("Welcome to {Project FishStick}!\n");
 
-  // Initial scene description before we begin the main gameplay loop
-  ConsoleController.DescribeScene(world.GetScene(player.GetCurrentSceneId()));
-  while (true)
-  {
-    string input = ConsoleController.ReadCommand(sessionHistory);
-    if (input.Length < 1)
-    {
-      continue;
-    }
-    // Simulate "thinking" time
-    Thread.Sleep(100);
-    commandController.Execute(input);
-  }
+  // Serialize scene instance to JSON
+  SaveManager.CreateSave(player, world, "save");
+
+  // ConsoleController.WriteText("Welcome to {Project FishStick}!\n");
+
+  // // Initial scene description before we begin the main gameplay loop
+  // ConsoleController.DescribeScene(world.GetScene(player.GetCurrentSceneId()));
+  // while (true)
+  // {
+  //   string input = ConsoleController.ReadCommand(sessionHistory);
+  //   if (input.Length < 1)
+  //   {
+  //     continue;
+  //   }
+  //   // Simulate "thinking" time
+  //   Thread.Sleep(100);
+  //   commandController.Execute(input);
+  // }
 }
 catch (Exception exception)
 {

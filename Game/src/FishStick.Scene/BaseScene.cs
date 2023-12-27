@@ -6,6 +6,13 @@ using Scene;
 namespace FishStick.Scene
 {
   [DataContract]
+  [KnownType(typeof(BaseTransition))]
+  [KnownType(typeof(BaseItem))]
+  [KnownType(typeof(ContainerItem))]
+  [KnownType(typeof(KeyItem))]
+  [KnownType(typeof(InteractableElement))]
+  [KnownType(typeof(StaticElement))]
+  [KnownType(typeof(NonPlayableCharacter))]
   public class BaseScene(
       string id,
       string description,

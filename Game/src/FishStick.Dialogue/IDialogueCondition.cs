@@ -1,3 +1,4 @@
+using System.Runtime.Serialization;
 using FishStick.Player;
 using FishStick.World;
 
@@ -8,8 +9,10 @@ namespace Dialogue
     public bool Check(PlayerController player, WorldController world);
   }
 
+  [DataContract]
   public class HasItemCondition : IDialogueCondition
   {
+    [DataMember]
     private string _itemNameOrId;
 
     public HasItemCondition(string itemNameOrId)
