@@ -1,0 +1,5 @@
+dialogue-data.maiden.first-meeting = { condition..., repeatable, order }
+dialogues.maiden.first-meeting[0] = ["hello", [["sup", 1], ["yo", 1]]]
+
+to see which replies were used:
+{ "dialogues.maiden.first-meeting": [[0, 0], [0, 1]] }
