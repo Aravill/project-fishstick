@@ -1,3 +1,4 @@
+using FishStick.Commands.Autocompletion;
 using FishStick.Session;
 
 namespace FishStick.Render
@@ -10,7 +11,7 @@ namespace FishStick.Render
 
   static class CommandStrategy
   {
-    public static string ReadCommand(SessionHistory history)
+    public static string ReadCommand(SessionHistory history, CommandAutocomplete commandAutocomplete)
     {
       Console.CursorVisible = false;
       string? finalInput = null;
@@ -79,7 +80,15 @@ namespace FishStick.Render
             Console.Write(writtenInput);
             break;
         }
-      } while (finalInput == null || finalInput.Length < 1);
+
+        //Autocompletion process
+        string cleanInput = RemoveCursor(writtenInput, cursor.cursorIndex);
+        AutocompleteResult result = commandAutocomplete.Autocomplete(cleanInput);
+        AutocompletionConsoleWriter.WriteResult(result);
+        // ---------------------
+
+      } while (finalInput == null || finalInput.Length < 1);  
+
       Console.WriteLine();
       history.Add(finalInput);
       Console.CursorVisible = true;

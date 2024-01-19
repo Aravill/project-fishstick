@@ -43,5 +43,11 @@ namespace FishStick.Commands
       }
       return null;
     }
+
+    // fuckie wuckie testing bs
+    public List<string> GetCommandKeywords()
+    {
+        return new List<string>(_commands.Keys);
+    }
   }
 }

@@ -1,5 +1,6 @@
 ﻿using Dialogue;
 using FishStick.Commands;
+using FishStick.Commands.Autocompletion;
 using FishStick.Player;
 using FishStick.Render;
 using FishStick.Session;
@@ -13,6 +14,9 @@ try
   CommandController commandController = new(player, world, dialogues);
   SessionHistory sessionHistory = new();
 
+  CommandAutocomplete commandAutocomplete = new();
+  commandAutocomplete.RegisterCommand(commandController.GetCommandKeywords());
+
   Console.Clear();
   ConsoleController.WriteText("Welcome to {Project FishStick}!\n");
 
@@ -20,7 +24,7 @@ try
   ConsoleController.DescribeScene(world.GetScene(player.GetCurrentSceneId()));
   while (true)
   {
-    string input = ConsoleController.ReadCommand(sessionHistory);
+    string input = ConsoleController.ReadCommand(sessionHistory, commandAutocomplete);
     if (input.Length < 1)
     {
       continue;

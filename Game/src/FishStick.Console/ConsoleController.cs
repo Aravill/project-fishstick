@@ -1,3 +1,4 @@
+using FishStick.Commands.Autocompletion;
 using FishStick.Scene;
 using FishStick.Session;
 using Render;
@@ -31,9 +32,9 @@ namespace FishStick.Render
       SceneStrategy.DescribeScene(scene);
     }
 
-    public static string ReadCommand(SessionHistory history)
+    public static string ReadCommand(SessionHistory history, CommandAutocomplete commandAutocomplete)
     {
-      return CommandStrategy.ReadCommand(history);
+      return CommandStrategy.ReadCommand(history, commandAutocomplete);
     }
   }
 }
