@@ -8,7 +8,7 @@ namespace Dialogue
     public bool IsDialogueExit => Replies == null && NextLineId == null;
     public bool? ReadNextLine { get; }
     public string? NextLineId { get; }
-    public List<IReply>? Replies { get; }
+    public List<IReply>? Replies { get; set; }
 
     public DialogueLine(
       string id,

@@ -1,8 +1,6 @@
-using Dialogue;
-
-namespace NPC
+namespace Character
 {
-  class NonPlayableCharacter : INonPlayableCharacter
+  public class NPC
   {
     public string Id { get; }
 
@@ -10,13 +8,13 @@ namespace NPC
 
     public string SceneDescription { get; }
 
-    public List<IDialogue> Dialogues { get; }
+    public List<string> Dialogues { get; }
 
-    public NonPlayableCharacter(
+    public NPC(
       string id,
       string name,
       string sceneDescription,
-      List<IDialogue> dialogues
+      List<string> dialogues
     )
     {
       Id = id;

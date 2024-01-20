@@ -1,10 +1,35 @@
 
+using Dialogue;
+using FishStick.Item;
+using FishStick.Scripts;
+
 namespace FishStick.SimpleDialogues
 {
   public static class MaidenDialogues
   {
     public static void Init()
     {
+      /**
+       * The dialogue structure is as follows:
+       * We have a key which references the dialogue, for example "maiden.first-meeting"
+       * under this key, we have a list of dialogue lines, which are indexed
+       * under each dialogue line, we have a list of replies, which are indexed
+       * under each reply, we have a tuple of (string, int?, bool?)
+       * the string is the reply text
+       * the int is the index of the next dialogue line
+       * the bool is whether or not the next reply we're pointing to should be read
+       * Additionally, the first line in the list is always the line said by an NPC, the others are replies
+       */
+      // TODO: Figure out how to mark dialogues non-repeatable
+      // TODO: Figure out how to mark dialogues as already used
+
+      // TODO: It's worth it to wrtie a new parser for this and also refactor the dialogue system to use it
+      Global.DialogueData["maiden.first-meeting"] = new()
+      {
+        WasHad = false,
+        Repeatable = false
+      };
+
       Global.Dialogues["maiden.first-meeting"] = new();
 
       Global.Dialogues["maiden.first-meeting"][0] = new();
@@ -20,10 +45,16 @@ namespace FishStick.SimpleDialogues
 
       // ===
 
+      Global.DialogueData["maiden.generic"] = new()
+      {
+        FirstLineIndex = 1,
+        WasHad = false,
+        Repeatable = false
+      };
       Global.Dialogues["maiden.generic"] = new();
 
       Global.Dialogues["maiden.generic"][0] = new();
-      Global.Dialogues["maiden.generic"][0][0] = ("Farewell then, stranger.", 1, false);
+      Global.Dialogues["maiden.generic"][0][0] = ("Farewell then, stranger.", null, null);
 
       Global.Dialogues["maiden.generic"][1] = new();
       Global.Dialogues["maiden.generic"][1][0] = ("Why art thou wandering the cold forest, stranger?", null, true);
@@ -85,6 +116,37 @@ namespace FishStick.SimpleDialogues
 
       Global.Dialogues["maiden.generic"][14] = new();
       Global.Dialogues["maiden.generic"][14][0] = ("The Obelisk shall tell you.", 11, true);
+
+      // ===
+
+      Global.Dialogues["maiden.key-1-found"] = new();
+      Global.DialogueData["maiden.key-1-found"] = new()
+      {
+        WasHad = false,
+        Repeatable = false,
+        Condition = new HasItemCondition("key-1"),
+        Scripts = new() {
+          (new int[] { 0, 1 }, new TakePlayerItemScript("key-1")),
+          // TODO: This should be an ID reference, not an actual item instance!
+          (new int[] { 1, 0 }, new GivePlayerItemScript( new BaseItem(
+            "scarf-1",
+            "Red Scarf",
+            "A warm, cozy, red scarf. Made by the Maiden.",
+            "Something...",
+            "Equipment",
+            false
+          ))),
+        }
+      };
+
+      Global.Dialogues["maiden.key-1-found"][0] = new();
+      Global.Dialogues["maiden.key-1-found"][0][0] = ("Oh, thee have found the key!.", null, null);
+      Global.Dialogues["maiden.key-1-found"][0][1] = ("*Hand over the key.*", 1, true);
+
+      Global.Dialogues["maiden.key-1-found"][1] = new();
+      Global.Dialogues["maiden.key-1-found"][1][0] = ("You have my thanks, stranger! Take this as a reward.", null, null);
+
+
     }
   }
 }
