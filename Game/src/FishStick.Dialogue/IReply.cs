@@ -5,8 +5,10 @@ namespace Dialogue
     string Text { get; }
     string? NextLineId { get; }
 
-    bool WasUsed { get; set; }
+    bool WasUsed { get; }
 
     bool Repeatable { get; }
+
+    void Use();
   }
 }

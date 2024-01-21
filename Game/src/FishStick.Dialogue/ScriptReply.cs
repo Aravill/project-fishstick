@@ -4,26 +4,28 @@ namespace Dialogue
 {
   class ScriptReply : Reply
   {
-    public IDialogueScript[] Scripts { get; }
+    public List<IDialogueScript> Scripts { get; }
 
     public ScriptReply(
+      string id,
       string text,
       string nextLineId,
       IDialogueScript script,
       bool repeatable = false
     )
-      : base(text, nextLineId, repeatable)
+      : base(id, text, nextLineId, repeatable)
     {
       Scripts = [script];
     }
 
     public ScriptReply(
+      string id,
       string text,
       string nextLineId,
-      IDialogueScript[] scripts,
+      List<IDialogueScript> scripts,
       bool repeatable = false
     )
-      : base(text, nextLineId, repeatable)
+      : base(id, text, nextLineId, repeatable)
     {
       Scripts = scripts;
     }

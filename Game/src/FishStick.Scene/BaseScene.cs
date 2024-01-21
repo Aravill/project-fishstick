@@ -1,5 +1,5 @@
+using Character;
 using FishStick.Item;
-using NPC;
 using Scene;
 
 namespace FishStick.Scene
@@ -10,7 +10,7 @@ namespace FishStick.Scene
     List<ITransition> exits,
     List<IItem> items,
     List<IElement> elements,
-    List<INonPlayableCharacter> npcs
+    List<NPC> npcs
   ) : IScene
   {
     public string Id { get; } = id;
@@ -20,7 +20,7 @@ namespace FishStick.Scene
 
     public List<IElement> Elements { get; set; } = elements;
 
-    public List<INonPlayableCharacter> NPCs { get; set; } = npcs;
+    public List<NPC> NPCs { get; set; } = npcs;
 
     IElement? IScene.GetElement(string elementId)
     {
@@ -43,12 +43,12 @@ namespace FishStick.Scene
       return Items.Find(item => item.Id == itemId);
     }
 
-    INonPlayableCharacter? IScene.GetNPC(string npcId)
+    NPC? IScene.GetNPC(string npcId)
     {
       return NPCs.Find(npc => npc.Id == npcId);
     }
 
-    INonPlayableCharacter? IScene.GetNPCByName(string npcName)
+    NPC? IScene.GetNPCByName(string npcName)
     {
       return NPCs.Find(npc => npc.Name == npcName);
     }
