@@ -1,16 +1,18 @@
 using FishStick;
+using FishStick.Scripts;
 
 namespace Dialogue
 {
   public static class DialogueParser
   {
-    public static void ParseAllDialogues(List<string> dialogueIds)
+    public static List<IDialogue> ParseAllDialogues(List<string> dialogueIds)
     {
-      List<BaseDialogue> dialogues = new();
+      List<IDialogue> dialogues = new();
       for (int i = 0; i < dialogueIds.Count; i++)
       {
         dialogues.Add(ParseDialogue(dialogueIds[i], i));
       }
+      return dialogues;
     }
 
     private static BaseDialogue ParseDialogue(string dialogueId, int order)
@@ -22,7 +24,7 @@ namespace Dialogue
       }
       DialogueData metadata = Global.DialogueData[dialogueId];
       List<IDialogueLine> lines = ParseAllLines(dialogueId);
-      return new BaseDialogue(dialogueId, lines, LineId(dialogueId, metadata.FirstLineIndex), order, metadata.Repeatable, metadata.Condition, metadata.WasHad);
+      return new BaseDialogue(dialogueId, lines, LineId(dialogueId, metadata.FirstLineIndex), order, metadata.Repeatable, metadata.Condition);
     }
 
     private static List<IDialogueLine> ParseAllLines(string dialogueId)
@@ -58,14 +60,17 @@ namespace Dialogue
       }
       // The first line is always the NPC line, the rest are replies
       DialogueLine line = BuildLine(dialogueId, lineIndex, set[0]);
-      line.Replies = new();
       // Starting at 1 to skip the NPC line and only iterate over replies
-      for (int j = 1; j < set.Count; j++)
+      for (int replyIndex = 1; replyIndex < set.Count; replyIndex++)
       {
-        (string, int?, bool?) lineData = set[j];
+        if (line.Replies == null)
+        {
+          line.Replies = new();
+        }
+        (string, int?, bool?) lineData = set[replyIndex];
         // The rest are replies
         line.Replies.Add(
-          BuildReply(dialogueId, lineIndex, lineData)
+          BuildReply(dialogueId, lineIndex, replyIndex, lineData)
         );
       }
       return line;
@@ -85,13 +90,29 @@ namespace Dialogue
         );
     }
 
-    private static Reply BuildReply(string dialogueId, int lineIndex, (string, int?, bool?) lineData)
+    private static IReply BuildReply(string dialogueId, int lineIndex, int replyIndex, (string, int?, bool?) lineData)
     {
+      // TODO: Maybe this should be checked, but since it's private, I don't expect it to be called
+      // from anywhere else
+      DialogueData metadata = Global.DialogueData[dialogueId];
       if (lineData.Item2 == null)
       {
         throw new Exception($"Reply {dialogueId}:{lineIndex} does not have a next line index");
       }
+      // If we find any scripts, init as a ScriptReply, otherwise init as a Reply
+      List<IDialogueScript>? scripts = metadata.Scripts?.GetReplyScripts(lineIndex, replyIndex) ?? null;
+      if (scripts != null && scripts.Count > 0)
+      {
+        return new ScriptReply(
+          ReplyId(dialogueId, lineIndex, replyIndex),
+          lineData.Item1,
+          LineId(dialogueId, lineData.Item2.Value),
+          scripts,
+          lineData.Item3 != null ? lineData.Item3.Value : true
+        );
+      }
       return new Reply(
+        ReplyId(dialogueId, lineIndex, replyIndex),
         lineData.Item1,
         LineId(dialogueId, lineData.Item2.Value),
         lineData.Item3 != null ? lineData.Item3.Value : true
@@ -102,6 +123,12 @@ namespace Dialogue
     {
       // The ID is built as "dialogue-id:line-index"
       return $"{dialogueId}:{lineIndex}";
+    }
+
+    private static string ReplyId(string dialogueId, int lineIndex, int replyIndex)
+    {
+      // The ID is built as "dialogue-id:line-index:reply-index"
+      return $"{dialogueId}:{lineIndex}:{replyIndex}";
     }
   }
 }

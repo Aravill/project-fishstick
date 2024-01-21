@@ -20,12 +20,12 @@ namespace FishStick.SimpleDialogues
        * the bool is whether or not the next reply we're pointing to should be read
        * Additionally, the first line in the list is always the line said by an NPC, the others are replies
        */
-      // TODO: Figure out how to mark dialogues non-repeatable
       // TODO: Figure out how to mark dialogues as already used
 
       // TODO: It's worth it to wrtie a new parser for this and also refactor the dialogue system to use it
       Global.DialogueData["maiden.first-meeting"] = new()
       {
+        FirstLineIndex = 1,
         WasHad = false,
         Repeatable = false
       };

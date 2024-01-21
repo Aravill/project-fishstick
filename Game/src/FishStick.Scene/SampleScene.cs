@@ -39,7 +39,9 @@ namespace FishStick.Scene
             "A young {Maiden} stands near a small campfire nearby.",
             new List<string>()
             {
-              "maiden.first-meeting"
+              "maiden.first-meeting",
+              "maiden.generic",
+              "maiden.key-1-found"
             }
           )
         }
