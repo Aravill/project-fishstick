@@ -24,7 +24,8 @@ namespace Dialogue
       }
       DialogueData metadata = Global.DialogueData[dialogueId];
       List<IDialogueLine> lines = ParseAllLines(dialogueId);
-      return new BaseDialogue(dialogueId, lines, LineId(dialogueId, metadata.FirstLineIndex), order, metadata.Repeatable, metadata.Condition);
+      // TODO: This could cause issues when explicitly defined order overlaps with the list order
+      return new BaseDialogue(dialogueId, lines, LineId(dialogueId, metadata.FirstLineIndex), metadata.Order ?? order, metadata.Repeatable, metadata.Condition);
     }
 
     private static List<IDialogueLine> ParseAllLines(string dialogueId)

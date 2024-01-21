@@ -8,6 +8,7 @@ namespace Dialogue
     public bool WasHad { get; set; }
     public bool Repeatable { get; set; }
 
+    public int? Order { get; set; }
     public ScriptList? Scripts { get; set; }
 
     public IDialogueCondition? Condition { get; set; }

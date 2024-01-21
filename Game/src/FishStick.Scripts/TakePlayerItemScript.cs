@@ -14,7 +14,7 @@ namespace FishStick.Scripts
       IItem? removed = player.RemoveItem(_itemId);
       if (removed != null)
       {
-        string text = $"{removed.Name} was from your inventory.";
+        string text = $"{removed.Name} was removed from your inventory.";
         text = char.ToUpper(text[0]) + text.Substring(1);
         ConsoleController.WriteText(text);
       }

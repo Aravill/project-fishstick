@@ -20,9 +20,7 @@ namespace FishStick.SimpleDialogues
        * the bool is whether or not the next reply we're pointing to should be read
        * Additionally, the first line in the list is always the line said by an NPC, the others are replies
        */
-      // TODO: Figure out how to mark dialogues as already used
 
-      // TODO: It's worth it to wrtie a new parser for this and also refactor the dialogue system to use it
       Global.DialogueData["maiden.first-meeting"] = new()
       {
         FirstLineIndex = 1,
@@ -122,13 +120,14 @@ namespace FishStick.SimpleDialogues
       Global.Dialogues["maiden.key-1-found"] = new();
       Global.DialogueData["maiden.key-1-found"] = new()
       {
+        Order = -1,
         WasHad = false,
         Repeatable = false,
         Condition = new HasItemCondition("key-1"),
         Scripts = new() {
           (new int[] { 0, 1 }, new TakePlayerItemScript("key-1")),
           // TODO: This should be an ID reference, not an actual item instance!
-          (new int[] { 1, 0 }, new GivePlayerItemScript( new BaseItem(
+          (new int[] { 0, 1 }, new GivePlayerItemScript( new BaseItem(
             "scarf-1",
             "Red Scarf",
             "A warm, cozy, red scarf. Made by the Maiden.",
@@ -144,7 +143,7 @@ namespace FishStick.SimpleDialogues
       Global.Dialogues["maiden.key-1-found"][0][1] = ("*Hand over the key.*", 1, true);
 
       Global.Dialogues["maiden.key-1-found"][1] = new();
-      Global.Dialogues["maiden.key-1-found"][1][0] = ("You have my thanks, stranger! Take this as a reward.", null, null);
+      Global.Dialogues["maiden.key-1-found"][1][0] = ("You have my thanks, stranger! Take this scarf as a reward.", null, null);
 
 
     }
