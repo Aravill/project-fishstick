@@ -16,6 +16,7 @@ namespace FishStick.Render
       Console.CursorVisible = false;
       string? finalInput = null;
       GameCursor cursor = new();
+      AutocompleteResult autocompleteResult = new AutocompleteResult();
       // Fake the cursor
       string writtenInput = cursor.cursorSymbol.ToString();
       Console.Write(writtenInput);
@@ -37,9 +38,9 @@ namespace FishStick.Render
             cursor.cursorIndex = writtenInput.Length - 1;
             break;
           case ConsoleKey.Backspace:
+            ClearCurrentConsoleLine();          
             if (cursor.cursorIndex > 0)
-            {
-              ClearCurrentConsoleLine();
+            { 
               // Remove the cursor symbol + last character from the end of the string
               if (cursor.cursorIndex == 0)
               {
@@ -50,14 +51,44 @@ namespace FishStick.Render
               cursor.cursorIndex--;
               Console.Write(writtenInput);
             }
+            else
+            {
+              cursor.cursorIndex = 0;
+              Console.Write(writtenInput);
+            }
+            break;
+          case ConsoleKey.Tab:
+            ClearCurrentConsoleLine();
+            // Fill in autocompletion suggestion
+            if (autocompleteResult.Status == AutocompleteResult.InputStatus.Autocompleted)
+            {
+              // I though about leaving the cursor at its current place, but I think it makes more
+              //sense to put at the end after filling the autocomplete.
+              // get rid of the cursor, trailing white spaces and put in the autocompletion          
+              writtenInput = RemoveCursor(writtenInput, cursor.cursorIndex).TrimEnd();
+              // couldve all been in one line but that'd be ugly so fuck that
+              writtenInput += autocompleteResult.CompletionSuggestion;
+              // and put the cursor back at the end                            
+              writtenInput +=  cursor.cursorSymbol;
+              cursor.cursorIndex = writtenInput.Length - 1;
+              Console.Write(writtenInput);
+            }
+            else
+            {
+              Console.Write(writtenInput);
+            }
             break;
           case ConsoleKey.Enter:
+            ClearCurrentConsoleLine();
             // Don't do anything if the user hasn't typed anything yet
             if (writtenInput.Length > 1)
-            {
-              ClearCurrentConsoleLine();
+            {              
               finalInput = RemoveCursor(writtenInput, cursor.cursorIndex);
               Console.Write(finalInput);
+            }
+            else
+            {
+              Console.Write(writtenInput);
             }
             break;
           case ConsoleKey.LeftArrow:
@@ -83,8 +114,8 @@ namespace FishStick.Render
 
         //Autocompletion process
         string cleanInput = RemoveCursor(writtenInput, cursor.cursorIndex);
-        AutocompleteResult result = commandAutocomplete.Autocomplete(cleanInput);
-        AutocompletionConsoleWriter.WriteResult(result);
+        autocompleteResult = commandAutocomplete.Autocomplete(cleanInput);
+        AutocompletionConsoleWriter.WriteResult(autocompleteResult);
         // ---------------------
 
       } while (finalInput == null || finalInput.Length < 1);  

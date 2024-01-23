@@ -57,5 +57,21 @@ namespace FishStick.Scene
     {
       return Transitions.Find(exit => exit.Name == exitName);
     }
+
+    List<string> IScene.GetSceneItemsNames()
+    {
+        return Items.Select(item => item.Name).ToList();
+    }
+
+    List<string> IScene.GetSceneNPCsNames()
+    {
+      return NPCs.Select(npc => npc.Name).ToList();
+    }
+
+    List<string> IScene.GetSceneInteractableElementsNames()
+    {
+      var interactables = Elements.Where(elem => elem is IInteractable);
+      return interactables.Select(elem => ((IInteractable)elem).Name).ToList();
+    }
   }
 }

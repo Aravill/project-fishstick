@@ -17,6 +17,11 @@ namespace FishStick.Commands.Autocompletion
 
         public string CompletionSuggestion { get; }
 
+        public AutocompleteResult()
+        {
+            Status = InputStatus.Invalid;
+            CompletionSuggestion = String.Empty;
+        }
         public AutocompleteResult(InputStatus status, string suggestion)
         {
             Status = status;

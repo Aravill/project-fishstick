@@ -16,6 +16,13 @@ namespace FishStick.Commands
 
     void ICommand.Execute(string[] args)
     {
+      // A quickie to deal with no args.
+      if (args.Length == 0)
+      {
+        ConsoleController.WriteText($"Interact with what exactly, fam?");
+        return;
+      }
+      
       // Uniquely, a part of this command's args is the command name itself.
       string commandName = args[0];
       args = args[1..];
