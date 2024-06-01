@@ -7,15 +7,14 @@ namespace Render
   {
     public static void DescribeScene(IScene scene)
     {
-      string allText = BuildDescriptionString(scene);
-      List<string> taggedWords = new();
-      allText = allText.FindTaggedWords(out taggedWords).RemoveTagMarkers();
-
       ConsoleWriter
-        .Write(allText)
+        .Write(
+          BuildDescriptionString(scene)
+            .FindTaggedWords(out var taggedWords)
+            .RemoveTagMarkers())
         .Slowly()
         .WithColor(ConsoleColor.DarkGray)
-        .WithHighlighting(taggedWords.ToDictionary(tag => tag, tag => ConsoleColor.DarkYellow))
+        .WithHighlighting(taggedWords, ConsoleColor.DarkYellow)
         .ToConsole();
 
       Console.WriteLine();
