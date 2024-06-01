@@ -1,11 +1,12 @@
+using Scene;
+using System.Runtime.CompilerServices;
+
 namespace FishStick.Scene
 {
 
-  public interface ITransition
+  public interface ITransition : ISceneDescribable
   {
     string NextSceneId { get; }
-
-    string Description { get; }
     string Name { get; }
   }
 }

@@ -1,4 +1,6 @@
-﻿namespace FishStick.Render
+﻿using FishStick.Extensions;
+
+namespace FishStick.Render
 {
   public class ConsoleWriter
   {
@@ -6,6 +8,7 @@
     private ConsoleColor _foregroundColor = Console.ForegroundColor;
     private ConsoleColor _backgroundColor = Console.BackgroundColor;
     private bool _writeSlowly = false;
+    private int _millisecondsDelay;
     private Dictionary<string, ConsoleColor> _highlightedPhrases =
       new Dictionary<string, ConsoleColor>();
 
@@ -16,15 +19,22 @@
       return new ConsoleWriter { _message = message };
     }
 
-    public void SetSlowly(bool slowly) => _writeSlowly = slowly;
-
-    public ConsoleWriter Slowly()
+    public ConsoleWriter NoTags()
     {
-      _writeSlowly = true;
+      _message = _message.RemoveTags();
       return this;
     }
 
-    public ConsoleWriter WithColor(
+    public void SetSlowly(bool slowly) => _writeSlowly = slowly;
+
+    public ConsoleWriter Slowly(int millisecondsDelay = 20)
+    {
+      _writeSlowly = true;
+      _millisecondsDelay = millisecondsDelay;
+      return this;
+    }
+
+    public ConsoleWriter Color(
       ConsoleColor foregroundColor,
       ConsoleColor? backgroundColor = null
     )
@@ -37,6 +47,12 @@
     public ConsoleWriter WithHighlighting(Dictionary<string, ConsoleColor>? highlightedWords)
     {
       _highlightedPhrases = highlightedWords ?? _highlightedPhrases;
+      return this;
+    }
+
+    public ConsoleWriter WithHighlighting(IEnumerable<string> highlightedWords, ConsoleColor highlighColor)
+    {
+      _highlightedPhrases = highlightedWords.ToDictionary(word => word, word => highlighColor);
       return this;
     }
 
@@ -72,8 +88,9 @@
         if (nextPhrase != null)
         {
           Console.ForegroundColor = nextWordColor;
-          WriteWord(nextPhrase);
+          WriteWord("[" + nextPhrase + "]");
           Console.ForegroundColor = _foregroundColor;
+
           currentPos = nextWordPos + nextPhrase.Length;
         }
         else
@@ -88,38 +105,26 @@
 
     private void WriteWord(string word)
     {
-      var ts = new CancellationTokenSource();
-      CancellationToken ct = ts.Token;
-      Task interruptSlow = Task.Run(() =>
-      {
-        while (true)
-        {
-          if (Console.KeyAvailable)
-          {
-            Console.ReadKey(true);
-            _writeSlowly = false;
-            break;
-          }
-          if (ct.IsCancellationRequested)
-          {
-            break;
-          }
-        }
-      });
       for (int i = 0; i < word.Length; i++)
       {
         if (_writeSlowly)
         {
+          // Check for key press
+          if (Console.KeyAvailable)
+          {
+            Console.ReadKey(true); // Clears the key press
+            _writeSlowly = false;
+          }
+
           Console.Write(word[i]);
-          Thread.Sleep(20);
+          Thread.Sleep(_millisecondsDelay);  // For async do await Task.Delay(20);
         }
         else
         {
-          Console.Write(word[i..]);
+          Console.Write(word[i..]); // Write the rest of the word
           break;
         }
       }
-      ts.Cancel();
     }
   }
 }

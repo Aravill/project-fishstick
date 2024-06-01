@@ -10,7 +10,7 @@ namespace FishStick.Scene
     [DataMember]
     public string Name { get; set; } = name;
     [DataMember]
-    public string Description { get; set; } = description;
+    public string SceneDescription { get; set; } = description;
     [DataMember]
     public string NextSceneId { get; set; } = nextRoomId;
   }

@@ -1,3 +1,4 @@
+using FishStick.Extensions;
 using FishStick.Scene;
 using FishStick.Session;
 using Render;
@@ -6,21 +7,15 @@ namespace FishStick.Render
 {
   class ConsoleController
   {
-    public class GameCursor
-    {
-      public char cursorSymbol = '▮';
-      public int cursorIndex = 0;
-    }
-
     public static void WriteText(string text)
     {
-      string withoutTags = text.FindTaggedWords(out var taggedWords).RemoveTagMarkers();
+      string withoutTags = text.RemoveTags();
 
       ConsoleWriter
         .Write(withoutTags)
         .Slowly()
-        .WithColor(ConsoleColor.DarkGray)
-        .WithHighlighting(taggedWords.ToDictionary(tag => tag, tag => ConsoleColor.DarkYellow))
+        .Color(ConsoleColor.DarkGray)
+        .WithHighlighting(text.FindTaggedWords(), ConsoleColor.DarkYellow)
         .ToConsole();
 
       Console.WriteLine();
@@ -31,9 +26,9 @@ namespace FishStick.Render
       SceneStrategy.DescribeScene(scene);
     }
 
-    public static string ReadCommand(SessionHistory history)
+    internal static string ReadCommand(SessionHistory sessionHistory)
     {
-      return CommandStrategy.ReadCommand(history);
+      return CommandStrategy.ReadCommand(sessionHistory);
     }
   }
 }

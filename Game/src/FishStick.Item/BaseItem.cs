@@ -1,3 +1,5 @@
+using Scene;
+
 namespace FishStick.Item
 {
   class BaseItem(
@@ -11,9 +13,9 @@ namespace FishStick.Item
   {
     string IItem.Name { get; } = Name;
     string IItem.Description { get; } = description;
-    string IItem.SceneDescription { get; } = SceneDescription;
+    string ISceneDescribable.SceneDescription { get; } = SceneDescription;
     string IItem.Type { get; } = Type;
     string IItem.Id { get; } = Id;
-    bool IItem.Hidden { get; set; } = Hidden;
+    bool IHiddeable.Hidden { get; set; } = Hidden;
   }
 }

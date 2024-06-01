@@ -130,7 +130,7 @@
                     <Grid RowDefinitions="Auto" ColumnDefinitions="1*,5,4*">
                       <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Name}" FontSize="12"
                         VerticalAlignment="Center" TextWrapping="Wrap" />
-                      <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Description}"
+                      <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding SceneDescription}"
                         FontSize="12"
                         TextWrapping="Wrap" />
                     </Grid>
