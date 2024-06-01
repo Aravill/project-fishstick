@@ -42,7 +42,7 @@
               <Grid ColumnDefinitions="2*,5*,2*,1*">
                 <TextBlock Grid.Column="0" Text="{Binding First.Name}" FontSize="12"
                   VerticalAlignment="Center" />
-                <TextBlock Grid.Column="1" Text="{Binding First.Description}" FontSize="12"
+                <TextBlock Grid.Column="1" Text="{Binding First.SceneDescription}" FontSize="12"
                   VerticalAlignment="Center" />
                 <TextBlock Grid.Column="2" Text="{Binding Second}" FontSize="12"
                   VerticalAlignment="Center" />
