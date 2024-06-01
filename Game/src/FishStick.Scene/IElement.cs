@@ -1,9 +1,9 @@
+using FishStick.Scene;
+
 namespace Scene
 {
-  public interface IElement
+  public interface IElement : ISceneDescribable, IHiddeable
   {
     string Id { get; }
-    string SceneDescription { get; }
-    bool Hidden { get; set; }
   }
 }

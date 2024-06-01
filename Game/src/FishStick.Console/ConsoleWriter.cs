@@ -1,4 +1,6 @@
-﻿namespace FishStick.Render
+﻿using FishStick.Extensions;
+
+namespace FishStick.Render
 {
   public class ConsoleWriter
   {
@@ -6,6 +8,7 @@
     private ConsoleColor _foregroundColor = Console.ForegroundColor;
     private ConsoleColor _backgroundColor = Console.BackgroundColor;
     private bool _writeSlowly = false;
+    private int _millisecondsDelay;
     private Dictionary<string, ConsoleColor> _highlightedPhrases =
       new Dictionary<string, ConsoleColor>();
 
@@ -16,15 +19,22 @@
       return new ConsoleWriter { _message = message };
     }
 
-    public void SetSlowly(bool slowly) => _writeSlowly = slowly;
-
-    public ConsoleWriter Slowly()
+    public ConsoleWriter NoTags()
     {
-      _writeSlowly = true;
+      _message = _message.RemoveTags();
       return this;
     }
 
-    public ConsoleWriter WithColor(
+    public void SetSlowly(bool slowly) => _writeSlowly = slowly;
+
+    public ConsoleWriter Slowly(int millisecondsDelay = 20)
+    {
+      _writeSlowly = true;
+      _millisecondsDelay = millisecondsDelay;
+      return this;
+    }
+
+    public ConsoleWriter Color(
       ConsoleColor foregroundColor,
       ConsoleColor? backgroundColor = null
     )
@@ -107,7 +117,7 @@
           }
 
           Console.Write(word[i]);
-          Thread.Sleep(20);  // For async do await Task.Delay(20);
+          Thread.Sleep(_millisecondsDelay);  // For async do await Task.Delay(20);
         }
         else
         {

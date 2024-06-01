@@ -107,13 +107,13 @@ namespace FishStick.Render
       {
         if (i == selectedLine)
         {
-          ConsoleWriter.Write($"> {replies[i].Text}").WithColor(ConsoleColor.Yellow).ToConsole();
+          ConsoleWriter.Write($"> {replies[i].Text}").Color(ConsoleColor.Yellow).ToConsole();
           Console.WriteLine();
           continue;
         }
         if (replies[i].WasUsed)
         {
-          ConsoleWriter.Write($"{replies[i].Text}").WithColor(ConsoleColor.DarkMagenta).ToConsole();
+          ConsoleWriter.Write($"{replies[i].Text}").Color(ConsoleColor.DarkMagenta).ToConsole();
           Console.WriteLine();
           continue;
         }

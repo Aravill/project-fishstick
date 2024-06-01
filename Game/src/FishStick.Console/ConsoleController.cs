@@ -1,3 +1,4 @@
+using FishStick.Extensions;
 using FishStick.Scene;
 using FishStick.Session;
 using Render;
@@ -8,13 +9,13 @@ namespace FishStick.Render
   {
     public static void WriteText(string text)
     {
-      string withoutTags = text.FindTaggedWords(out var taggedWords).RemoveTagMarkers();
+      string withoutTags = text.RemoveTags();
 
       ConsoleWriter
         .Write(withoutTags)
         .Slowly()
-        .WithColor(ConsoleColor.DarkGray)
-        .WithHighlighting(taggedWords, ConsoleColor.DarkYellow)
+        .Color(ConsoleColor.DarkGray)
+        .WithHighlighting(text.FindTaggedWords(), ConsoleColor.DarkYellow)
         .ToConsole();
 
       Console.WriteLine();

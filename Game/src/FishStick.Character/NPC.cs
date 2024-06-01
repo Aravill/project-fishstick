@@ -1,6 +1,8 @@
+using Scene;
+
 namespace Character
 {
-  public class NPC
+  public class NPC : ISceneDescribable
   {
     public string Id { get; }
 
